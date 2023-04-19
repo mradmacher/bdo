@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>MBDO</title>
+
+    <script src="/jquery-3.6.0.min.js"></script>
+    <script src="/catalog.js?v=3"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  </head>
+
+  <body>
+    <div class="ui grid container">
+      <div class="sixteen wide column">
+        <div class="ui menu">
+          <a class="ui item" href="/">Katalog</a>
+          <a class="ui item floated right" href="/">Zgłoś instalację</a>
+        </div>
+      </div>
+
+      <div class="six wide column">
+        <div class="ui fluid card">
+          <div class="content">
+            <div class="header">Szukaj instalacji</div>
+          </div>
+          <div class="content">
+            <form class="ui form">
+              <div class="field">
+                <label>Kod odpadu</label>
+                <div class="ui icon input">
+                  <input type="text" name="code" placeholder="xxxxxx">
+                  <i class="inverted circular search link icon"></i>
+                </div>
+                <div class="ui pointing label code-hint">Podaj kod odpadu</div>
+              </div>
+              <div class="field">
+                <label>Proces przetwarzania</label>
+                <div class="ui icon input">
+                  <input type="text" name="process" placeholder="R1">
+                  <i class="inverted circular search link icon"></i>
+                </div>
+                <div class="ui pointing label process-hint">Podaj kod procesu przetwarzania</div>
+              </div>
+              <div class="field">
+                <label>Województwo</label>
+                <div class="ui icon input">
+                  <select class="ui search selection dropdown" name="voivodeship">
+                    <option value=""></option>
+                    <option value="DS">dolnośląskie</option>
+                    <option value="KP">kujawsko-pomorskie</option>
+                    <option value="LU">lubelskie</option>
+                    <option value="LB">lubuskie</option>
+                    <option value="LD">łódzkie</option>
+                    <option value="MA">małopolskie</option>
+                    <option value="MZ">mazowieckie</option>
+                    <option value="OP">opolskie</option>
+                    <option value="PK">podkarpackie</option>
+                    <option value="PD">podlaskie</option>
+                    <option value="PM">pomorskie</option>
+                    <option value="SL">śląskie</option>
+                    <option value="SK">świętokrzyskie</option>
+                    <option value="WN">warmińsko-mazurskie</option>
+                    <option value="WP">wielkopolskie</option>
+                    <option value="ZP">zachodniopomorskie</option>
+                  </select>
+                  <i class="inverted circular location arrow link icon"></i>
+                </div>
+              </div>
+              <button class="ui button" type="submit">Szukaj</button>
+            </form>
+          </div>
+          <!--
+          <iframe width="450" height="250" frameborder="0" style="border:0" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/MAP_MODE?key=YOUR_API_KEY&PARAMETERS" allowfullscreen>
+          </iframe>
+          -->
+        </div>
+      </div>
+
+      <div class="ten wide column">
+        <img class="ui fluid bordered image" src="map.png" />
+      </div>
+
+      <div class="sixteen wide column">
+        <div class="ui two cards">
+
+        <% 4.times do %>
+          <div class="ui fluid card">
+            <div class="content">
+              <div class="header">Instalacja wysoko wyspecjalizowana</div>
+              <div class="meta">podkarpackie, Dębica</div>
+              <div class="description">
+                <div class="ui large labels">
+                  <div class="ui label">
+                    <span class="ui label">01 01 01</span>
+                    <span class="ui orange label">D1</span>
+                    <span class="ui olive label">0,150</span>
+                  </div>
+                  <div class="ui label">
+                    <span class="ui label">01 01 02</span>
+                    <span class="ui teal label">R3</span>
+                    <span class="ui olive label">1,250</span>
+                  </div>
+                  <div class="ui label">
+                    <span class="ui label">01 01 01</span>
+                    <span class="ui teal label">R1</span>
+                    <span class="ui purple label">1500</span>
+                  </div>
+                  <div class="ui label">
+                    <span class="ui label">02 01 01</span>
+                    <span class="ui teal label">R1</span>
+                    <span class="ui olive label">0,150</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui fluid card">
+            <div class="content">
+              <div class="header">Żaden odpad nam nie straszny</div>
+              <div class="meta">podkarpackie, Dębica</div>
+              <div class="description">
+                <div class="ui large labels">
+                  <div class="ui large label">
+                    <span class="ui label">01 01 01</span>
+                    <span class="ui teal label">R1</span>
+                    <span class="ui olive label">0,150</span>
+                  </div>
+                  <div class="ui large label">
+                    <span class="ui label">01 01 02</span>
+                    <span class="ui orange label">D3</span>
+                    <span class="ui olive label">0,150</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui fluid card">
+            <div class="content">
+              <div class="header">Przetwarzaj razem z nami</div>
+              <div class="meta">podkarpackie, Dębica</div>
+              <div class="description">
+                <div class="ui large labels">
+                  <div class="ui large label">
+                    <span class="ui label">01 01 01</span>
+                    <span class="ui teal label">R1</span>
+                    <span class="ui olive label">0,300</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      $(function() {
+        $('select.dropdown').dropdown()
+
+        $('.ui.form .button').click((event) => {
+          event.preventDefault()
+          $('.ui.cards').toggle()
+          code = $('.ui.form .field [name=code]').val()
+          codeA = code.slice(0, 2)
+          codeB = code.slice(2, 4)
+          codeC = code.slice(4)
+          var value = null
+          if(codeA) {
+            value = codes[codeA]
+            if(value) {
+              if(codeB) {
+                value = value.entries[codeB]
+                if(value) {
+                  if(codeC) {
+                    value = value.entries[codeC]
+                  }
+                }
+              }
+            }
+            if(value) {
+              $('.ui.form .code-hint').text(value.desc)
+            } else {
+              $('.ui.form .code-hint').text("Nieznany kod")
+            }
+          }
+
+
+          process = $('.ui.form .field [name=process]').val()
+          value = processes[process]
+          if(value) {
+            $('.ui.form .process-hint').text(value)
+          } else {
+            $('.ui.form .process-hint').text("Nieznany kod")
+          }
+        })
+
+      })
+    </script>
+  </body>
+</html>
