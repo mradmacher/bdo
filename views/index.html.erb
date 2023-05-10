@@ -27,20 +27,22 @@
             <div class="header">Szukaj instalacji</div>
           </div>
           <div class="content">
-            <form class="ui form">
+            <form class="ui search form">
               <div class="field">
                 <label>Kod odpadu</label>
                 <div class="ui icon input">
                   <input type="text" name="code" placeholder="xxxxxx">
                   <i class="inverted circular search link icon"></i>
                 </div>
-                <div class="ui pointing label code-hint">Podaj kod odpadu</div>
+                <div class="ui pointing label code-hint code-a">Podaj kod odpadu</div>
+                <div class="ui pointing label code-hint code-b"></div>
+                <div class="ui pointing label code-hint code-c"></div>
               </div>
               <div class="field">
                 <label>Proces przetwarzania</label>
                 <div class="ui icon input">
                   <input type="text" name="process" placeholder="R1">
-                  <i class="inverted circular search link icon"></i>
+                  <i class="inverted circular search process link icon"></i>
                 </div>
                 <div class="ui pointing label process-hint">Podaj kod procesu przetwarzania</div>
               </div>
@@ -81,6 +83,36 @@
 
       <div class="ten wide column">
         <img class="ui fluid bordered image" src="map.png" />
+      </div>
+
+      <div class="ui modal processes">
+        <div class="header">
+          Wyszukaj proces przetwarzania
+        </div>
+        <div class="scrolling content">
+          <table class="ui selectable compact celled table">
+            <thead>
+              <tr>
+                <th>Kod</th>
+                <th>Opis</th>
+              </tr>
+            </thead>
+            <template class="process-template">
+              <tr class="process">
+                <td class="code"></td>
+                <td class="description"></td>
+              </tr>
+            </template>
+            <tbody class="process-list">
+            </tbody>
+          </table>
+        </div>
+        <div class="actions">
+          <div class="ui basic cancel button">
+            <i class="checkmark icon"></i>
+            Anuluj
+          </div>
+        </div>
       </div>
 
       <div class="sixteen wide column">
@@ -161,37 +193,84 @@
     <script type="text/javascript">
       $(function() {
         $('select.dropdown').dropdown()
+        $('.ui.form .code-hint.code-b').hide()
+        $('.ui.form .code-hint.code-c').hide()
+
+        $('.search.process').click((event) => {
+          modal = $('.ui.modal.processes')
+          modal.find('.process-list').html('')
+          for (code in processDescs) {
+            desc = processDescs[code]
+            template = $(modal.find('.process-template').html())
+            template.find('.code').text(code)
+            template.find('.description').text(desc)
+            template.click((event) => {
+              code = $(event.target).parent().find('.code').text()
+              description = $(event.target).parent().find('.description').text()
+              $('.search input[name="process"]').val(code)
+              $('.search .process-hint').text(description)
+              modal.modal('hide')
+            })
+            modal.find('.process-list').append(template)
+          }
+          modal.modal('show')
+        })
 
         $('.ui.form .button').click((event) => {
           event.preventDefault()
           $('.ui.cards').toggle()
+          var valueA
+          var valueB
+          var valueC
           code = $('.ui.form .field [name=code]').val()
+          console.log(code)
           codeA = code.slice(0, 2)
-          codeB = code.slice(2, 4)
-          codeC = code.slice(4)
-          var value = null
+          codeB = code.slice(0, 4)
+          codeC = code.slice(0, 6)
+          if(codeA.length < 2) {
+            codeA = ''
+          }
+          if(codeB.length < 4) {
+            codeB = ''
+          }
+          if(codeC.length < 6) {
+            codeC = ''
+          }
           if(codeA) {
-            value = codes[codeA]
-            if(value) {
-              if(codeB) {
-                value = value.entries[codeB]
-                if(value) {
-                  if(codeC) {
-                    value = value.entries[codeC]
-                  }
-                }
-              }
-            }
-            if(value) {
-              $('.ui.form .code-hint').text(value.desc)
-            } else {
-              $('.ui.form .code-hint').text("Nieznany kod")
-            }
+            valueA = codeDescs[codeA]
+          }
+          if(codeB) {
+            valueB = codeDescs[codeB]
+          }
+          if(codeC) {
+            valueC = codeDescs[codeC]
           }
 
+          if(valueA) {
+            $('.ui.form .code-hint.code-a').text(valueA)
+          } else {
+            $('.ui.form .code-hint').text("Nieznany kod")
+          }
+          if(valueB) {
+            $('.ui.form .code-hint.code-b').show()
+            $('.ui.form .code-hint.code-b').text(valueB)
+          } else {
+            $('.ui.form .code-hint.code-b').hide()
+          }
+          if(valueC) {
+            $('.ui.form .code-hint.code-c').show()
+            $('.ui.form .code-hint.code-c').text(valueC)
+          } else {
+            $('.ui.form .code-hint.code-c').hide()
+          }
 
+          var value
           process = $('.ui.form .field [name=process]').val()
-          value = processes[process]
+          if(process) {
+            process = process.toUpperCase()
+            $('.ui.form .field [name=process]').val(process)
+            value = processDescs[process]
+          }
           if(value) {
             $('.ui.form .process-hint').text(value)
           } else {

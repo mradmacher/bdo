@@ -1,4 +1,4 @@
-const processes = {
+const processDescs = {
   R1: "Wykorzystanie głównie jako paliwa lub innego środka wytwarzania energii",
   R2: "Odzysk/regeneracja rozpuszczalników",
   R3: "Recykling lub regeneracja substancji organicznych, które nie są stosowane jako rozpuszczalniki (w tym kompostowanie i inne biologiczne procesy przekształcania)",
@@ -27,84 +27,98 @@ const processes = {
   D13: "Sporządzanie mieszanki lub mieszanie przed poddaniem odpadów któremukolwiek z procesów wymienionych w pozycjach D 1 – D 12",
 }
 
+const processes = [
+  'R1',
+  'R2',
+  'R3',
+  'R4',
+  'R5',
+  'R6',
+  'R7',
+  'R8',
+  'R9',
+  'R10',
+  'R11',
+  'R12',
+  'R13',
+  'D1',
+  'D2',
+  'D3',
+  'D4',
+  'D5',
+  'D6',
+  'D7',
+  'D8',
+  'D9',
+  'D10',
+  'D11',
+  'D12',
+  'D13',
+]
+
+const codeDescs = {
+  '01': 'Odpady powstające przy poszukiwaniu, wydobywaniu, fizycznej i chemicznej przeróbce rud oraz innych kopalin',
+  '0101': 'Odpady z wydobywania kopalin',
+  '010101': 'Odpady z wydobywania rud metali (z wyłączeniem 01 01 80)',
+  '010102': 'Odpady z wydobywania kopalin innych niż rudy metali',
+  '010180': 'Odpady skalne z górnictwa miedzi, cynku i ołowiu',
+  '0103': 'Odpady z fizycznej i chemicznej przeróbki rud metali',
+  '010304': 'Odpady z przeróbki rud siarczkowych powodujące samoczynne zakwaszenie środowiska w czasie składowania',
+  '010305': 'Inne odpady poprzeróbcze zawierające substancje niebezpieczne (z wyłączeniem 01 03 80)',
+  '010306': 'Inne odpady poprzeróbcze niż wymienione w 01 03 04, 01 03 05, 01 03 80 i 01 03 81',
+  '0104': 'Odpady z fizycznej i chemicznej przeróbki kopalin innych niż rudy metali',
+  '010407': 'Odpady zawierające niebezpieczne substancje z fizycznej i chemicznej przeróbki kopalin innych niż rudy metali',
+  '010408': 'Odpady żwiru lub skruszone skały inne niż wymienione w 01 04 07',
+  '010409': 'Odpadowe piaski i iły',
+
+  '02': 'Odpady z rolnictwa, sadownictwa, upraw hydroponicznych, rybołówstwa, leśnictwa, łowiectwa oraz przetwórstwa żywności',
+  '0201': 'Odpady z rolnictwa, sadownictwa, upraw hydroponicznych, leśnictwa, łowiectwa i rybołówstwa',
+  '020101': 'Osady z mycia i czyszczenia',
+  '020102': 'Odpadowa tkanka zwierzęca',
+  '020103': 'Odpadowa masa roślinna',
+  '03': 'Odpady z przetwórstwa drewna oraz z produkcji płyt i mebli, masy celulozowej, papieru i tektury',
+  '0301': 'Odpady z przetwórstwa drewna oraz z produkcji płyt i mebli',
+  '030101': 'Odpady kory i korka',
+}
+
 const codes = {
-  '01': {
-    desc: 'Odpady powstające przy poszukiwaniu, wydobywaniu, fizycznej i chemicznej przeróbce rud oraz innych kopalin',
-    entries: {
-      '01': {
-        desc: 'Odpady z wydobywania kopalin',
-        entries: {
-          '01': {
-            desc: 'Odpady z wydobywania rud metali (z wyłączeniem 01 01 80)',
-          },
-          '02': {
-            desc: 'Odpady z wydobywania kopalin innych niż rudy metali',
-          },
-          '80': {
-            desc: 'Odpady skalne z górnictwa miedzi, cynku i ołowiu',
-          },
-        },
-      },
-      '03': {
-        desc: 'Odpady z fizycznej i chemicznej przeróbki rud metali',
-        entries: {
-          '04*': {
-            desc: 'Odpady z przeróbki rud siarczkowych powodujące samoczynne zakwaszenie środowiska w czasie składowania',
-          },
-          '05*': {
-            desc: 'Inne odpady poprzeróbcze zawierające substancje niebezpieczne (z wyłączeniem 01 03 80)',
-          },
-          '06': {
-            desc: 'Inne odpady poprzeróbcze niż wymienione w 01 03 04, 01 03 05, 01 03 80 i 01 03 81',
-          },
-        },
-      },
-      '04': {
-        desc: 'Odpady z fizycznej i chemicznej przeróbki kopalin innych niż rudy metali',
-        entries: {
-          '07': {
-            desc: 'Odpady zawierające niebezpieczne substancje z fizycznej i chemicznej przeróbki kopalin innych niż rudy metali',
-          },
-          '08': {
-            desc: 'Odpady żwiru lub skruszone skały inne niż wymienione w 01 04 07',
-          },
-          '09': {
-            desc: 'Odpadowe piaski i iły',
-          },
-        }
-      },
-    }
-  },
-  '02': {
-    desc: 'Odpady z rolnictwa, sadownictwa, upraw hydroponicznych, rybołówstwa, leśnictwa, łowiectwa oraz przetwórstwa żywności',
-    entries: {
-      '01': {
-        desc: 'Odpady z rolnictwa, sadownictwa, upraw hydroponicznych, leśnictwa, łowiectwa i rybołówstwa',
-        entries: {
-          '01': {
-            desc: 'Osady z mycia i czyszczenia',
-          },
-          '02': {
-            desc: 'Odpadowa tkanka zwierzęca',
-          },
-          '03': {
-            desc: 'Odpadowa masa roślinna',
-          },
-        }
-      },
-    },
-  },
-  '03': {
-    desc: 'Odpady z przetwórstwa drewna oraz z produkcji płyt i mebli, masy celulozowej, papieru i tektury',
-    entries: {
-      '01': {
-        desc: 'Odpady z przetwórstwa drewna oraz z produkcji płyt i mebli',
-        entries: {
-          '01': {
-            desc: 'Odpady kory i korka',
-          }
-        }
-      },
-    }
-  }
+  '00': [
+    '01',
+    '02',
+    '03',
+  ],
+  '01': [
+    '0101',
+    '0103',
+    '0104',
+  ],
+  '02': [
+    '0201',
+  ],
+  '0201': [
+    '020101',
+    '020102',
+    '020103',
+  ],
+  '03': [
+    '0301',
+  ],
+  '0101': [
+    '010101',
+    '010102',
+    '010180',
+  ],
+  '0103': [
+    '010304*',
+    '010305*',
+    '010306',
+  ],
+  '0104': [
+    '010407',
+    '010408',
+    '010409',
+  ],
+  '0301': [
+    '030101',
+  ],
 }
