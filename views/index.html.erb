@@ -97,7 +97,7 @@
                 <th>Opis</th>
               </tr>
             </thead>
-            <template class="process-template">
+            <template class="process-row-template">
               <tr class="process">
                 <td class="code"></td>
                 <td class="description"></td>
@@ -121,8 +121,8 @@
         </div>
         <div class="scrolling content">
           <table class="ui selectable compact celled table">
-            <template class="waste-header-template">
-              <tr class="waste">
+            <template class="waste-header-row-template">
+              <tr class="selected-waste-header">
                 <th class="code"></th>
                 <th class="description"></th>
               </tr>
@@ -133,7 +133,7 @@
                 <th>Opis</th>
               </tr>
             </thead>
-            <template class="waste-template">
+            <template class="waste-row-template">
               <tr class="waste">
                 <td class="code"></td>
                 <td class="description"></td>
@@ -162,20 +162,71 @@
         $('select.dropdown').dropdown()
         $('.ui.form .waste-hint.code-b').hide()
         $('.ui.form .waste-hint.code-c').hide()
+        $('.ui.form').trigger("reset")
+
+        class SearchView {
+          constructor(selector) {
+            this.selector = selector
+            this.element = $(selector)
+          }
+
+          setProcess(code, description) {
+            this.element.find('input[name="process"]').val(code)
+            this.element.find('.process-hint').text(description)
+          }
+
+          setWaste(code, descA, descB, descC) {
+            $('.search input[name="waste"]').val(code)
+            $('.search .waste-hint.code-a').text(descA)
+            $('.search .waste-hint.code-b').show()
+            $('.search .waste-hint.code-b').text(descB)
+            $('.search .waste-hint.code-c').show()
+            $('.search .waste-hint.code-c').text(descC)
+            }
+        }
+
+        class ProcessRowBuilder {
+          static build(code, desc, callback) {
+            var template = $($('.process-row-template').html())
+            template.find('.code').text(code)
+            template.find('.description').text(desc)
+            template.click((event) => {
+              callback(code, desc)
+            })
+            return template
+          }
+        }
+
+        class WasteRowTemplate {
+          static build(code, desc, callback) {
+            var template = $($('.waste-row-template').html())
+            template.find('.code').text(code)
+            template.find('.description').text(desc)
+            template.click((event) => {
+              callback(code, desc)
+            })
+            return template
+          }
+        }
+
+        class WasteHeaderRowTemplate {
+          static build(code, desc) {
+            template = $($('.waste-header-row-template').html())
+            template.find('.code').text(code)
+            template.find('.description').text(desc)
+
+            return template
+          }
+        }
+
+        var searchView = new SearchView('.search')
 
         $('.search.process').click((event) => {
           modal = $('.ui.modal.processes')
           modal.find('.process-list').html('')
           for (code in processDescs) {
-            desc = processDescs[code]
-            template = $(modal.find('.process-template').html())
-            template.find('.code').text(code)
-            template.find('.description').text(desc)
-            template.click((event) => {
-              code = $(event.target).parent().find('.code').text()
-              description = $(event.target).parent().find('.description').text()
-              $('.search input[name="process"]').val(code)
-              $('.search .process-hint').text(description)
+            template = ProcessRowBuilder.build(code, processDescs[code], (code, desc) => {
+              searchView.setProcess(code, desc)
               modal.modal('hide')
             })
             modal.find('.process-list').append(template)
@@ -183,55 +234,45 @@
           modal.modal('show')
         })
 
+        class WasteListView {
+          constructor() {
+            this.modal = $('.ui.modal.wastes')
+            this.modal.find('.selected-waste-header').remove()
+            this.modal.find('.waste-list').html('')
+          }
+
+
+          selectWaste(code, desc) {
+
+          }
+
+        }
+
         $('.search.waste').click((event) => {
           modal = $('.ui.modal.wastes')
-          modal.find('.waste-list-header').html('')
+          modal.find('.selected-waste-header').remove()
           modal.find('.waste-list').html('')
           codes['00'].forEach((code, i) => {
             desc = codeDescs[code]
-            template = $(modal.find('.waste-template').html())
-            template.find('.code').text(code)
-            template.find('.description').text(desc)
-            template.click((event) => {
-              codeA = $(event.target).parent().find('.code').text()
-              descriptionA = $(event.target).parent().find('.description').text()
-              //$('.search input[name="waste"]').val(code)
-              //$('.search .waste-hint').text(description)
-              //modal.modal('hide')
-              template = $(modal.find('.waste-header-template').html())
-              template.find('.code').text(codeA)
-              template.find('.description').text(descriptionA)
-              modal.find('.waste-list-header').append(template)
+            template = WasteRowTemplate.build(code, codeDescs[code], (code, desc) => {
+              codeA = code
+              descriptionA = desc
+              modal.find('.waste-list-header').append(WasteHeaderRowTemplate.build(codeA, desc))
               modal.find('.waste-list').html('')
 
               codes[codeA].forEach((code, i) => {
                 desc = codeDescs[code]
-                template = $(modal.find('.waste-template').html())
-                template.find('.code').text(code)
-                template.find('.description').text(desc)
-                template.click((event) => {
-                  codeB = $(event.target).parent().find('.code').text()
-                  descriptionB = $(event.target).parent().find('.description').text()
-                  template = $(modal.find('.waste-header-template').html())
-                  template.find('.code').text(codeB)
-                  template.find('.description').text(descriptionB)
-                  modal.find('.waste-list-header').append(template)
+                template = WasteRowTemplate.build(code, codeDescs[code], (code, desc) => {
+                  codeB = code
+                  descriptionB = desc
+                  modal.find('.waste-list-header').append(WasteHeaderRowTemplate.build(codeB, desc))
                   modal.find('.waste-list').html('')
 
                   codes[codeB].forEach((code, i) => {
                     desc = codeDescs[code]
-                    template = $(modal.find('.waste-template').html())
-                    template.find('.code').text(code)
-                    template.find('.description').text(desc)
-                    template.click((event) => {
-                      codeC = $(event.target).parent().find('.code').text()
-                      descriptionC = $(event.target).parent().find('.description').text()
-                      $('.search input[name="waste"]').val(codeC)
-                      $('.search .waste-hint.code-a').text(descriptionA)
-                      $('.search .waste-hint.code-b').show()
-                      $('.search .waste-hint.code-b').text(descriptionB)
-                      $('.search .waste-hint.code-c').show()
-                      $('.search .waste-hint.code-c').text(descriptionC)
+                    template = WasteRowTemplate.build(code, codeDescs[code], (code, desc) => {
+                      descriptionC = desc
+                      searchView.setWaste(code, descriptionA, descriptionB, descriptionC)
                       modal.modal('hide')
                     })
                     modal.find('.waste-list').append(template)
