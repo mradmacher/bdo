@@ -1,0 +1,334 @@
+<div class="ui fluid search card">
+  <div class="content">
+    <div class="header">Szukaj instalacji</div>
+  </div>
+  <div class="content">
+    <form class="ui form">
+      <div class="field">
+        <label>Kod odpadu</label>
+        <div class="ui icon input">
+          <input type="text" name="waste" placeholder="xxxxxx">
+          <i class="inverted circular search waste link icon"></i>
+        </div>
+        <div class="ui pointing label waste-hint code-a">Podaj kod odpadu</div>
+        <div class="ui pointing label waste-hint code-b"></div>
+        <div class="ui pointing label waste-hint code-c"></div>
+      </div>
+      <div class="field">
+        <label>Proces przetwarzania</label>
+        <div class="ui icon input">
+          <input type="text" name="process" placeholder="R1">
+          <i class="inverted circular search process link icon"></i>
+        </div>
+        <div class="ui pointing label process-hint">Podaj kod procesu przetwarzania</div>
+      </div>
+      <div class="field">
+        <label>Województwo</label>
+        <div class="ui icon input">
+          <select class="ui search selection dropdown" name="voivodeship">
+            <option value=""></option>
+            <option value="DS">dolnośląskie</option>
+            <option value="KP">kujawsko-pomorskie</option>
+            <option value="LU">lubelskie</option>
+            <option value="LB">lubuskie</option>
+            <option value="LD">łódzkie</option>
+            <option value="MA">małopolskie</option>
+            <option value="MZ">mazowieckie</option>
+            <option value="OP">opolskie</option>
+            <option value="PK">podkarpackie</option>
+            <option value="PD">podlaskie</option>
+            <option value="PM">pomorskie</option>
+            <option value="SL">śląskie</option>
+            <option value="SK">świętokrzyskie</option>
+            <option value="WN">warmińsko-mazurskie</option>
+            <option value="WP">wielkopolskie</option>
+            <option value="ZP">zachodniopomorskie</option>
+          </select>
+          <i class="inverted circular location arrow link icon"></i>
+        </div>
+      </div>
+      <button class="ui button" type="submit">Szukaj</button>
+    </form>
+  </div>
+  <!--
+  <iframe width="450" height="250" frameborder="0" style="border:0" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/MAP_MODE?key=YOUR_API_KEY&PARAMETERS" allowfullscreen>
+  </iframe>
+  -->
+</div>
+
+<div class="ui modal processes">
+  <div class="header">
+    Wyszukaj proces przetwarzania
+  </div>
+  <div class="scrolling content">
+    <table class="ui selectable compact celled table">
+      <thead>
+        <tr>
+          <th>Kod</th>
+          <th>Opis</th>
+        </tr>
+      </thead>
+      <template class="process-row-template">
+        <tr class="process">
+          <td class="code"></td>
+          <td class="description"></td>
+        </tr>
+      </template>
+      <tbody class="process-list">
+      </tbody>
+    </table>
+  </div>
+  <div class="actions">
+    <div class="ui basic cancel button">
+      <i class="checkmark icon"></i>
+      Anuluj
+    </div>
+  </div>
+</div>
+
+<div class="ui modal wastes">
+  <div class="header">
+    Wyszukaj kod odpadu
+  </div>
+  <div class="scrolling content">
+    <table class="ui selectable compact celled table">
+      <template class="waste-header-row-template">
+        <tr class="selected-waste-header">
+          <th class="code"></th>
+          <th class="description"></th>
+        </tr>
+      </template>
+      <thead class="waste-list-header">
+        <tr>
+          <th>Kod</th>
+          <th>Opis</th>
+        </tr>
+      </thead>
+      <template class="waste-row-template">
+        <tr class="waste">
+          <td class="code"></td>
+          <td class="description"></td>
+        </tr>
+      </template>
+      <tbody class="waste-list">
+      </tbody>
+    </table>
+  </div>
+  <div class="actions">
+    <div class="ui basic cancel button">
+      <i class="checkmark icon"></i>
+      Anuluj
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(function() {
+    class SearchView {
+      constructor(selector) {
+        this.selector = selector
+        this.element = $(selector)
+        this.element.find('.dropdown').dropdown()
+        this.element.find('.waste-hint.code-b').hide()
+        this.element.find('.waste-hint.code-c').hide()
+        this.element.trigger('form reset')
+
+        this.element.find('.button').click((event) => {
+          event.preventDefault()
+          $('.ui.cards').toggle()
+          let valueA
+          let valueB
+          let valueC
+          let code = $('.ui.form .field [name=waste]').val()
+          let codeA = code.slice(0, 2)
+          let codeB = code.slice(0, 4)
+          let codeC = code.slice(0, 6)
+          if(codeA.length < 2) {
+            codeA = ''
+          }
+          if(codeB.length < 4) {
+            codeB = ''
+          }
+          if(codeC.length < 6) {
+            codeC = ''
+          }
+          if(codeA) {
+            valueA = codeDescs[codeA]
+          }
+          if(codeB) {
+            valueB = codeDescs[codeB]
+          }
+          if(codeC) {
+            valueC = codeDescs[codeC]
+          }
+
+          if(valueA) {
+            this.element.find('.waste-hint.code-a').text(valueA)
+          } else {
+            this.element.find('.waste-hint').text("Nieznany kod")
+          }
+          if(valueB) {
+            this.element.find('.waste-hint.code-b').show()
+            this.element.find('.waste-hint.code-b').text(valueB)
+          } else {
+            this.element.find('.waste-hint.code-b').hide()
+          }
+          if(valueC) {
+            this.element.find('.waste-hint.code-c').show()
+            this.element.find('.waste-hint.code-c').text(valueC)
+          } else {
+            this.element.find('.waste-hint.code-c').hide()
+          }
+
+          let value
+          let process = this.element.find('.field [name=process]').val()
+          if(process) {
+            process = process.toUpperCase()
+            this.element.find('form .field [name=process]').val(process)
+            value = processDescs[process]
+          }
+          if(value) {
+            this.element.find('.process-hint').text(value)
+          } else {
+            this.element.find('.process-hint').text("Nieznany kod")
+          }
+        })
+      }
+
+      setProcess(code, description) {
+        this.element.find('form input[name="process"]').val(code)
+        this.element.find('.process-hint').text(description)
+      }
+
+      setWaste(code, descA, descB, descC) {
+        this.element.find('form input[name="waste"]').val(code)
+        this.element.find('.waste-hint.code-a').text(descA)
+        this.element.find('.waste-hint.code-b').show()
+        this.element.find('.waste-hint.code-b').text(descB)
+        this.element.find('.waste-hint.code-c').show()
+        this.element.find('.waste-hint.code-c').text(descC)
+      }
+    }
+
+    class ProcessRowBuilder {
+      static build(code, desc, callback) {
+        var template = $($('.process-row-template').html())
+        template.find('.code').text(code)
+        template.find('.description').text(desc)
+        template.click((event) => {
+          callback(code, desc)
+        })
+        return template
+      }
+    }
+
+    class WasteRowTemplate {
+      static build(code, desc, callback) {
+        var template = $($('.waste-row-template').html())
+        template.find('.code').text(code)
+        template.find('.description').text(desc)
+        template.click((event) => {
+          callback(code, desc)
+        })
+        return template
+      }
+    }
+
+    class WasteHeaderRowTemplate {
+      static build(code, desc) {
+        let template = $($('.waste-header-row-template').html())
+        template.find('.code').text(code)
+        template.find('.description').text(desc)
+
+        return template
+      }
+    }
+
+    var searchView = new SearchView('.ui.search.card')
+
+    class ProcessSelectorView {
+      constructor() {
+        this.modal = $('.ui.modal.processes')
+        this.modal.find('.process-list').html('')
+      }
+
+      hide() {
+        this.modal.modal('hide')
+      }
+
+      show() {
+        this.modal.modal('show')
+      }
+
+      load(onSelect) {
+        for (let code in processDescs) {
+          let template = ProcessRowBuilder.build(code, processDescs[code], (code, desc) => {
+            onSelect(code, desc)
+          })
+          this.modal.find('.process-list').append(template)
+        }
+      }
+    }
+
+    $('.search.process').click((event) => {
+      let processSelectorView = new ProcessSelectorView
+      processSelectorView.load((code, desc) => {
+        searchView.setProcess(code, desc)
+        processSelectorView.hide()
+      })
+      processSelectorView.show()
+    })
+
+    class WasteListView {
+      constructor() {
+        this.modal = $('.ui.modal.wastes')
+        this.modal.find('.selected-waste-header').remove()
+        this.modal.find('.waste-list').html('')
+        this.selectedDescs = []
+        this.selectedCode = '00'
+      }
+
+      select(code, desc) {
+        this.modal.find('.waste-list-header').append(
+          WasteHeaderRowTemplate.build(code, desc)
+        )
+      }
+
+      hide() {
+        this.modal.modal('hide')
+      }
+
+      show() {
+        this.modal.modal('show')
+      }
+
+      load(code, onSelect) {
+        this.modal.find('.waste-list').html('')
+        codes[code].forEach((code, i) => {
+          let template = WasteRowTemplate.build(code, codeDescs[code], (code, desc) => {
+            this.selectedCode = code
+            this.selectedDescs.push(desc)
+            onSelect(code, desc)
+          })
+          this.modal.find('.waste-list').append(template)
+        })
+      }
+    }
+
+    $('.search.waste').click((event) => {
+      var wasteListView = new WasteListView
+      wasteListView.load('00', (code, desc) => {
+        wasteListView.select(code, desc)
+        wasteListView.load(code, (code, desc) => {
+          wasteListView.select(code, desc)
+          wasteListView.load(code, (code, desc) => {
+            searchView.setWaste(wasteListView.selectedCode, ...wasteListView.selectedDescs)
+            wasteListView.hide()
+          })
+        })
+      })
+      wasteListView.show()
+    })
+
+  })
+</script>
