@@ -1,4 +1,16 @@
 <div class="ui fluid search card">
+  <template class="code-desc-row-template">
+    <tr>
+      <td class="code"></td>
+      <td class="description"></td>
+    </tr>
+  </template>
+  <template class="code-desc-header-row-template">
+    <tr>
+      <th class="code"></th>
+      <th class="description"></th>
+    </tr>
+  </template>
   <div class="content">
     <div class="header">Szukaj instalacji</div>
   </div>
@@ -68,12 +80,6 @@
           <th>Opis</th>
         </tr>
       </thead>
-      <template class="process-row-template">
-        <tr class="process">
-          <td class="code"></td>
-          <td class="description"></td>
-        </tr>
-      </template>
       <tbody class="process-list">
       </tbody>
     </table>
@@ -92,24 +98,12 @@
   </div>
   <div class="scrolling content">
     <table class="ui selectable compact celled table">
-      <template class="waste-header-row-template">
-        <tr class="selected-waste-header">
-          <th class="code"></th>
-          <th class="description"></th>
-        </tr>
-      </template>
       <thead class="waste-list-header">
         <tr>
           <th>Kod</th>
           <th>Opis</th>
         </tr>
       </thead>
-      <template class="waste-row-template">
-        <tr class="waste">
-          <td class="code"></td>
-          <td class="description"></td>
-        </tr>
-      </template>
       <tbody class="waste-list">
       </tbody>
     </table>
@@ -136,9 +130,9 @@
         this.element.find('.button').click((event) => {
           event.preventDefault()
           $('.ui.cards').toggle()
-          let valueA
-          let valueB
-          let valueC
+          let descA
+          let descB
+          let descC
           let code = $('.ui.form .field [name=waste]').val()
           let codeA = code.slice(0, 2)
           let codeB = code.slice(0, 4)
@@ -153,29 +147,29 @@
             codeC = ''
           }
           if(codeA) {
-            valueA = codeDescs[codeA]
+            descA = codeDescs[codeA]
           }
           if(codeB) {
-            valueB = codeDescs[codeB]
+            descB = codeDescs[codeB]
           }
           if(codeC) {
-            valueC = codeDescs[codeC]
+            descC = codeDescs[codeC]
           }
 
-          if(valueA) {
-            this.element.find('.waste-hint.code-a').text(valueA)
+          if(descA) {
+            this.element.find('.waste-hint.code-a').text(descA)
           } else {
             this.element.find('.waste-hint').text("Nieznany kod")
           }
-          if(valueB) {
+          if(descB) {
+            this.element.find('.waste-hint.code-b').text(descB)
             this.element.find('.waste-hint.code-b').show()
-            this.element.find('.waste-hint.code-b').text(valueB)
           } else {
             this.element.find('.waste-hint.code-b').hide()
           }
-          if(valueC) {
+          if(descC) {
+            this.element.find('.waste-hint.code-c').text(descC)
             this.element.find('.waste-hint.code-c').show()
-            this.element.find('.waste-hint.code-c').text(valueC)
           } else {
             this.element.find('.waste-hint.code-c').hide()
           }
@@ -210,9 +204,9 @@
       }
     }
 
-    class ProcessRowBuilder {
+    class CodeDescRowBuilder {
       static build(code, desc, callback) {
-        var template = $($('.process-row-template').html())
+        var template = $($('.code-desc-row-template').html())
         template.find('.code').text(code)
         template.find('.description').text(desc)
         template.click((event) => {
@@ -222,21 +216,9 @@
       }
     }
 
-    class WasteRowTemplate {
-      static build(code, desc, callback) {
-        var template = $($('.waste-row-template').html())
-        template.find('.code').text(code)
-        template.find('.description').text(desc)
-        template.click((event) => {
-          callback(code, desc)
-        })
-        return template
-      }
-    }
-
-    class WasteHeaderRowTemplate {
+    class CodeDescHeaderRowBuilder {
       static build(code, desc) {
-        let template = $($('.waste-header-row-template').html())
+        let template = $($('.code-desc-header-row-template').html())
         template.find('.code').text(code)
         template.find('.description').text(desc)
 
@@ -258,11 +240,7 @@
 
       show() {
         this.modal.modal('show')
-      }
-
-      load(onSelect) {
-        for (let code in processDescs) {
-          let template = ProcessRowBuilder.build(code, processDescs[code], (code, desc) => {
+      } load(onSelect) { for (let code in processDescs) { let template = CodeDescRowBuilder.build(code, processDescs[code], (code, desc) => {
             onSelect(code, desc)
           })
           this.modal.find('.process-list').append(template)
@@ -290,7 +268,7 @@
 
       select(code, desc) {
         this.modal.find('.waste-list-header').append(
-          WasteHeaderRowTemplate.build(code, desc)
+          CodeDescHeaderRowBuilder.build(code, desc)
         )
       }
 
@@ -302,10 +280,10 @@
         this.modal.modal('show')
       }
 
-      load(code, onSelect) {
+      load(onSelect) {
         this.modal.find('.waste-list').html('')
-        codes[code].forEach((code, i) => {
-          let template = WasteRowTemplate.build(code, codeDescs[code], (code, desc) => {
+        codes[this.selectedCode].forEach((code, i) => {
+          let template = CodeDescRowBuilder.build(code, codeDescs[code], (code, desc) => {
             this.selectedCode = code
             this.selectedDescs.push(desc)
             onSelect(code, desc)
@@ -317,11 +295,11 @@
 
     $('.search.waste').click((event) => {
       var wasteListView = new WasteListView
-      wasteListView.load('00', (code, desc) => {
+      wasteListView.load((code, desc) => {
         wasteListView.select(code, desc)
-        wasteListView.load(code, (code, desc) => {
+        wasteListView.load((code, desc) => {
           wasteListView.select(code, desc)
-          wasteListView.load(code, (code, desc) => {
+          wasteListView.load((code, desc) => {
             searchView.setWaste(wasteListView.selectedCode, ...wasteListView.selectedDescs)
             wasteListView.hide()
           })
