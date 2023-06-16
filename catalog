@@ -4,14 +4,12 @@
 01 01 02 	Odpady z wydobywania kopalin innych niż rudy metali
 01 01 80 	Odpady skalne z górnictwa miedzi, cynku i ołowiu
 01 03 	Odpady z fizycznej i chemicznej przeróbki rud metali
-01 03 04* 	Odpady z przeróbki rud siarczkowych powodujące samoczynne zakwaszenie
-środowiska w czasie składowania
+01 03 04* 	Odpady z przeróbki rud siarczkowych powodujące samoczynne zakwaszenie środowiska w czasie składowania
 01 03 05* 	Inne odpady poprzeróbcze zawierające substancje niebezpieczne (z wyłączeniem 01 03 80)
 01 03 06 	Inne odpady poprzeróbcze niż wymienione w 01 03 04, 01 03 05, 01 03 80 i 01 03 81
 01 03 07* 	Inne odpady zawierające substancje niebezpieczne z fizycznej i chemicznej przeróbki rud metali
 01 03 08 	Odpady w postaci pyłów i proszków inne niż wymienione w 01 03 07
-01 03 09 	Czerwony szlam powstający przy produkcji tlenku glinu inny niż wymieniony
-w 01 03 10
+01 03 09 	Czerwony szlam powstający przy produkcji tlenku glinu inny niż wymieniony w 01 03 10
 01 03 10* 	Czerwony szlam powstający przy produkcji tlenku glinu zawierający substancje stwarzające zagrożenie inny niż odpady wymienione w 01 03 07
 01 03 80* 	Odpady z flotacyjnego wzbogacania rud metali nieżelaznych zawierające substancje niebezpieczne
 01 03 81 	Odpady z flotacyjnego wzbogacania rud metali nieżelaznych inne niż wymienione w 01 03 80
@@ -458,8 +456,7 @@ w 01 03 10
 10 03 21* 	Inne cząstki stałe i pyły (łącznie z pyłami z młynów kulowych) zawierające substancje niebezpieczne
 10 03 22 	Inne cząstki stałe i pyły (łącznie z pyłami z młynów kulowych) inne niż wymienione w 10 03 21
 10 03 23* 	Odpady stałe z oczyszczania gazów odlotowych zawierające substancje niebezpieczne
-10 03 24 	Odpady stałe z oczyszczania gazów odlotowych inne niż wymienione
-w 10 03 23
+10 03 24 	Odpady stałe z oczyszczania gazów odlotowych inne niż wymienione w 10 03 23
 10 03 25* 	Szlamy i osady pofiltracyjne z oczyszczania gazów odlotowych zawierające substancje niebezpieczne
 10 03 26 	Szlamy i osady pofiltracyjne z oczyszczania gazów odlotowych inne niż wymienione w 10 03 25
 10 03 27* 	Odpady z uzdatniania wody chłodzącej zawierające oleje
@@ -622,7 +619,7 @@ w 10 03 23
 11 01 10 	Szlamy i osady pofiltracyjne inne niż wymienione w 11 01 09
 11 01 11* 	Wody popłuczne zawierające substancje niebezpieczne
 11 01 12 	Wody popłuczne inne niż wymienione w 11 01 11
-1101 13* 	Odpady z odtłuszczania zawierające substancje niebezpieczne
+11 01 13* 	Odpady z odtłuszczania zawierające substancje niebezpieczne
 11 01 14 	Odpady z odtłuszczania inne niż wymienione w 11 01 13
 11 01 15* 	Odcieki i szlamy z systemów membranowych lub systemów wymiany jonowej zawierające substancje niebezpieczne
 11 01 16* 	Nasycone lub zużyte żywice jonowymienne
@@ -812,8 +809,7 @@ w 10 03 23
 16 10 01* 	Uwodnione odpady ciekłe zawierające substancje niebezpieczne
 16 10 02 	Uwodnione odpady ciekłe inne niż wymienione w 16 10 01
 16 10 03* 	Stężone uwodnione odpady ciekłe (np. koncentraty) zawierające substancje niebezpieczne
-16 10 04 	Stężone uwodnione odpady ciekłe (np. koncentraty) inne niż wymienione
-w 16 10 03
+16 10 04 	Stężone uwodnione odpady ciekłe (np. koncentraty) inne niż wymienione w 16 10 03
 16 11 	Odpady z okładzin piecowych i materiały ogniotrwałe
 16 11 01* 	Węglopochodne okładziny piecowe i materiały ogniotrwałe z procesów metalurgicznych zawierające substancje niebezpieczne
 16 11 02 	Węglopochodne okładziny piecowe i materiały ogniotrwałe z procesów metalurgicznych inne niż wymienione w 16 11 01
@@ -1045,7 +1041,7 @@ w 16 10 03
 20 01 39 	Tworzywa sztuczne
 20 01 40 	Metale
 20 01 41 	Odpady z czyszczenia kominów (w tym zmiotki wentylacyjne)
-20 01 80 	Środki ochrony roślin inne niż wymienione w 20 01 19
+20 01 80    Środki ochrony roślin inne niż wymienione w 20 01 19
 20 01 99 	Inne niewymienione frakcje zbierane w sposób selektywny
 20 02 	Odpady z ogrodów i parków (w tym z cmentarzy)
 20 02 01 	Odpady ulegające biodegradacji
