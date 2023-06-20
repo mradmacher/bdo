@@ -137,52 +137,6 @@ func playWithDb() {
     }
 }
 
-func buildCatalogs() {
-    buffer, err := os.ReadFile("catalog")
-    if err != nil { panic(err) }
-    sc := bufio.NewScanner(bytes.NewReader(buffer))
-
-    var codeDescs map[string]string
-    codeDescs = make(map[string]string)
-    var codes map[string][]string
-    codes = make(map[string][]string)
-
-    wasteRegexp := regexp.MustCompile(`(\d\d \d\d \d\d\*|\d\d \d\d \d\d|\d\d \d\d|\d\d)\s+(\S.+)`)
-    for sc.Scan() {
-        result := wasteRegexp.FindStringSubmatch(sc.Text())
-
-        if result[1] == "" || result[2] == "" {
-            panic(result[1] + result[2])
-        }
-        code := result[1]
-        codeDescs[code] = result[2]
-        if len(code) == 2 {
-            codes["00"] = append(codes["00"], code)
-        } else if len(code) == 5 {
-            codes[code[:2]] = append(codes[code[:2]], code)
-        } else {
-            codes[code[:5]] = append(codes[code[:5]], code)
-        }
-    }
-    if err = sc.Err(); err != nil {
-        panic(err)
-    }
-
-    total := 0
-    total += len(codes["00"])
-    for _, code1 := range codes["00"] {
-        total += len(codes[code1])
-        for _, code2 := range codes[code1] {
-            total += len(codes[code2])
-        }
-    }
-    fmt.Println(total)
-    fmt.Printf("%q\n", codes["20"])
-    fmt.Println(codeDescs["20"])
-    fmt.Println(codeDescs["20 01"])
-    fmt.Println(codeDescs["20 01 80"])
-}
-
 func main() {
     buildCatalogs()
 }

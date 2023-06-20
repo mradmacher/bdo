@@ -283,7 +283,7 @@
       load(onSelect) {
         this.modal.find('.waste-list').html('')
         codes[this.selectedCode].forEach((code, i) => {
-          let template = CodeDescRowBuilder.build(code, codeDescs[code], (code, desc) => {
+          let template = CodeDescRowBuilder.build(code, codeDescs[code.replace("*", "")], (code, desc) => {
             this.selectedCode = code
             this.selectedDescs.push(desc)
             onSelect(code, desc)
