@@ -1,4 +1,4 @@
-package repo
+package bdo
 
 import (
     "context"
@@ -36,7 +36,9 @@ func (db *DbClient) NewInstallationRepo() *InstallationRepo {
     return &InstallationRepo{Collection: db.Client.Database("mbdo").Collection("installations")}
 }
 
-type Decision struct {
+type Params map[string]string
+
+type Capability struct {
     WasteCode string `bson:"waste_code"`
     Dangerous bool `bson:"dangerous"`
     ProcessCode string `bson:"process_code,omitempty"`
@@ -46,13 +48,13 @@ type Decision struct {
 type Address struct {
     Line1 string
     Line2 string
-    StateCode string
+    StateCode string `bson:"state_code"`
 }
 
 type Installation struct {
     Name string
     Address Address
-    Decisions []Decision
+    Capabilities []Capability
 }
 
 type InstallationRepo struct {
@@ -70,11 +72,21 @@ func (repo *InstallationRepo) Add(installation *Installation) error {
     return nil
 }
 
-func (repo *InstallationRepo) Search() ([]Installation, error) {
+func (repo *InstallationRepo) Search(params Params) ([]Installation, error) {
     var installations []Installation
 
-    cursor, err := repo.Collection.Find(context.TODO(), bson.D{})
+    query := bson.D{}
+    for k, v := range params {
+        switch k {
+            case "process_code":
+                query = append(query, bson.E{"capabilities.process_code", v})
+            case "waste_code":
+                query = append(query, bson.E{"capabilities.waste_code", v})
+        }
+    }
+    cursor, err := repo.Collection.Find(context.TODO(), query)
     if err != nil { return nil, err }
+
     for cursor.Next(context.TODO()) {
         var result Installation
         if err := cursor.Decode(&result); err != nil {

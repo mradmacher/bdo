@@ -5,11 +5,11 @@ import (
     "os"
     "encoding/json"
     "github.com/joho/godotenv"
-    "github.com/mradmacher/mbdo/internal/repo"
+    "github.com/mradmacher/mbdo/internal"
 )
 
-func loadData(filePath string) ([]repo.Installation, error) {
-    var installations []repo.Installation
+func loadData(filePath string) ([]bdo.Installation, error) {
+    var installations []bdo.Installation
     jsonBlob, err := os.ReadFile(filePath)
 
     err = json.Unmarshal(jsonBlob, &installations)
@@ -18,7 +18,7 @@ func loadData(filePath string) ([]repo.Installation, error) {
 }
 
 func playWithDb() {
-    db := repo.DbClient{}
+    db := bdo.DbClient{}
     err := db.Connect()
     if err != nil { panic(err) }
 
@@ -28,24 +28,24 @@ func playWithDb() {
         }
     }()
 
-    installationsRepo := db.NewInstallationRepo()
-    err = installationsRepo.Purge()
+    repo := db.NewInstallationRepo()
+    err = repo.Purge()
     if err != nil { panic(err) }
 
-    var installations []repo.Installation
+    var installations []bdo.Installation
     installations, err = loadData("db_seed.json")
     if err != nil { panic(err) }
 
     for _, installation := range installations {
-        err = installationsRepo.Add(&installation)
+        err = repo.Add(&installation)
         if err != nil { panic(err) }
     }
 
-    result, err := installationsRepo.Find()
+    result, err := repo.Find()
     if err != nil { panic(err) }
     fmt.Println("%v", *result)
 
-    results, err := installationsRepo.Search()
+    results, err := repo.Search(map[string]string{})
     if err != nil { panic(err) }
     for _, installation := range results {
         fmt.Println("%v", installation)

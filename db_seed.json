@@ -1,0 +1,76 @@
+[
+  {
+    "Name": "TRANS POŁUDNIE",
+    "Address": {
+      "Line1": "Podgrodzie 8b",
+      "Line2": "39-200 Dębica",
+      "StateCode": "18"
+    },
+    "Capabilities": [
+      {
+        "WasteCode": "160103",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "Quantity": 2500
+      },
+      {
+        "WasteCode": "160103",
+        "Quantity": 1750
+      }
+    ]
+  },
+  {
+    "Name": "MEGA",
+    "Address": {
+      "Line1": "ul. Świętosława 272",
+      "Line2": "39-200 Dębica",
+      "StateCode": "18"
+    },
+    "Capabilities": [
+      {
+        "WasteCode": "120101",
+        "Quantity": 1000
+      },
+      {
+        "WasteCode": "120102",
+        "Quantity": 2000
+      },
+      {
+        "WasteCode": "120103",
+        "Quantity": 2000
+      },
+      {
+        "WasteCode": "120104",
+        "Quantity": 1000
+      },
+      {
+        "WasteCode": "150104",
+        "Quantity": 3000
+      },
+      {
+        "WasteCode": "160117",
+        "Quantity": 200
+      },
+      {
+        "WasteCode": "160118",
+        "Quantity": 100
+      },
+      {
+        "WasteCode": "170405",
+        "Quantity": 6000
+      },
+      {
+        "WasteCode": "170407",
+        "Quantity": 2000
+      },
+      {
+        "WasteCode": "191202",
+        "Quantity": 4000
+      },
+      {
+        "WasteCode": "191203",
+        "Quantity": 950
+      }
+    ]
+  }
+]
