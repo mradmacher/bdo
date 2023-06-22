@@ -10,6 +10,8 @@ import (
     "go.mongodb.org/mongo-driver/mongo/options"
 )
 
+const DB_NAME = "bdo"
+
 type DbClient struct {
     Client *mongo.Client
 }
@@ -33,10 +35,27 @@ func (db *DbClient) Disconnect() error {
 }
 
 func (db *DbClient) NewInstallationRepo() *InstallationRepo {
-    return &InstallationRepo{Collection: db.Client.Database("mbdo").Collection("installations")}
+    return &InstallationRepo{Collection: db.Client.Database(DB_NAME).Collection("installations")}
 }
 
-type Params map[string]string
+type SearchParams map[string]string
+
+func (params *SearchParams) toQuery() bson.D {
+    query := bson.D{}
+
+    for k, v := range *params {
+        switch k {
+            case "process_code":
+                query = append(query, bson.E{"capabilities.process_code", v})
+            case "waste_code":
+                query = append(query, bson.E{"capabilities.waste_code", v})
+            case "state_code":
+                query = append(query, bson.E{"address.state_code", v})
+        }
+    }
+
+    return query
+}
 
 type Capability struct {
     WasteCode string `bson:"waste_code"`
@@ -72,19 +91,10 @@ func (repo *InstallationRepo) Add(installation *Installation) error {
     return nil
 }
 
-func (repo *InstallationRepo) Search(params Params) ([]Installation, error) {
+func (repo *InstallationRepo) Search(params SearchParams) ([]Installation, error) {
     var installations []Installation
 
-    query := bson.D{}
-    for k, v := range params {
-        switch k {
-            case "process_code":
-                query = append(query, bson.E{"capabilities.process_code", v})
-            case "waste_code":
-                query = append(query, bson.E{"capabilities.waste_code", v})
-        }
-    }
-    cursor, err := repo.Collection.Find(context.TODO(), query)
+    cursor, err := repo.Collection.Find(context.TODO(), params.toQuery())
     if err != nil { return nil, err }
 
     for cursor.Next(context.TODO()) {

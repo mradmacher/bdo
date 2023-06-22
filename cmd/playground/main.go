@@ -5,7 +5,7 @@ import (
     "os"
     "encoding/json"
     "github.com/joho/godotenv"
-    "github.com/mradmacher/mbdo/internal"
+    "github.com/mradmacher/bdo/internal"
 )
 
 func loadData(filePath string) ([]bdo.Installation, error) {
@@ -33,7 +33,7 @@ func playWithDb() {
     if err != nil { panic(err) }
 
     var installations []bdo.Installation
-    installations, err = loadData("db_seed.json")
+    installations, err = loadData("seed.json")
     if err != nil { panic(err) }
 
     for _, installation := range installations {

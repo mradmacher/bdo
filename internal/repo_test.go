@@ -2,11 +2,12 @@ package bdo
 
 import (
     "testing"
+    "golang.org/x/exp/slices"
     "github.com/joho/godotenv"
 )
 
 func setupSuite(t *testing.T) (func(*testing.T), *DbClient) {
-    if err := godotenv.Load("../../.env"); err != nil {
+    if err := godotenv.Load("../.env"); err != nil {
         t.Fatalf("No .env file found")
     }
 
@@ -20,15 +21,15 @@ func setupSuite(t *testing.T) (func(*testing.T), *DbClient) {
     }, &db
 }
 
-func TestSearchReturnsAllDocuments(t *testing.T) {
-    teardownSuite, db := setupSuite(t)
-    defer teardownSuite(t)
-
-    r := db.NewInstallationRepo()
-    r.Purge()
-    r.Add(
+func setupTest(t *testing.T, db *DbClient) (func(*testing.T), *InstallationRepo) {
+    repo := db.NewInstallationRepo()
+    repo.Purge()
+    repo.Add(
         &Installation{
             Name: "Test1",
+            Address: Address{
+              StateCode: "11",
+            },
             Capabilities: []Capability{
                 Capability{
                     WasteCode: "020202",
@@ -40,12 +41,20 @@ func TestSearchReturnsAllDocuments(t *testing.T) {
                     ProcessCode: "R2",
                     Quantity: 123,
                 },
+                Capability{
+                    WasteCode: "010101",
+                    ProcessCode: "R1",
+                    Quantity: 123,
+                },
             },
         },
     )
-    r.Add(
+    repo.Add(
         &Installation{
             Name: "Test2",
+            Address: Address{
+              StateCode: "10",
+            },
             Capabilities: []Capability{
                 Capability{
                     WasteCode: "010101",
@@ -60,30 +69,101 @@ func TestSearchReturnsAllDocuments(t *testing.T) {
             },
         },
     )
-    r.Add(
+    repo.Add(
         &Installation{
             Name: "Test3",
+            Address: Address{
+              StateCode: "11",
+            },
             Capabilities: []Capability{
                 Capability{
                     WasteCode: "030303",
-                    ProcessCode: "R3",
+                    ProcessCode: "R1",
                     Quantity: 123,
                 },
             },
         },
     )
-    params := Params{
-        "process_code": "R1",
-        "waste_code": "010101",
+
+    return func(t *testing.T) {
+        repo.Purge()
+    }, repo
+}
+
+func TestSearchReturnsAllDocuments(t *testing.T) {
+    teardownSuite, db := setupSuite(t)
+    defer teardownSuite(t)
+    teardownTest, repo := setupTest(t, db)
+    defer teardownTest(t)
+
+    testCases := []struct {
+      params SearchParams
+      want []string
+    }{
+        {
+            SearchParams{
+                "process_code": "R1",
+            },
+            []string{"Test1", "Test2", "Test3"},
+        },
+        {
+            SearchParams{
+                "process_code": "R100",
+            },
+            []string{},
+        },
+        {
+            SearchParams{
+                "waste_code": "010101",
+            },
+            []string{"Test1", "Test2"},
+        },
+        {
+            SearchParams{
+                "waste_code": "010203",
+            },
+            []string{},
+        },
+        {
+            SearchParams{
+                "state_code": "11",
+            },
+            []string{"Test1", "Test3"},
+        },
+        {
+            SearchParams{
+                "state_code": "100",
+            },
+            []string{},
+        },
+        {
+            SearchParams{
+                "process_code": "R1",
+                "waste_code": "010101",
+            },
+            []string{"Test1", "Test2"},
+        },
+        {
+            SearchParams{
+                "process_code": "R1",
+                "waste_code": "010101",
+                "state_code": "10",
+            },
+            []string{"Test2"},
+        },
     }
-    results, _ := r.Search(params)
-    got := len(results)
-    if got != 1 {
-        t.Fatalf("Expected %d, got %d", 1, got)
-    }
-    result := results[0]
-    want := "Test2"
-    if result.Name != want {
-        t.Fatalf("Expected %q, got %q", want, result.Name)
+
+    for _, tc := range testCases {
+        results, _ := repo.Search(tc.params)
+        got_count := len(results)
+        want_count := len(tc.want)
+        if got_count != len(tc.want) {
+            t.Errorf("len(Search(%v)) = %d; want %d", tc.params, got_count, want_count)
+        }
+        for _, result := range results {
+            if !slices.Contains(tc.want, result.Name) {
+                t.Errorf("Search(%v)) returned %q; want %q", tc.params, result.Name, tc.want)
+            }
+        }
     }
 }
