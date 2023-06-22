@@ -1,4 +1,4 @@
-module github.com/mradmacher/mbdo
+module github.com/mradmacher/bdo
 
 go 1.20
 
