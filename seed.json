@@ -12,10 +12,6 @@
         "Dangerous": false,
         "ProcessCode": "R12",
         "Quantity": 2500
-      },
-      {
-        "WasteCode": "160103",
-        "Quantity": 1750
       }
     ]
   },
