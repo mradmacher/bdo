@@ -87,10 +87,10 @@ func (repo *InstallationRepo) Purge() error {
     return err
 }
 
-func (repo *InstallationRepo) Add(installation *Installation) error {
-    _, err := repo.Collection.InsertOne(context.TODO(), installation)
-    if err != nil { return err }
-    return nil
+func (repo *InstallationRepo) Add(installation *Installation) (interface{}, error) {
+    result, err := repo.Collection.InsertOne(context.TODO(), installation)
+    if err != nil { return nil, err }
+    return result.InsertedID, nil
 }
 
 func (repo *InstallationRepo) Search(params SearchParams) ([]Installation, error) {
