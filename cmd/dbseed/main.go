@@ -17,7 +17,7 @@ func loadData(filePath string) ([]bdo.Installation, error) {
     return installations, nil
 }
 
-func playWithDb() {
+func seedDb() {
     db := bdo.DbClient{}
     err := db.Connect()
     if err != nil { panic(err) }
@@ -29,10 +29,17 @@ func playWithDb() {
     }()
 
     repo := db.NewInstallationRepo()
-
-    result, err := repo.Find()
+    err = repo.Purge()
     if err != nil { panic(err) }
-    fmt.Println("%v", *result)
+
+    var installations []bdo.Installation
+    installations, err = loadData("seed.json")
+    if err != nil { panic(err) }
+
+    for _, installation := range installations {
+        err = repo.Add(&installation)
+        if err != nil { panic(err) }
+    }
 
     results, err := repo.Search(map[string]string{})
     if err != nil { panic(err) }
@@ -46,6 +53,5 @@ func main() {
         panic("No .env file found")
     }
 
-    playWithDb()
+    seedDb()
 }
-
