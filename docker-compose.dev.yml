@@ -5,6 +5,6 @@ services:
     image: mongo
     restart: always
     volumes:
-      - ./db/mongo:/data/db
+      - ../bdo_data/mongo:/data/db
     ports:
       - 27017:27017
