@@ -116,6 +116,7 @@ class SearchView {
       }
       if(value) {
         this.element.find('.process-hint').text(value)
+        this.element.find('.process-hint').show()
       } else {
         this.element.find('.process-hint').text("Nieznany kod")
       }
