@@ -8,15 +8,17 @@ import (
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "text/html; charset=utf-8")
-  fmt.Fprint(w, "<h1>Welcome</h1>")
+  http.ServeFile(w, r, "views/index.html")
+}
+
+func staticHandler(w http.ResponseWriter, r *http.Request) {
+  http.ServeFile(w, r, "." + r.URL.Path)
 }
 
 func main() {
   router := chi.NewRouter()
   router.Get("/", homeHandler)
-  router.NotFound(func(w http.ResponseWriter, r *http.Request) {
-    http.Error(w, "Page not found", http.StatusNotFound)
-  })
+  router.Get("/assets/*", staticHandler)
 
   fmt.Println("Starting the server on :3000...")
   http.ListenAndServe(":3000", router)

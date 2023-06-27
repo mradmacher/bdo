@@ -6,6 +6,7 @@ import (
     "encoding/json"
     "github.com/joho/godotenv"
     "github.com/mradmacher/bdo/internal"
+    "html/template"
 )
 
 func loadData(filePath string) ([]bdo.Installation, error) {
@@ -18,6 +19,10 @@ func loadData(filePath string) ([]bdo.Installation, error) {
 }
 
 func playWithDb() {
+    if err := godotenv.Load(); err != nil {
+        panic("No .env file found")
+    }
+
     db := bdo.DbClient{}
     err := db.Connect()
     if err != nil { panic(err) }
@@ -41,11 +46,26 @@ func playWithDb() {
     }
 }
 
-func main() {
-    if err := godotenv.Load(); err != nil {
-        panic("No .env file found")
-    }
-
-    playWithDb()
+type User struct {
+    Name string
 }
 
+func playWithTemplates() {
+    t, err := template.ParseFiles("cmd/playground/hello.gohtml")
+    if err != nil {
+        panic(err)
+    }
+
+    user := User{
+        Name: "John Smith",
+    }
+
+    err = t.Execute(os.Stdout, user)
+    if err != nil {
+        panic(err)
+    }
+}
+
+func main() {
+    playWithTemplates()
+}

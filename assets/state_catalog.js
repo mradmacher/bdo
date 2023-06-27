@@ -1,4 +1,4 @@
-const states = [
+const states = {
   "02": "Dolnośląskie",
   "04": "Kujawsko-Pomorskie",
   "06": "Lubelskie",
@@ -15,4 +15,4 @@ const states = [
   "28": "Warmińsko-Mazurskie",
   "30": "Wielkopolskie",
   "32": "Zachodniopomorskie",
-]
+}
