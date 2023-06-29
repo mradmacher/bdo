@@ -37,7 +37,7 @@ func seedDb() {
     if err != nil { panic(err) }
 
     for _, installation := range installations {
-        err = repo.Add(&installation)
+        _, err := repo.Add(&installation)
         if err != nil { panic(err) }
     }
 

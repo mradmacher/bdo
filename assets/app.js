@@ -10,22 +10,22 @@ class InstallationsView {
 
   addInstallation(installation) {
     let template = $($('#installation-template').html())
-    template.find('.name').text(installation.name)
-    template.find('.address').text(installation.address)
-    installation.capabilities.forEach((capability, i) => {
+    template.find('.name').text(installation.Name)
+    template.find('.address').text(`${installation.Address.Line1},  ${installation.Address.Line2}`)
+    installation.Capabilities.forEach((capability, i) => {
       let capabilityTemplate = $($('#installation-capability-template').html())
-      capabilityTemplate.find('.waste-code').text(capability.wasteCode)
-      capabilityTemplate.find('.process-code').text(capability.processCode)
-      capabilityTemplate.find('.quantity').text(capability.quantity)
+      capabilityTemplate.find('.waste-code').text(capability.WasteCode)
+      capabilityTemplate.find('.process-code').text(capability.ProcessCode)
+      capabilityTemplate.find('.quantity').text(capability.Quantity)
 
       let processStatus = 'teal'
-      if (capability.processCode.startsWith('D')) {
+      if (capability.ProcessCode.startsWith('D')) {
         processStatus = 'orange'
       }
       capabilityTemplate.find('.process-code').addClass(processStatus)
 
       let quantityStatus = 'olive'
-      if (capability.quantity > 1500) {
+      if (capability.Quantity > 1500) {
         quantityStatus = 'purple'
       }
       capabilityTemplate.find('.quantity').addClass(quantityStatus)
@@ -59,8 +59,39 @@ class SearchView {
     this.element.find('.button[type="submit"]').click((event) => {
       event.preventDefault()
       installationsView.clear()
-      installations.forEach((installation, i) => {
-        installationsView.addInstallation(installation)
+
+      let params = {
+        'wc': this.element.find('[name=waste]').val(),
+        'pc': this.element.find('[name=process]').val(),
+        'sc': this.element.find('[name=state]').val(),
+      }
+      console.log(params)
+
+      if ('URLSearchParams' in window) {
+        let searchParams = new URLSearchParams();
+        let searchParamsProvided = false;
+        for(let p in params) {
+          if(params[p]) {
+            searchParams.set(p, params[p]);
+            searchParamsProvided = true;
+          }
+        }
+        let newRelativePathQuery = window.location.pathname;
+        if(searchParamsProvided) {
+          newRelativePathQuery = newRelativePathQuery + '?' + searchParams.toString();
+        }
+        history.pushState(null, '', newRelativePathQuery);
+      }
+
+      $.ajax({
+        method: "GET",
+        url: "/api/installations",
+        data: params,
+        dataType: "json",
+      }).done(function(installations) {
+        installations.forEach((installation, i) => {
+          installationsView.addInstallation(installation)
+        })
       })
       let descA
       let descB

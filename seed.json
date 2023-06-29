@@ -25,46 +25,57 @@
     "Capabilities": [
       {
         "WasteCode": "120101",
+        "ProcessCode": "R12",
         "Quantity": 1000
       },
       {
         "WasteCode": "120102",
+        "ProcessCode": "R12",
         "Quantity": 2000
       },
       {
         "WasteCode": "120103",
+        "ProcessCode": "R12",
         "Quantity": 2000
       },
       {
         "WasteCode": "120104",
+        "ProcessCode": "R12",
         "Quantity": 1000
       },
       {
         "WasteCode": "150104",
+        "ProcessCode": "R12",
         "Quantity": 3000
       },
       {
         "WasteCode": "160117",
+        "ProcessCode": "R12",
         "Quantity": 200
       },
       {
         "WasteCode": "160118",
+        "ProcessCode": "R12",
         "Quantity": 100
       },
       {
         "WasteCode": "170405",
+        "ProcessCode": "R12",
         "Quantity": 6000
       },
       {
         "WasteCode": "170407",
+        "ProcessCode": "R12",
         "Quantity": 2000
       },
       {
         "WasteCode": "191202",
+        "ProcessCode": "R12",
         "Quantity": 4000
       },
       {
         "WasteCode": "191203",
+        "ProcessCode": "R12",
         "Quantity": 950
       }
     ]

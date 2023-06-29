@@ -3,13 +3,13 @@ module github.com/mradmacher/bdo
 go 1.20
 
 require (
+	github.com/go-chi/chi/v5 v5.0.8
 	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.11.7
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
 )
 
 require (
-	github.com/go-chi/chi/v5 v5.0.8 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
