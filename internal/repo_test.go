@@ -7,7 +7,7 @@ import (
 )
 
 func setupSuite(t *testing.T) (func(*testing.T), *DbClient) {
-    if err := godotenv.Load("../.env"); err != nil {
+    if err := godotenv.Load("../.test.env"); err != nil {
         t.Fatalf("No .env file found")
     }
 
