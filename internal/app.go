@@ -5,17 +5,29 @@ import (
 	"fmt"
 	"github.com/go-chi/chi/v5"
   "net/http"
+  "html/template"
+  "os"
 )
 
 type App struct {
-  *chi.Mux
+  router *chi.Mux
   db DbClient
+  template *template.Template
 }
 
-func NewApp() *App {
-  app := App{chi.NewRouter(), DbClient{}}
+func NewApp(templatesPath string) *App {
+  app := App{}
+  app.router = chi.NewRouter()
+  app.db = DbClient{}
 
-	err := app.db.Connect()
+  var err error
+
+  app.template, err = template.ParseFiles(templatesPath + "/index.html")
+  if err != nil {
+    panic(err)
+  }
+
+	err = app.db.Connect()
 	if err != nil {
 		panic(err)
 	}
@@ -24,13 +36,13 @@ func NewApp() *App {
 }
 
 func (app *App) MountHandlers() {
-	app.Get("/", homeHandler)
-	app.Get("/assets/*", staticHandler)
-	app.Get("/api/installations", app.searchInstallationsHandler)
+	app.router.Get("/", app.homeHandler)
+	app.router.Get("/assets/*", staticHandler)
+	app.router.Get("/api/installations", app.searchInstallationsHandler)
 }
 
 func (app *App) Start() {
-	http.ListenAndServe(":3000", app)
+	http.ListenAndServe(":3000", app.router)
 }
 
 func (app *App) Stop() {
@@ -39,9 +51,12 @@ func (app *App) Stop() {
   }
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
+func (app *App) homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	http.ServeFile(w, r, "views/index.html")
+  config := struct {
+    GoogleMapsApiKey string
+  }{os.Getenv("GOOGLE_MAPS_API_KEY")}
+  app.template.Execute(w, config)
 }
 
 func staticHandler(w http.ResponseWriter, r *http.Request) {

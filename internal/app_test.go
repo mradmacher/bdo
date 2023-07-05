@@ -12,14 +12,14 @@ func TestSearch(t *testing.T) {
 		panic("No .test.env file found")
 	}
 
-  app := NewApp()
+  app := NewApp("../views")
   app.MountHandlers()
   defer app.Stop()
 
   req := httptest.NewRequest("GET", "/api/installations", nil)
 
   res := httptest.NewRecorder()
-  app.ServeHTTP(res, req)
+  app.router.ServeHTTP(res, req)
 
   if res.Code != http.StatusOK {
     t.Errorf("Expected response code %d; got %d\n", http.StatusOK, res.Code)
