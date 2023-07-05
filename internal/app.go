@@ -15,10 +15,6 @@ type App struct {
 func NewApp() *App {
   app := App{chi.NewRouter(), DbClient{}}
 
-	app.Get("/", homeHandler)
-	app.Get("/assets/*", staticHandler)
-	app.Get("/api/installations", app.searchInstallationsHandler)
-
 	err := app.db.Connect()
 	if err != nil {
 		panic(err)
@@ -27,11 +23,17 @@ func NewApp() *App {
   return &app
 }
 
+func (app *App) MountHandlers() {
+	app.Get("/", homeHandler)
+	app.Get("/assets/*", staticHandler)
+	app.Get("/api/installations", app.searchInstallationsHandler)
+}
+
 func (app *App) Start() {
 	http.ListenAndServe(":3000", app)
 }
 
-func (app *App) Close() {
+func (app *App) Stop() {
   if err := app.db.Disconnect(); err != nil {
     panic(err)
   }
@@ -79,5 +81,3 @@ func (app *App) searchInstallationsHandler(w http.ResponseWriter, r *http.Reques
 		fmt.Fprint(w, "[]")
 	}
 }
-
-

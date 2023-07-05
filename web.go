@@ -12,7 +12,8 @@ func main() {
 	}
 
   app := bdo.NewApp()
-  defer app.Close()
+  app.MountHandlers()
+  defer app.Stop()
 
 	fmt.Println("Starting the server on :3000...")
   app.Start()
