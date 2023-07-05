@@ -11,7 +11,10 @@ func main() {
 		panic("No .env file found")
 	}
 
-  app := bdo.NewApp("views")
+  app, err := bdo.NewApp("views")
+  if err != nil {
+    panic(err)
+  }
   app.MountHandlers()
   defer app.Stop()
 
