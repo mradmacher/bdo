@@ -10,7 +10,7 @@
     <script src="assets/process_catalog.js"></script>
     <script src="assets/state_catalog.js"></script>
     <script src="assets/waste_catalog.js"></script>
-    <script src="assets/app.js?v=105"></script>
+    <script src="assets/app.js?v=107"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
   </head>
@@ -64,7 +64,7 @@
               <div class="field">
                 <label>Województwo</label>
                 <div class="ui icon input">
-                  <select class="ui search selection dropdown" name="state">
+                  <select class="ui search selection simple dropdown" name="state">
                     <option value=""></option>
                     <option value="02">dolnośląskie</option>
                     <option value="04">kujawsko-pomorskie</option>
@@ -83,7 +83,7 @@
                     <option value="30">wielkopolskie</option>
                     <option value="32">zachodniopomorskie</option>
                   </select>
-                  <i class="inverted circular location arrow link icon"></i>
+                  <!--<i class="inverted circular location arrow link icon"></i>-->
                 </div>
               </div>
               <button class="ui button" type="submit">Szukaj</button>
@@ -145,7 +145,7 @@
         </div>
       </div>
 
-      <div class="ten wide column">
+      <div class="ten wide column" id="map">
         <img class="ui fluid bordered image" src="assets/map.png" />
       </div>
 
@@ -179,33 +179,56 @@
   </body>
 
   <script type="text/javascript">
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+      key: "",
+      v: "weekly",
+      // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+      // Add other bootstrap parameters as needed, using camel case.
+    });
+
     $(function() {
-      var installationsView = new InstallationsView('.installations')
-      var searchView = new SearchView('.ui.search.card', installationsView)
+      let map;
 
-      $('.dropdown').dropdown()
-      $('.search.process').click((event) => {
-        let processSelectorView = new ProcessSelectorView
-        processSelectorView.load((code, desc) => {
-          searchView.setProcess(code, desc)
-          processSelectorView.hide()
+      async function initMap() {
+        const { Map } = await google.maps.importLibrary("maps");
+
+        map = new Map(document.getElementById("map"), {
+          //center: { lat: 50.05, lng: 21.41 },
+          center: { lat: 52.24, lng: 21.00 },
+          zoom: 6,
+        });
+      }
+      let installationsView
+      let searchView
+
+      initMap().then(()=> {
+        installationsView = new InstallationsView('.installations', map)
+        searchView = new SearchView('.ui.search.card', installationsView)
+
+        //$('.dropdown').dropdown()
+        $('.search.process').click((event) => {
+          let processSelectorView = new ProcessSelectorView
+          processSelectorView.load((code, desc) => {
+            searchView.setProcess(code, desc)
+            processSelectorView.hide()
+          })
+          processSelectorView.show()
         })
-        processSelectorView.show()
-      })
 
-      $('.search.waste').click((event) => {
-        var wasteListView = new WasteListView
-        wasteListView.load((code, desc) => {
-          wasteListView.select(code, desc)
+        $('.search.waste').click((event) => {
+          var wasteListView = new WasteListView
           wasteListView.load((code, desc) => {
             wasteListView.select(code, desc)
             wasteListView.load((code, desc) => {
-              searchView.setWaste(wasteListView.selectedCode, ...wasteListView.selectedDescs)
-              wasteListView.hide()
+              wasteListView.select(code, desc)
+              wasteListView.load((code, desc) => {
+                searchView.setWaste(wasteListView.selectedCode, ...wasteListView.selectedDescs)
+                wasteListView.hide()
+              })
             })
           })
+          wasteListView.show()
         })
-        wasteListView.show()
       })
 
     })

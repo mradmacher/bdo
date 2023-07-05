@@ -1,11 +1,18 @@
 class InstallationsView {
-  constructor(selector) {
+  constructor(selector, map) {
     this.selector = selector
     this.element = $(selector)
+    this.map = map
+    this.markers = []
   }
 
   clear() {
     this.element.html('')
+    this.map.setZoom(6)
+    this.map.setCenter(new google.maps.LatLng(52.24, 21.00))
+    while (this.markers.length) {
+      this.markers.pop().setMap(null)
+    }
   }
 
   addInstallation(installation) {
@@ -14,7 +21,15 @@ class InstallationsView {
     template.find('.address').text(`${installation.Address.Line1},  ${installation.Address.Line2}`)
     installation.Capabilities.forEach((capability, i) => {
       let capabilityTemplate = $($('#installation-capability-template').html())
-      capabilityTemplate.find('.waste-code').text(capability.WasteCode)
+      let formattedCode = [
+        capability.WasteCode.slice(0, 2),
+        capability.WasteCode.slice(2, 4),
+        capability.WasteCode.slice(4, 6),
+      ].join(" ")
+      if (capability.Dangerous) {
+        formattedCode += "*"
+      }
+      capabilityTemplate.find('.waste-code').text(formattedCode)
       capabilityTemplate.find('.process-code').text(capability.ProcessCode)
       capabilityTemplate.find('.quantity').text(capability.Quantity)
 
@@ -33,6 +48,15 @@ class InstallationsView {
       template.find('.capabilities').append(capabilityTemplate)
     })
     this.element.append(template)
+
+    const latLng = new google.maps.LatLng(installation.Address.Lat, installation.Address.Lng)
+    let marker = new google.maps.Marker({
+      map: this.map,
+      position: latLng,
+      label: installation.Name,
+      title: `${installation.Name}\n${installation.Address.Line1}\n${installation.Address.Line2}`,
+    })
+    this.markers.push(marker)
   }
 }
 
@@ -65,7 +89,6 @@ class SearchView {
         'pc': this.element.find('[name=process]').val(),
         'sc': this.element.find('[name=state]').val(),
       }
-      console.log(params)
 
       if ('URLSearchParams' in window) {
         let searchParams = new URLSearchParams();

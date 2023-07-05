@@ -4,7 +4,9 @@
     "Address": {
       "Line1": "Podgrodzie 8b",
       "Line2": "39-200 Dębica",
-      "StateCode": "18"
+      "StateCode": "18",
+      "Lat": 50.01235165814038,
+      "Lng": 21.334693268564028
     },
     "Capabilities": [
       {
@@ -20,7 +22,9 @@
     "Address": {
       "Line1": "ul. Świętosława 272",
       "Line2": "39-200 Dębica",
-      "StateCode": "18"
+      "StateCode": "18",
+      "Lat": 50.0786513030218,
+      "Lng": 21.436335712744448
     },
     "Capabilities": [
       {

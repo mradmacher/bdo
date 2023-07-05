@@ -69,6 +69,8 @@ type Address struct {
     Line1 string
     Line2 string
     StateCode string `bson:"state_code"`
+    Lat float32
+    Lng float32
 }
 
 type Installation struct {
