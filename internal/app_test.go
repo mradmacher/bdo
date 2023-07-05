@@ -12,7 +12,10 @@ func TestSearch(t *testing.T) {
 		panic("No .test.env file found")
 	}
 
-  app := NewApp("../views")
+  app, err := NewApp("../views")
+  if err != nil {
+    t.Errorf("Error creating the app: %v", err)
+  }
   app.MountHandlers()
   defer app.Stop()
 

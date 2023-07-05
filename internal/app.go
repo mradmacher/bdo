@@ -15,7 +15,7 @@ type App struct {
   template *template.Template
 }
 
-func NewApp(templatesPath string) *App {
+func NewApp(templatesPath string) (*App, error) {
   app := App{}
   app.router = chi.NewRouter()
   app.db = DbClient{}
@@ -24,15 +24,15 @@ func NewApp(templatesPath string) *App {
 
   app.template, err = template.ParseFiles(templatesPath + "/index.html")
   if err != nil {
-    panic(err)
+    return nil, err
   }
 
 	err = app.db.Connect()
 	if err != nil {
-		panic(err)
+    return nil, err
 	}
 
-  return &app
+  return &app, nil
 }
 
 func (app *App) MountHandlers() {
@@ -56,7 +56,10 @@ func (app *App) homeHandler(w http.ResponseWriter, r *http.Request) {
   config := struct {
     GoogleMapsApiKey string
   }{os.Getenv("GOOGLE_MAPS_API_KEY")}
-  app.template.Execute(w, config)
+  err := app.template.Execute(w, config)
+  if err != nil {
+    panic(err)
+  }
 }
 
 func staticHandler(w http.ResponseWriter, r *http.Request) {
