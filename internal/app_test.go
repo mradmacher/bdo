@@ -2,8 +2,8 @@ package bdo
 
 import (
   "testing"
+  "net/http"
   "net/http/httptest"
-  "io"
 	"github.com/joho/godotenv"
 )
 
@@ -12,22 +12,23 @@ func TestSearch(t *testing.T) {
 		panic("No .test.env file found")
 	}
 
-  app := NewApp()
-  defer app.Close()
-
-  ts := httptest.NewServer(app)
-  defer ts.Close()
-
-  res, err := ts.Client().Get(ts.URL + "/api/installations")
+  app, err := NewApp("../views")
   if err != nil {
-    t.Fatal(err)
+    t.Errorf("Error creating the app: %v", err)
   }
-  json, err := io.ReadAll(res.Body)
-  res.Body.Close()
-  if err != nil {
-    t.Fatal(err)
+  app.MountHandlers()
+  defer app.Stop()
+
+  req := httptest.NewRequest("GET", "/api/installations", nil)
+
+  res := httptest.NewRecorder()
+  app.router.ServeHTTP(res, req)
+
+  if res.Code != http.StatusOK {
+    t.Errorf("Expected response code %d; got %d\n", http.StatusOK, res.Code)
   }
-  if string(json) != "[]" {
-    t.Errorf("/api/installations => []; got: %v", string(json))
+
+  if res.Body.String() != "[]" {
+    t.Errorf("/api/installations => []; got: %v", res.Body.String())
   }
 }

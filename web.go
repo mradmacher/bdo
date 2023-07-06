@@ -11,8 +11,12 @@ func main() {
 		panic("No .env file found")
 	}
 
-  app := bdo.NewApp()
-  defer app.Close()
+  app, err := bdo.NewApp("views")
+  if err != nil {
+    panic(err)
+  }
+  app.MountHandlers()
+  defer app.Stop()
 
 	fmt.Println("Starting the server on :3000...")
   app.Start()
