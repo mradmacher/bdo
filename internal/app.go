@@ -4,35 +4,35 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-chi/chi/v5"
-  "net/http"
-  "html/template"
-  "os"
+	"html/template"
+	"net/http"
+	"os"
 )
 
 type App struct {
-  router *chi.Mux
-  db DbClient
-  template *template.Template
+	router   *chi.Mux
+	db       DbClient
+	template *template.Template
 }
 
 func NewApp(templatesPath string) (*App, error) {
-  app := App{}
-  app.router = chi.NewRouter()
-  app.db = DbClient{}
+	app := App{}
+	app.router = chi.NewRouter()
+	app.db = DbClient{}
 
-  var err error
+	var err error
 
-  app.template, err = template.ParseFiles(templatesPath + "/index.html")
-  if err != nil {
-    return nil, err
-  }
+	app.template, err = template.ParseFiles(templatesPath + "/index.html")
+	if err != nil {
+		return nil, err
+	}
 
 	err = app.db.Connect()
 	if err != nil {
-    return nil, err
+		return nil, err
 	}
 
-  return &app, nil
+	return &app, nil
 }
 
 func (app *App) MountHandlers() {
@@ -46,20 +46,20 @@ func (app *App) Start() {
 }
 
 func (app *App) Stop() {
-  if err := app.db.Disconnect(); err != nil {
-    panic(err)
-  }
+	if err := app.db.Disconnect(); err != nil {
+		panic(err)
+	}
 }
 
 func (app *App) homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-  config := struct {
-    GoogleMapsApiKey string
-  }{os.Getenv("GOOGLE_MAPS_API_KEY")}
-  err := app.template.Execute(w, config)
-  if err != nil {
-    panic(err)
-  }
+	config := struct {
+		GoogleMapsApiKey string
+	}{os.Getenv("GOOGLE_MAPS_API_KEY")}
+	err := app.template.Execute(w, config)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func staticHandler(w http.ResponseWriter, r *http.Request) {
@@ -80,7 +80,7 @@ func Bind(sp SearchParams, r *http.Request) {
 
 func (app *App) searchInstallationsHandler(w http.ResponseWriter, r *http.Request) {
 	params := SearchParams{}
-  Bind(params, r)
+	Bind(params, r)
 	repo := app.db.NewInstallationRepo()
 	results, err := repo.Search(params)
 	if err != nil {

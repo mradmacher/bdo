@@ -1,10 +1,10 @@
 package bdo
 
 import (
-  "testing"
-  "net/http"
-  "net/http/httptest"
 	"github.com/joho/godotenv"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 )
 
 func TestSearch(t *testing.T) {
@@ -12,23 +12,23 @@ func TestSearch(t *testing.T) {
 		panic("No .test.env file found")
 	}
 
-  app, err := NewApp("../views")
-  if err != nil {
-    t.Errorf("Error creating the app: %v", err)
-  }
-  app.MountHandlers()
-  defer app.Stop()
+	app, err := NewApp("../views")
+	if err != nil {
+		t.Errorf("Error creating the app: %v", err)
+	}
+	app.MountHandlers()
+	defer app.Stop()
 
-  req := httptest.NewRequest("GET", "/api/installations", nil)
+	req := httptest.NewRequest("GET", "/api/installations", nil)
 
-  res := httptest.NewRecorder()
-  app.router.ServeHTTP(res, req)
+	res := httptest.NewRecorder()
+	app.router.ServeHTTP(res, req)
 
-  if res.Code != http.StatusOK {
-    t.Errorf("Expected response code %d; got %d\n", http.StatusOK, res.Code)
-  }
+	if res.Code != http.StatusOK {
+		t.Errorf("Expected response code %d; got %d\n", http.StatusOK, res.Code)
+	}
 
-  if res.Body.String() != "[]" {
-    t.Errorf("/api/installations => []; got: %v", res.Body.String())
-  }
+	if res.Body.String() != "[]" {
+		t.Errorf("/api/installations => []; got: %v", res.Body.String())
+	}
 }
