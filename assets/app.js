@@ -1,4 +1,4 @@
-class MapView {
+export class MapView {
   constructor(apiKey) {
     (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
       key: apiKey,
@@ -44,22 +44,21 @@ class MapView {
   }
 }
 
-class InstallationsView {
-  constructor(selector) {
-    this.selector = selector
-    this.element = $(selector)
+export class InstallationsView {
+  constructor(elementId) {
+    this.element = document.getElementById(elementId)
   }
 
   clear() {
-    this.element.html('')
+    this.element.innerHTML = ''
   }
 
   addInstallation(installation) {
-    let template = $($('#installation-template').html())
-    template.find('.name').text(installation.Name)
-    template.find('.address').text(`${installation.Address.Line1},  ${installation.Address.Line2}`)
+    let template = document.getElementById('installation-template').content.cloneNode(true)
+    template.querySelector('.name').textContent = installation.Name
+    template.querySelector('.address').textContent = `${installation.Address.Line1},  ${installation.Address.Line2}`
     installation.Capabilities.forEach((capability, i) => {
-      let capabilityTemplate = $($('#installation-capability-template').html())
+      let capabilityTemplate = document.getElementById('installation-capability-template').content.cloneNode(true)
       let formattedCode = [
         capability.WasteCode.slice(0, 2),
         capability.WasteCode.slice(2, 4),
@@ -68,29 +67,30 @@ class InstallationsView {
       if (capability.Dangerous) {
         formattedCode += "*"
       }
-      capabilityTemplate.find('.waste-code').text(formattedCode)
-      capabilityTemplate.find('.process-code').text(capability.ProcessCode)
-      capabilityTemplate.find('.quantity').text(capability.Quantity)
+      capabilityTemplate.querySelector('.waste-code').textContent = formattedCode
+      capabilityTemplate.querySelector('.waste-code').textContent = formattedCode
+      capabilityTemplate.querySelector('.process-code').textContent = capability.ProcessCode
+      capabilityTemplate.querySelector('.quantity').textContent = capability.Quantity
 
       let processStatus = 'teal'
       if (capability.ProcessCode.startsWith('D')) {
         processStatus = 'orange'
       }
-      capabilityTemplate.find('.process-code').addClass(processStatus)
+      capabilityTemplate.querySelector('.process-code').classList.add(processStatus)
 
       let quantityStatus = 'olive'
       if (capability.Quantity > 1500) {
         quantityStatus = 'purple'
       }
-      capabilityTemplate.find('.quantity').addClass(quantityStatus)
+      capabilityTemplate.querySelector('.quantity').classList.add(quantityStatus)
 
-      template.find('.capabilities').append(capabilityTemplate)
+      template.querySelector('.capabilities').append(capabilityTemplate)
     })
     this.element.append(template)
   }
 }
 
-class SearchView {
+export class SearchView {
   constructor(selector, installationsView, mapView) {
     this.selector = selector
     this.element = $(selector)
@@ -250,7 +250,7 @@ class CodeDescHeaderRowBuilder {
   }
 }
 
-class ProcessSelectorView {
+export class ProcessSelectorView {
   constructor() {
     this.modal = $('.ui.modal.processes')
     this.modal.find('.process-list').html('')
@@ -270,7 +270,7 @@ class ProcessSelectorView {
   }
 }
 
-class WasteListView {
+export class WasteListView {
   constructor() {
     this.modal = $('.ui.modal.wastes')
     this.modal.find('.selected-waste-header').remove()

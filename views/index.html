@@ -10,7 +10,6 @@
     <script src="assets/process_catalog.js"></script>
     <script src="assets/state_catalog.js"></script>
     <script src="assets/waste_catalog.js"></script>
-    <script src="assets/app.js?v=107"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
   </head>
@@ -24,7 +23,7 @@
         </div>
       </div>
 
-      <div class="six wide column">
+      <div class="six wide computer sixteen wide mobile column">
         <div class="ui fluid search card">
           <template id="code-desc-row-template">
             <tr>
@@ -90,10 +89,6 @@
               <button class="ui button" type="reset">Wyczyść</button>
             </form>
           </div>
-          <!--
-          <iframe width="450" height="250" frameborder="0" style="border:0" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/MAP_MODE?key=YOUR_API_KEY&PARAMETERS" allowfullscreen>
-          </iframe>
-          -->
         </div>
 
         <div class="ui modal processes">
@@ -145,49 +140,48 @@
         </div>
       </div>
 
-      <div class="ten wide column" id="map">
+      <div class="ten wide computer sixteen wide mobile column" id="map">
       </div>
 
-      <div class="sixteen wide column">
+      <template id="installation-capability-template">
+        <div class="ui label capability">
+          <span class="ui label waste-code"></span>
+          <span class="ui label process-code"></span>
+          <span class="ui label quantity"></span>
+        </div>
+      </template>
 
-        <template id="installation-capability-template">
-          <div class="ui label">
-            <span class="ui label waste-code"></span>
-            <span class="ui label process-code"></span>
-            <span class="ui label quantity"></span>
-          </div>
-        </template>
-
-        <template id="installation-template">
-          <div class="ui fluid card installation">
-            <div class="content">
-              <div class="header name"></div>
-              <div class="meta address"></div>
-              <div class="description">
-                <div class="ui large labels capabilities">
-                </div>
+      <template id="installation-template">
+        <div class="ui card installation">
+          <div class="content">
+            <div class="header name"></div>
+            <div class="meta address"></div>
+            <div class="description">
+              <div class="ui large labels capabilities">
               </div>
             </div>
           </div>
-        </template>
-
-        <div class="ui two cards installations">
         </div>
+      </template>
+
+      <div class="sixteen wide column">
+        <div class="ui two stackable cards" id="installations"></div>
       </div>
     </div>
   </body>
 
-  <script type="text/javascript">
-    $(function() {
+  <script type="module">
+    import {MapView, InstallationsView, SearchView} from "./assets/app.js"
+
+    document.addEventListener("DOMContentLoaded", () => {
       let installationsView
       let searchView
       let mapView = new MapView({{.GoogleMapsApiKey}})
 
       mapView.initMap("map").then(()=> {
-        installationsView = new InstallationsView('.installations')
+        installationsView = new InstallationsView('installations')
         searchView = new SearchView('.ui.search.card', installationsView, mapView)
 
-        //$('.dropdown').dropdown()
         $('.search.process').click((event) => {
           let processSelectorView = new ProcessSelectorView
           processSelectorView.load((code, desc) => {
