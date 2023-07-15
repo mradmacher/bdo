@@ -3,6 +3,11 @@
   "scripts": {
     "test": "ava"
   },
+  "ava": {
+    "files": [
+      "js/test/**/*"
+    ]
+  },
   "devDependencies": {
     "ava": "^5.3.1",
     "jsdom": "^22.1.0"

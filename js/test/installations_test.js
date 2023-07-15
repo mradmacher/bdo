@@ -1,6 +1,6 @@
 import test from 'ava'
 import { JSDOM } from 'jsdom'
-import {InstallationsView} from './assets/app.js'
+import {InstallationsView} from '../app.js'
 
 test.before(t => {
   t.context.html =

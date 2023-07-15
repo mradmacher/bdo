@@ -24,19 +24,19 @@
       </div>
 
       <div class="six wide computer sixteen wide mobile column">
-        <div class="ui fluid search card">
-          <template id="code-desc-row-template">
-            <tr>
-              <td class="code"></td>
-              <td class="description"></td>
-            </tr>
-          </template>
-          <template id="code-desc-header-row-template">
-            <tr class="selected-waste-header">
-              <th class="code"></th>
-              <th class="description"></th>
-            </tr>
-          </template>
+        <template id="code-desc-row-template">
+          <tr>
+            <td class="code"></td>
+            <td class="description"></td>
+          </tr>
+        </template>
+        <template id="code-desc-header-row-template">
+          <tr class="selected-waste-header">
+            <th class="code"></th>
+            <th class="description"></th>
+          </tr>
+        </template>
+        <div class="ui fluid search card" id="search">
           <div class="content">
             <div class="header">Szukaj instalacji</div>
           </div>
@@ -48,17 +48,17 @@
                   <input type="text" name="waste" placeholder="xxxxxx">
                   <i class="inverted circular search waste link icon"></i>
                 </div>
-                <div class="ui pointing label waste-hint code-a">Podaj kod odpadu</div>
+                <div class="ui pointing label waste-hint code-a"></div>
                 <div class="ui pointing label waste-hint code-b"></div>
                 <div class="ui pointing label waste-hint code-c"></div>
               </div>
               <div class="field">
                 <label>Proces przetwarzania</label>
                 <div class="ui icon input">
-                  <input type="text" name="process" placeholder="R1">
+                  <input type="text" name="process" placeholder="R/Dx">
                   <i class="inverted circular search process link icon"></i>
                 </div>
-                <div class="ui pointing label process-hint">Podaj kod procesu przetwarzania</div>
+                <div class="ui pointing label process-hint"></div>
               </div>
               <div class="field">
                 <label>Województwo</label>
@@ -171,7 +171,7 @@
   </body>
 
   <script type="module">
-    import {MapView, InstallationsView, SearchView} from "./assets/app.js"
+    import {MapView, InstallationsView, SearchView, ProcessSelectorView, WasteListView, InstallationRequest, updateUrlSearchParams} from "./js/app.js"
 
     document.addEventListener("DOMContentLoaded", () => {
       let installationsView
@@ -180,7 +180,26 @@
 
       mapView.initMap("map").then(()=> {
         installationsView = new InstallationsView('installations')
-        searchView = new SearchView('.ui.search.card', installationsView, mapView)
+        searchView = new SearchView('search',
+          () => {
+            installationsView.clear()
+            mapView.clear()
+          },
+          (params) => {
+            updateUrlSearchParams(params)
+
+            installationsView.clear()
+            mapView.clear()
+
+            new InstallationRequest().search(params)
+              .then((installations) => {
+                installations.forEach((installation, i) => {
+                  installationsView.addInstallation(installation)
+                  mapView.addInstallation(installation)
+                })
+              })
+          }
+        )
 
         $('.search.process').click((event) => {
           let processSelectorView = new ProcessSelectorView

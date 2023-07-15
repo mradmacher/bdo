@@ -37,6 +37,7 @@ func NewApp(templatesPath string) (*App, error) {
 
 func (app *App) MountHandlers() {
 	app.router.Get("/", app.homeHandler)
+	app.router.Get("/js/*", staticHandler)
 	app.router.Get("/assets/*", staticHandler)
 	app.router.Get("/api/installations", app.searchInstallationsHandler)
 }

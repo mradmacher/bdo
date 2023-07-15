@@ -90,70 +90,76 @@ export class InstallationsView {
   }
 }
 
-export class SearchView {
-  constructor(selector, installationsView, mapView) {
-    this.selector = selector
-    this.element = $(selector)
-    this.installationsView = installationsView
-    this.mapView = mapView
-    this.element.find('.waste-hint.code-a').hide()
-    this.element.find('.waste-hint.code-b').hide()
-    this.element.find('.waste-hint.code-c').hide()
-    this.element.find('.process-hint').hide()
-    this.element.trigger('form reset')
-
-    this.element.find('.button[type="reset"]').click((event) => {
-      installationsView.clear()
-      mapView.clear()
-      this.element.find('.waste-hint.code-a').hide()
-      this.element.find('.waste-hint.code-b').hide()
-      this.element.find('.waste-hint.code-c').hide()
-      this.element.find('.process-hint').hide()
-      this.element.trigger('form reset')
-    })
-
-    this.element.find('.button[type="submit"]').click((event) => {
-      event.preventDefault()
-      installationsView.clear()
-      mapView.clear()
-
-      let params = {
-        'wc': this.element.find('[name=waste]').val(),
-        'pc': this.element.find('[name=process]').val(),
-        'sc': this.element.find('[name=state]').val(),
+export function updateUrlSearchParams(params) {
+  if ('URLSearchParams' in window) {
+    let searchParams = new URLSearchParams();
+    let searchParamsProvided = false;
+    for(let p in params) {
+      if(params[p]) {
+        searchParams.set(p, params[p]);
+        searchParamsProvided = true;
       }
+    }
+    let newRelativePathQuery = window.location.pathname;
+    if(searchParamsProvided) {
+      newRelativePathQuery = newRelativePathQuery + '?' + searchParams.toString();
+    }
+    history.pushState(null, '', newRelativePathQuery);
+  }
 
-      if ('URLSearchParams' in window) {
-        let searchParams = new URLSearchParams();
-        let searchParamsProvided = false;
-        for(let p in params) {
-          if(params[p]) {
-            searchParams.set(p, params[p]);
-            searchParamsProvided = true;
-          }
-        }
-        let newRelativePathQuery = window.location.pathname;
-        if(searchParamsProvided) {
-          newRelativePathQuery = newRelativePathQuery + '?' + searchParams.toString();
-        }
-        history.pushState(null, '', newRelativePathQuery);
-      }
+}
 
+export class InstallationRequest {
+  constructor() {
+    this.url = "/api/installations"
+  }
+
+  search(params) {
+    return new Promise((resolve, reject) => {
       $.ajax({
         method: "GET",
-        url: "/api/installations",
+        url: this.url,
         data: params,
         dataType: "json",
       }).done(function(installations) {
-        installations.forEach((installation, i) => {
-          installationsView.addInstallation(installation)
-          mapView.addInstallation(installation)
-        })
+        resolve(installations)
+      }).fail(function(xhr, status, error) {
+        reject(xhr.responseJSON.errors);
       })
+    })
+  }
+}
+
+export class SearchView {
+  constructor(elementId, onReset, onSearch) {
+    this.element = document.getElementById(elementId)
+    this.onReset = onReset
+    this.onSearch = onSearch
+    this.element.querySelector('form').reset()
+    this.setWasteHint(null, null, null)
+    this.setProcessHint(null)
+
+    this.element.querySelector('form [type="reset"]').addEventListener('click', (event) => {
+      this.setWasteHint(null, null, null)
+      this.setProcessHint(null)
+      this.onReset()
+    })
+
+    this.element.querySelector('form [type="submit"]').addEventListener('click', (event) => {
+      event.preventDefault()
+
+      let params = {
+        'wc': this.element.querySelector('[name=waste]').value,
+        'pc': this.element.querySelector('[name=process]').value,
+        'sc': this.element.querySelector('[name=state]').value,
+      }
+
+      this.onSearch(params)
+
       let descA
       let descB
       let descC
-      let code = $('.ui.form .field [name=waste]').val()
+      let code = this.element.querySelector('[name=waste]').value
       let codeA = code.slice(0, 2)
       let codeB = code.slice(0, 4)
       let codeC = code.slice(0, 6)
@@ -175,56 +181,74 @@ export class SearchView {
       if(codeC) {
         descC = codeDescs[codeC]
       }
+      this.setWasteHint(descA, descB, descC)
 
-      if(descA) {
-        this.element.find('.waste-hint.code-a').text(descA)
-        this.element.find('.waste-hint.code-a').show()
-      } else {
-        this.element.find('.waste-hint.code-a').text("Nieznany kod")
-      }
-      if(descB) {
-        this.element.find('.waste-hint.code-b').text(descB)
-        this.element.find('.waste-hint.code-b').show()
-      } else {
-        this.element.find('.waste-hint.code-b').hide()
-      }
-      if(descC) {
-        this.element.find('.waste-hint.code-c').text(descC)
-        this.element.find('.waste-hint.code-c').show()
-      } else {
-        this.element.find('.waste-hint.code-c').hide()
-      }
-
-      let value
-      let process = this.element.find('.field [name=process]').val()
+      let processInputElement = this.element.querySelector('.field [name=process]')
+      let process = processInputElement.value
       if(process) {
         process = process.toUpperCase()
-        this.element.find('form .field [name=process]').val(process)
-        value = processDescs[process]
-      }
-      if(value) {
-        this.element.find('.process-hint').text(value)
-        this.element.find('.process-hint').show()
+        processInputElement.value = process
+        this.setProcessHint(processDescs[process])
       } else {
-        this.element.find('.process-hint').text("Nieznany kod")
+        this.setProcessHint(null)
       }
     })
   }
 
+  setWasteHint(hintA, hintB, hintC) {
+    let hintElement = this.element.querySelector('.waste-hint.code-a')
+    if(hintA) {
+      hintElement.textContent = hintA
+      hintElement.hidden = false
+      hintElement.style.display = "block"
+    } else {
+      hintElement.textContent = ''
+      hintElement.hidden = true
+      hintElement.style.display = "none"
+    }
+    hintElement = this.element.querySelector('.waste-hint.code-b')
+    if(hintB) {
+      hintElement.textContent = hintB
+      hintElement.hidden = false
+      hintElement.style.display = "block"
+    } else {
+      hintElement.textContent = ''
+      hintElement.hidden = true
+      hintElement.style.display = "none"
+    }
+    hintElement = this.element.querySelector('.waste-hint.code-c')
+    if(hintC) {
+      hintElement.textContent = hintC
+      hintElement.hidden = false
+      hintElement.style.display = "block"
+    } else {
+      hintElement.textContent = ''
+      hintElement.hidden = true
+      hintElement.style.display = "none"
+    }
+  }
+
+  setProcessHint(hint) {
+    let hintElement = this.element.querySelector('.process-hint')
+    if(hint) {
+      hintElement.textContent = hint
+      hintElement.hidden = false
+      hintElement.style.display = "block"
+    } else {
+      hintElement.textContent = ''
+      hintElement.hidden = true
+      hintElement.style.display = "none"
+    }
+  }
+
   setProcess(code, description) {
-    this.element.find('form input[name="process"]').val(code)
-    this.element.find('.process-hint').text(description)
-    this.element.find('.process-hint').show()
+    this.element.querySelector('form input[name="process"]').value = code
+    this.setProcessHint(description)
   }
 
   setWaste(code, descA, descB, descC) {
-    this.element.find('form input[name="waste"]').val(code)
-    this.element.find('.waste-hint.code-a').show()
-    this.element.find('.waste-hint.code-a').text(descA)
-    this.element.find('.waste-hint.code-b').show()
-    this.element.find('.waste-hint.code-b').text(descB)
-    this.element.find('.waste-hint.code-c').show()
-    this.element.find('.waste-hint.code-c').text(descC)
+    this.element.querySelector('form input[name="waste"]').value = code
+    this.setWasteHint(descA, descB, descC)
   }
 }
 
