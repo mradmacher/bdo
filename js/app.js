@@ -31,6 +31,19 @@ export class MapView {
       label: installation.Name,
       title: `${installation.Name}\n${installation.Address.Line1}\n${installation.Address.Line2}`,
     })
+    const infoWindow = new google.maps.InfoWindow({
+      content: `
+        <h3>${installation.Name}</h3>
+        <p>${installation.Address.Line1}<br />${installation.Address.Line2}</p>
+      `,
+      ariaLabel: installation.Name,
+    })
+    marker.addListener("click", () => {
+      infoWindow.open({
+        anchor: marker,
+        map: this.map,
+      })
+    })
     this.markers.push(marker)
   }
 
