@@ -1,6 +1,6 @@
 import test from 'ava'
 import { JSDOM } from 'jsdom'
-import {InstallationsView} from '../app.js'
+import {InstallationsComponent} from '../installations_component.js'
 
 test.before(t => {
   t.context.html =
@@ -17,8 +17,7 @@ test.before(t => {
         <div class="installation">
           <div class="name"></div>
           <div class="address"></div>
-          <div class="capabilities">
-          </div>
+          <div class="capabilities"></div>
         </div>
       </template>
       <div id="installations"></div>
@@ -28,7 +27,7 @@ test.before(t => {
 test('adds installation with capabilities', t => {
   const dom = new JSDOM(t.context.html)
   global.document = dom.window.document
-  let view = new InstallationsView('installations')
+  let view = new InstallationsComponent('installations')
   view.addInstallation({
     Name: "Test",
     Address: {

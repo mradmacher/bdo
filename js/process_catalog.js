@@ -1,4 +1,4 @@
-const processDescs = {
+export const processDescs = {
   R1: "Wykorzystanie głównie jako paliwa lub innego środka wytwarzania energii",
   R2: "Odzysk/regeneracja rozpuszczalników",
   R3: "Recykling lub regeneracja substancji organicznych, które nie są stosowane jako rozpuszczalniki (w tym kompostowanie i inne biologiczne procesy przekształcania)",
@@ -27,7 +27,7 @@ const processDescs = {
   D13: "Sporządzanie mieszanki lub mieszanie przed poddaniem odpadów któremukolwiek z procesów wymienionych w pozycjach D 1 – D 12",
 }
 
-const processes = [
+export const processes = [
   'R1',
   'R2',
   'R3',

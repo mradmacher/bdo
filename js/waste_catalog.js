@@ -1,4 +1,4 @@
-const codes = {
+export const codes = {
   "00": [
     "01",
     "02",
@@ -1329,7 +1329,8 @@ const codes = {
     "200399",
   ],
 }
-const codeDescs = {
+
+export const codeDescs = {
   "100708": "Odpady z uzdatniania wody chłodzącej inne niż wymienione w 10 07 07",
   "070180": "Wapno pokarbidowe niezawierające substancji niebezpiecznych (inne niż wymienione w 07 01 08)",
   "070299": "Inne niewymienione odpady",
