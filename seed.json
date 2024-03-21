@@ -1,8 +1,8 @@
 [
   {
-    "Name": "TRANS POŁUDNIE",
+    "Name": "INSTALACJA 1",
     "Address": {
-      "Line1": "Podgrodzie 8b",
+      "Line1": "Podgrodzie",
       "Line2": "39-200 Dębica",
       "StateCode": "18",
       "Lat": 50.01235165814038,
@@ -13,14 +13,21 @@
         "WasteCode": "160103",
         "Dangerous": false,
         "ProcessCode": "R12",
+        "ActivityType": "PR",
         "Quantity": 2500
+      }, {
+        "WasteCode": "160103",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 40000
       }
     ]
   },
   {
-    "Name": "MEGA",
+    "Name": "INSTALACJA 2",
     "Address": {
-      "Line1": "ul. Świętosława 272",
+      "Line1": "ul. Świętosława",
       "Line2": "39-200 Dębica",
       "StateCode": "18",
       "Lat": 50.0786513030218,
@@ -28,59 +35,535 @@
     },
     "Capabilities": [
       {
+        "WasteCode": "030308",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 2500
+      }, {
+        "WasteCode": "150101",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 2500
+      }, {
+        "WasteCode": "191201",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 2500
+      }, {
+        "WasteCode": "200101",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 2500
+      }, {
+        "WasteCode": "070213",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 130
+      }, {
+        "WasteCode": "200139",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 130
+      }, {
+        "WasteCode": "040209",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 130
+      }, {
+        "WasteCode": "040221",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 130
+      }, {
+        "WasteCode": "040222",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 130
+      }, {
+        "WasteCode": "040299",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 130
+      }, {
+        "WasteCode": "191208",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 130
+      }, {
+        "WasteCode": "200110",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 130
+      }, {
+        "WasteCode": "200111",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityType": "Z",
+        "Quantity": 130
+      }
+    ]
+  },
+  {
+    "Name": "INSTALACJA 3",
+    "Address": {
+      "Line1": "",
+      "Line2": "39-200 Dębica",
+      "StateCode": "18",
+      "Lat": 50.020477987595,
+      "Lng": 21.405744440625995
+    },
+    "Capabilities": [
+      {
+        "WasteCode": "020110",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "100210",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "100280",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "100903",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "100906",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "100908",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "100980",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "100999",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "101003",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "101006",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "101008",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "110501",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 150
+      }, {
+        "WasteCode": "110502",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 100
+      }, {
         "WasteCode": "120101",
         "ProcessCode": "R12",
-        "Quantity": 1000
-      },
-      {
+        "ActivityType": "Z",
+        "Quantity": 3000
+      }, {
         "WasteCode": "120102",
         "ProcessCode": "R12",
-        "Quantity": 2000
-      },
-      {
+        "ActivityType": "Z",
+        "Quantity": 2500
+      }, {
         "WasteCode": "120103",
         "ProcessCode": "R12",
-        "Quantity": 2000
-      },
-      {
+        "ActivityType": "Z",
+        "Quantity": 2500
+      }, {
         "WasteCode": "120104",
         "ProcessCode": "R12",
-        "Quantity": 1000
-      },
-      {
+        "ActivityType": "Z",
+        "Quantity": 2000
+      }, {
+        "WasteCode": "120113",
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
         "WasteCode": "150104",
         "ProcessCode": "R12",
-        "Quantity": 3000
-      },
-      {
+        "ActivityType": "Z",
+        "Quantity": 500
+      }, {
+        "WasteCode": "150110",
+        "Dangerous": true,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "160104",
+        "Dangerous": true,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 250
+      }, {
+        "WasteCode": "160106",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 50
+      }, {
+        "WasteCode": "160116",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
         "WasteCode": "160117",
+        "Dangerous": false,
         "ProcessCode": "R12",
-        "Quantity": 200
-      },
-      {
-        "WasteCode": "160118",
-        "ProcessCode": "R12",
-        "Quantity": 100
-      },
-      {
-        "WasteCode": "170405",
-        "ProcessCode": "R12",
-        "Quantity": 6000
-      },
-      {
-        "WasteCode": "170407",
-        "ProcessCode": "R12",
+        "ActivityType": "Z",
         "Quantity": 2000
-      },
-      {
-        "WasteCode": "191202",
+      }, {
+        "WasteCode": "160118",
+        "Dangerous": false,
         "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 200
+      }, {
+        "WasteCode": "160213",
+        "Dangerous": true,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 5
+      }, {
+        "WasteCode": "160214",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "160215",
+        "Dangerous": true,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 5
+      }, {
+        "WasteCode": "160216",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "160601",
+        "Dangerous": true,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 60
+      }, {
+        "WasteCode": "160602",
+        "Dangerous": true,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 15
+      }, {
+        "WasteCode": "160801",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 5
+      }, {
+        "WasteCode": "160802",
+        "Dangerous": true,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 1
+      }, {
+        "WasteCode": "160803",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 5
+      }, {
+        "WasteCode": "160804",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 1
+      }, {
+        "WasteCode": "170401",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 500
+      }, {
+        "WasteCode": "170402",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 2000
+      }, {
+        "WasteCode": "170403",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 50
+      }, {
+        "WasteCode": "170404",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 50
+      }, {
+        "WasteCode": "170405",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 10000
+      }, {
+        "WasteCode": "170406",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "170407",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 100
+      }, {
+        "WasteCode": "170409",
+        "Dangerous": true,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 25
+      }, {
+        "WasteCode": "170411",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 50
+      }, {
+        "WasteCode": "190102",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 50
+      }, {
+        "WasteCode": "191001",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
         "Quantity": 4000
-      },
-      {
-        "WasteCode": "191203",
+      }, {
+        "WasteCode": "191002",
+        "Dangerous": false,
         "ProcessCode": "R12",
-        "Quantity": 950
+        "ActivityType": "Z",
+        "Quantity": 100
+      }, {
+        "WasteCode": "191202",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 100
+      }, {
+        "WasteCode": "191203",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 100
+      }, {
+        "WasteCode": "200140",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "Z",
+        "Quantity": 100
+      }, {
+        "WasteCode": "120101",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 1000
+      }, {
+        "WasteCode": "120102",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 2000
+      }, {
+        "WasteCode": "120103",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 2000
+      }, {
+        "WasteCode": "120104",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 1000
+      }, {
+        "WasteCode": "150104",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 500
+      }, {
+        "WasteCode": "160117",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 200
+      }, {
+        "WasteCode": "160118",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 100
+      }, {
+        "WasteCode": "170405",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 6000
+      }, {
+        "WasteCode": "170407",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 2000
+      }
+    ]
+  },
+  {
+    "Name": "INSTALACJA 4",
+    "Address": {
+      "Line1": "Poznań",
+      "Line2": "Poznań",
+      "StateCode": "30",
+      "Lat": 52.40441427551725,
+      "Lng": 16.919681799465284
+    },
+    "Capabilities": [
+      {
+        "WasteCode": "191210",
+        "Dangerous": false,
+        "ProcessCode": "R1",
+        "ActivityType": "PO",
+        "Quantity": 19000
+      }, {
+        "WasteCode": "191212",
+        "Dangerous": false,
+        "ProcessCode": "R1",
+        "ActivityType": "PO",
+        "Quantity": 210000
+      }, {
+        "WasteCode": "200301",
+        "Dangerous": false,
+        "ProcessCode": "R1",
+        "ActivityType": "PO",
+        "Quantity": 210000
+      }, {
+        "WasteCode": "200307",
+        "Dangerous": false,
+        "ProcessCode": "R1",
+        "ActivityType": "PO",
+        "Quantity": 2000
+      }, {
+        "WasteCode": "190107",
+        "Dangerous": true,
+        "ProcessCode": "R1",
+        "ActivityType": "UN",
+        "Quantity": 8400
+      }, {
+        "WasteCode": "190113",
+        "Dangerous": true,
+        "ProcessCode": "R1",
+        "ActivityType": "UN",
+        "Quantity": 8400
+      }, {
+        "WasteCode": "190115",
+        "Dangerous": true,
+        "ProcessCode": "R1",
+        "ActivityType": "UN",
+        "Quantity": 8400
+      }
+    ]
+  },
+  {
+    "Name": "INSTALACJA 5",
+    "Address": {
+      "Line1": "Pruszków",
+      "Line2": "Pruszków",
+      "StateCode": "14",
+      "Lat": 52.16544029312577,
+      "Lng": 20.813777066254254
+    },
+    "Capabilities": [
+      {
+        "WasteCode": "170101",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 2000
+      }, {
+        "WasteCode": "170181",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 2000
+      }, {
+        "WasteCode": "170504",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityType": "PR",
+        "Quantity": 2000
+      }, {
+        "WasteCode": "170101",
+        "Dangerous": false,
+        "ProcessCode": "R13",
+        "ActivityType": "PR",
+        "Quantity": 2000
+      }, {
+        "WasteCode": "170181",
+        "Dangerous": false,
+        "ProcessCode": "R13",
+        "ActivityType": "PR",
+        "Quantity": 2000
+      }, {
+        "WasteCode": "170504",
+        "Dangerous": false,
+        "ProcessCode": "R13",
+        "ActivityType": "PR",
+        "Quantity": 2000
       }
     ]
   }
