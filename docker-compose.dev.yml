@@ -8,3 +8,10 @@ services:
       - ../bdo_data/mongo:/data/db
     ports:
       - 27017:27017
+  testdb:
+    image: mongo
+    restart: always
+    volumes:
+      - ../bdo_data/mongo_test:/data/db
+    ports:
+      - 27018:27017

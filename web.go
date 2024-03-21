@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+
 	if err := godotenv.Load(); err != nil {
 		panic("No .env file found")
 	}

@@ -56,7 +56,7 @@ func seedDb() {
 		panic(err)
 	}
 	for _, installation := range results {
-		fmt.Println("%v", installation)
+		fmt.Printf("%v\n", installation)
 	}
 }
 
