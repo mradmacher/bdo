@@ -5,96 +5,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>BDO</title>
-
     <script src="assets/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
   </head>
 
   <body>
-    <div class="ui grid container">
-      <div class="sixteen wide column">
-        <div class="ui menu">
-          <a class="ui item" href="/">Katalog</a>
-          <a class="ui item floated right" href="/">Zgłoś instalację</a>
+    <template id="code-desc-row-template">
+      <tr>
+        <td class="code"></td>
+        <td class="description"></td>
+        <td class="action"><button class="button is-small is-rounded">-></button></td>
+      </tr>
+    </template>
+    <template id="code-desc-header-row-template">
+      <tr class="selected-waste-header is-selected">
+        <th class="code"></th>
+        <th class="description"></th>
+      </tr>
+    </template>
+
+    <template id="installation-capability-template">
+      <div class="control">
+        <div class="tags has-addons capability">
+          <span class="tag waste-code"></span>
+          <span class="tag process-code"></span>
+          <span class="tag quantity"></span>
         </div>
       </div>
+    </template>
 
-      <div class="six wide computer sixteen wide mobile column">
-        <template id="code-desc-row-template">
-          <tr>
-            <td class="code"></td>
-            <td class="description"></td>
-          </tr>
-        </template>
-        <template id="code-desc-header-row-template">
-          <tr class="selected-waste-header">
-            <th class="code"></th>
-            <th class="description"></th>
-          </tr>
-        </template>
-        <div class="ui fluid search card" id="search">
-          <div class="content">
-            <div class="header">Szukaj instalacji</div>
-          </div>
-          <div class="content">
-            <form class="ui form">
-              <div class="field">
-                <label>Kod odpadu</label>
-                <div class="ui icon input">
-                  <input type="text" name="waste" placeholder="xxxxxx">
-                  <i class="inverted circular search waste link icon"></i>
-                </div>
-                <div class="ui pointing label waste-hint code-a"></div>
-                <div class="ui pointing label waste-hint code-b"></div>
-                <div class="ui pointing label waste-hint code-c"></div>
-              </div>
-              <div class="field">
-                <label>Proces przetwarzania</label>
-                <div class="ui icon input">
-                  <input type="text" name="process" placeholder="Rx/Dx">
-                  <i class="inverted circular search process link icon"></i>
-                </div>
-                <div class="ui pointing label process-hint"></div>
-              </div>
-              <div class="field">
-                <label>Województwo</label>
-                <div class="ui icon input">
-                  <select class="ui search selection simple dropdown" name="state">
-                    <option value=""></option>
-                    <option value="02">dolnośląskie</option>
-                    <option value="04">kujawsko-pomorskie</option>
-                    <option value="06">lubelskie</option>
-                    <option value="08">lubuskie</option>
-                    <option value="10">łódzkie</option>
-                    <option value="12">małopolskie</option>
-                    <option value="14">mazowieckie</option>
-                    <option value="16">opolskie</option>
-                    <option value="18">podkarpackie</option>
-                    <option value="20">podlaskie</option>
-                    <option value="22">pomorskie</option>
-                    <option value="24">śląskie</option>
-                    <option value="26">świętokrzyskie</option>
-                    <option value="28">warmińsko-mazurskie</option>
-                    <option value="30">wielkopolskie</option>
-                    <option value="32">zachodniopomorskie</option>
-                  </select>
-                  <!--<i class="inverted circular location arrow link icon"></i>-->
-                </div>
-              </div>
-              <button class="ui button" type="submit">Szukaj</button>
-              <button class="ui button" type="reset">Wyczyść</button>
-            </form>
-          </div>
+    <template id="installation-template">
+      <div class="column">
+        <div class="panel installation">
+          <header class="panel-heading">
+            <p class="header name"></p>
+            <p class="tag address"></p>
+          </header>
+          <section class="panel-block">
+            <div class="field is-grouped is-grouped-multiline capabilities">
+            </div>
+          </section>
         </div>
+      </div>
+    </template>
 
-        <div class="ui modal processes">
-          <div class="header">
+    <div class="modal processes">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">
             Wyszukaj proces przetwarzania
-          </div>
-          <div class="scrolling content">
-            <table class="ui selectable compact celled table">
+          </p>
+          <button class="cancel button modal-close is-large" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="table-container">
+            <table class="table is-narrow is-striped">
               <thead>
                 <tr>
                   <th>Kod</th>
@@ -105,20 +72,27 @@
               </tbody>
             </table>
           </div>
-          <div class="actions">
-            <div class="ui basic cancel button">
-              <i class="checkmark icon"></i>
-              Anuluj
-            </div>
+        </section>
+        <footer class="modal-card-foot">
+          <div class="cancel button is-link is-fullwidth">
+            Anuluj
           </div>
-        </div>
+        </footer>
+      </div>
+    </div>
 
-        <div class="ui modal wastes">
-          <div class="header">
+    <div class="modal wastes">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">
             Wyszukaj kod odpadu
-          </div>
-          <div class="scrolling content">
-            <table class="ui selectable compact celled table">
+          </p>
+          <button class="cancel button modal-close is-large" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="table-container">
+            <table class="table is-narrow is-striped">
               <thead class="waste-list-header">
                 <tr>
                   <th>Kod</th>
@@ -129,47 +103,100 @@
               </tbody>
             </table>
           </div>
-          <div class="actions">
-            <div class="ui basic cancel button">
-              <i class="checkmark icon"></i>
-              Anuluj
-            </div>
-          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="cancel button is-link is-fullwidth">Anuluj</button>
         </div>
-      </div>
-
-      <div class="ten wide computer sixteen wide mobile column" id="map">
-      </div>
-
-      <template id="installation-capability-template">
-        <div class="ui label capability">
-          <span class="ui label waste-code"></span>
-          <span class="ui label process-code"></span>
-          <span class="ui label quantity"></span>
-        </div>
-      </template>
-
-      <template id="installation-template">
-        <div class="ui card installation">
-          <div class="content">
-            <div class="header name"></div>
-            <div class="meta address"></div>
-            <div class="description">
-              <div class="ui large labels capabilities">
-              </div>
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <div class="sixteen wide column">
-        <div class="ui two stackable cards" id="installations"></div>
       </div>
     </div>
+
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/"><h1>BDO</h1></a>
+      </div>
+    </nav>
+
+    <section class="section">
+      <div class="columns">
+        <div class="column" >
+          <div class="search panel" id="search">
+            <div class="panel-heading">
+              <p>Szukaj instalacji</p>
+            </div>
+            <div class="panel-block">
+              <form>
+                <div class="field">
+                  <label class="label">Kod odpadu</label>
+                  <div class="control">
+                    <input type="text" name="waste" placeholder="xxxxxx">
+                    <button class="button is-small is-link search waste">Wybierz</button>
+                  </div>
+                  <div class="tag is-primary is-light is-rounded waste-hint code-a"></div>
+                  <div class="tag is-primary is-light is-rounded waste-hint code-b"></div>
+                  <div class="tag is-primary is-light is-rounded waste-hint code-c"></div>
+                </div>
+                <div class="field">
+                  <label class="label">Proces przetwarzania</label>
+                  <div class="control">
+                    <input type="text" name="process" placeholder="Rx/Dx">
+                    <button class="button is-small is-link search process">Wybierz</button>
+                  </div>
+                  <div class="tag is-primary is-light is-rounded process-hint"></div>
+                </div>
+                <div class="field">
+                  <label class="label">Województwo</label>
+                  <div class="control">
+                    <select class="select" name="state">
+                      <option value=""></option>
+                      <option value="02">dolnośląskie</option>
+                      <option value="04">kujawsko-pomorskie</option>
+                      <option value="06">lubelskie</option>
+                      <option value="08">lubuskie</option>
+                      <option value="10">łódzkie</option>
+                      <option value="12">małopolskie</option>
+                      <option value="14">mazowieckie</option>
+                      <option value="16">opolskie</option>
+                      <option value="18">podkarpackie</option>
+                      <option value="20">podlaskie</option>
+                      <option value="22">pomorskie</option>
+                      <option value="24">śląskie</option>
+                      <option value="26">świętokrzyskie</option>
+                      <option value="28">warmińsko-mazurskie</option>
+                      <option value="30">wielkopolskie</option>
+                      <option value="32">zachodniopomorskie</option>
+                    </select>
+                    <!--<i class="inverted circular location arrow link icon"></i>-->
+                  </div>
+                </div>
+                <button class="button is-link" type="submit">Szukaj</button>
+                <button class="button is-link is-light" type="reset">Wyczyść</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="column">
+          <div class="card">
+            <div class="card-content">
+              <div class="image is-5by4" id="map"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="columns" id="installations">
+        </div>
+      </div>
+    </section>
   </body>
 
   <script type="module">
-    import {ProcessSelectorView, WasteListView, InstallationRequest, updateUrlSearchParams} from "./js/app.js"
+    import {ProcessSelectorView, WasteSelectorView, InstallationRequest, updateUrlSearchParams} from "./js/app.js?q=3"
     import {MapComponent} from "./js/map_component.js"
     import {SearchComponent} from "./js/search_component.js"
     import {InstallationsComponent} from "./js/installations_component.js"
@@ -203,6 +230,7 @@
         )
 
         document.querySelector('.search.process').addEventListener('click', (event) => {
+          event.preventDefault();
           let processSelectorView = new ProcessSelectorView
           processSelectorView.load((code, desc) => {
             searchComponent.setProcess(code, desc)
@@ -212,7 +240,8 @@
         })
 
         document.querySelector('.search.waste').addEventListener('click', (event) => {
-          var wasteListView = new WasteListView
+          event.preventDefault();
+          var wasteListView = new WasteSelectorView
           wasteListView.load((code, desc) => {
             wasteListView.select(code, desc)
             wasteListView.load((code, desc) => {

@@ -1,6 +1,14 @@
 import { codes, codeDescs } from "./waste_catalog.js"
 import { processes, processDescs } from "./process_catalog.js"
 
+function openModal($el) {
+  $el.classList.add('is-active');
+}
+
+function closeModal($el) {
+  $el.classList.remove('is-active');
+}
+
 export function updateUrlSearchParams(params) {
   if ('URLSearchParams' in window) {
     let searchParams = new URLSearchParams();
@@ -68,10 +76,10 @@ export class InstallationRequest {
 
 class CodeDescRowBuilder {
   static build(code, desc, callback) {
-    var template = $($('#code-desc-row-template').html())
-    template.find('.code').text(code)
-    template.find('.description').text(desc)
-    template.click((event) => {
+    var template = document.getElementById('code-desc-row-template').content.cloneNode(true);
+    template.querySelector('.code').textContent = code;
+    template.querySelector('.description').textContent = desc;
+    template.querySelector('.action').addEventListener('click', (event) => {
       callback(code, desc)
     })
     return template
@@ -80,9 +88,9 @@ class CodeDescRowBuilder {
 
 class CodeDescHeaderRowBuilder {
   static build(code, desc) {
-    let template = $($('#code-desc-header-row-template').html())
-    template.find('.code').text(code)
-    template.find('.description').text(desc)
+    let template = document.getElementById('code-desc-header-row-template').content.cloneNode(true);
+    template.querySelector('.code').textContent = code;
+    template.querySelector('.description').textContent = desc;
 
     return template
   }
@@ -90,56 +98,72 @@ class CodeDescHeaderRowBuilder {
 
 export class ProcessSelectorView {
   constructor() {
-    this.modal = $('.ui.modal.processes')
-    this.modal.find('.process-list').html('')
+    this.modal = document.querySelector('.modal.processes');
+    this.modal.querySelector('.process-list').content = '';
+    this.modal.querySelectorAll('.button.cancel').forEach((elem) => {
+      elem.addEventListener('click', (event) => {
+        closeModal(this.modal);
+      })
+    })
   }
 
   hide() {
-    this.modal.modal('hide')
+    closeModal(this.modal);
   }
 
   show() {
-    this.modal.modal('show')
-  } load(onSelect) { for (let code in processDescs) { let template = CodeDescRowBuilder.build(code, processDescs[code], (code, desc) => {
+    openModal(this.modal);
+  }
+
+  load(onSelect) {
+    for (let code in processDescs) {
+      let template = CodeDescRowBuilder.build(code, processDescs[code], (code, desc) => {
         onSelect(code, desc)
       })
-      this.modal.find('.process-list').append(template)
+      this.modal.querySelector('.process-list').append(template);
     }
   }
 }
 
-export class WasteListView {
+export class WasteSelectorView {
   constructor() {
-    this.modal = $('.ui.modal.wastes')
-    this.modal.find('.selected-waste-header').remove()
-    this.modal.find('.waste-list').html('')
+    this.modal = document.querySelector('.modal.wastes');
+    this.modal.querySelectorAll('.selected-waste-header').forEach((elem) => {
+      elem.remove();
+    })
+    this.modal.querySelectorAll('.button.cancel').forEach((elem) => {
+      elem.addEventListener('click', (event) => {
+        closeModal(this.modal);
+      })
+    })
+    this.modal.querySelector('.waste-list').innerHTML = '';
     this.selectedDescs = []
     this.selectedCode = '00'
   }
 
   select(code, desc) {
-    this.modal.find('.waste-list-header').append(
+    this.modal.querySelector('.waste-list-header').append(
       CodeDescHeaderRowBuilder.build(code, desc)
     )
   }
 
   hide() {
-    this.modal.modal('hide')
+    closeModal(this.modal);
   }
 
   show() {
-    this.modal.modal('show')
+    openModal(this.modal)
   }
 
   load(onSelect) {
-    this.modal.find('.waste-list').html('')
+    this.modal.querySelector('.waste-list').innerHTML = '';
     codes[this.selectedCode].forEach((code, i) => {
       let template = CodeDescRowBuilder.build(code, codeDescs[code.replace("*", "")], (code, desc) => {
         this.selectedCode = code
         this.selectedDescs.push(desc)
         onSelect(code, desc)
       })
-      this.modal.find('.waste-list').append(template)
+      this.modal.querySelector('.waste-list').append(template)
     })
   }
 }
