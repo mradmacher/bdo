@@ -13,9 +13,9 @@
     <span id="google-maps-api-key" data-value="{{.GoogleMapsApiKey}}"></span>
     <template id="code-desc-row-template">
       <tr>
-        <td class="code"></td>
-        <td class="description"></td>
-        <td class="action"><button class="button is-small is-rounded">-></button></td>
+        <td class="code-slot"></td>
+        <td class="description-slot"></td>
+        <td class="select-action"><button class="button is-small is-rounded">-></button></td>
       </tr>
     </template>
     <template id="code-desc-header-row-template">
@@ -34,28 +34,26 @@
     </template>
 
     <template id="code-template">
-        <span class="tag code"></span>
+        <span class="tag code-slot"></span>
     </template>
 
     <template id="installation-template">
-      <div class="column">
-        <div class="panel installation">
-          <header class="panel-heading">
-            <p class="header name"></p>
-            <p class="tag address"></p>
-          </header>
-          <section class="panel-block">
-            <div class="tags waste-codes">
-            </div>
-          </section>
-          <section class="panel-block">
-            <div class="tags process-codes">
-            </div>
-          </section>
-          <section class="panel-block">
-            <button class="button action show-details is-link is-fullwidth">Szczegóły</button>
-          </section>
-        </div>
+      <div class="panel installation">
+        <header class="panel-heading">
+          <p class="header name-slot"></p>
+          <p class="tag address-slot"></p>
+        </header>
+        <section class="panel-block">
+          <div class="tags waste-codes-slot">
+          </div>
+        </section>
+        <section class="panel-block">
+          <div class="tags process-codes-slot">
+          </div>
+        </section>
+        <section class="panel-block">
+          <button class="button show-details-action is-link is-fullwidth">Szczegóły</button>
+        </section>
       </div>
     </template>
 
@@ -231,7 +229,7 @@
 
     <section class="section">
       <div class="container">
-        <div class="olumns" id="installations">
+        <div id="installations">
         </div>
       </div>
     </section>

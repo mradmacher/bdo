@@ -1,10 +1,14 @@
-import test from 'ava'
-import { JSDOM } from 'jsdom'
-import {InstallationsComponent} from '../installations_component.js'
+import test from 'ava';
+import { JSDOM } from 'jsdom';
+import { InstallationsComponent } from '../installations_component.js';
 
 test.before(t => {
   t.context.html =
     `
+      <template id="code-template">
+        <span class="code-slot"></span>
+      </template>
+
       <template id="installation-capability-template">
         <div class="capability"</div>
           <span class="waste-code"></span>
@@ -15,12 +19,16 @@ test.before(t => {
 
       <template id="installation-template">
         <div class="installation">
-          <div class="name"></div>
-          <div class="address"></div>
-          <div class="capabilities"></div>
+          <div class="name-slot"></div>
+          <div class="address-slot"></div>
+          <div class="waste-codes-slot"></div>
+          <div class="process-codes-slot"></div>
+          <button class="show-details-action"></button>
         </div>
       </template>
+
       <div id="installations"></div>
+      <div class="modal installation-details"></div>
     `
 })
 
@@ -53,20 +61,19 @@ test('adds installation with capabilities', t => {
   t.deepEqual(installationsElement.length, 1)
 
   let installationElement = installationsElement[0]
-  t.deepEqual(installationElement.querySelector(".name").textContent, "Test")
-  t.regex(installationElement.querySelector(".address").textContent, /Address Line 1/)
-  t.regex(installationElement.querySelector(".address").textContent, /Address Line 2/)
+  t.deepEqual(installationElement.querySelector(".name-slot").textContent, "Test")
+  t.regex(installationElement.querySelector(".address-slot").textContent, /Address Line 1/)
+  t.regex(installationElement.querySelector(".address-slot").textContent, /Address Line 2/)
 
-  let capabilitiesElement = installationElement.querySelectorAll(".capability")
-  t.deepEqual(capabilitiesElement.length, 2)
+  let wasteCodesElement = installationElement.querySelectorAll(".waste-codes-slot > .code-slot")
+  t.deepEqual(wasteCodesElement.length, 2)
 
-  let capabilityElement = capabilitiesElement[0]
-  t.deepEqual(capabilityElement.querySelector(".waste-code").textContent, "01 01 01")
-  t.deepEqual(capabilityElement.querySelector(".process-code").textContent, "R12")
-  t.deepEqual(capabilityElement.querySelector(".quantity").textContent, "1000")
+  let processCodesElement = installationElement.querySelectorAll(".process-codes-slot > .code-slot")
+  t.deepEqual(processCodesElement.length, 2)
 
-  capabilityElement = capabilitiesElement[1]
-  t.deepEqual(capabilityElement.querySelector(".waste-code").textContent, "02 02 02*")
-  t.deepEqual(capabilityElement.querySelector(".process-code").textContent, "D10")
-  t.deepEqual(capabilityElement.querySelector(".quantity").textContent, "500")
+  t.deepEqual(wasteCodesElement[0].textContent, "01 01 01")
+  t.deepEqual(wasteCodesElement[1].textContent, "02 02 02*")
+
+  t.deepEqual(processCodesElement[0].textContent, "D10")
+  t.deepEqual(processCodesElement[1].textContent, "R12")
 })

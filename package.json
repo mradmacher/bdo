@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "test": "ava",
     "build": "esbuild js/index.js --bundle --outfile=assets/main.js"

@@ -1,3 +1,5 @@
+import { openModal, closeModal } from "./modal_helpers.js"
+
 function formatCode(code, dangerous) {
   let formattedCode = [
     code.slice(0, 2),
@@ -6,67 +8,70 @@ function formatCode(code, dangerous) {
   ].join(" ")
   if (dangerous) {
     formattedCode += "*"
-  } else {
-    formattedCode += " "
   }
+
   return formattedCode;
 }
-export class InstallationsComponent {
-  constructor(elementId) {
-    this.element = document.getElementById(elementId);
+
+class CodeTemplate {
+  constructor() {
+    this.template = document.getElementById('code-template');
   }
 
-  clear() {
-    this.element.innerHTML = '';
+  build(code) {
+    let element = this.template.content.cloneNode(true);
+    element.querySelector('.code-slot').textContent = code;
+
+    return element;
+  }
+}
+
+class InstallationCapabilityTemplate {
+  constructor() {
+    this.template = document.getElementById('installation-capability-template');
   }
 
-  showDetails(installation) {
-    let modal = document.querySelector('.modal.installation-details');
-    modal.querySelector('.installation-name').textContent = installation.Name
-    modal.querySelector('.installation-address').textContent = `${installation.Address.Line1},  ${installation.Address.Line2}`
-    modal.querySelector('.installation-capabilities').innerHTML = '';
-    installation.Capabilities.forEach((capability, i) => {
-      let capabilityTemplate = document.getElementById('installation-capability-template').content.cloneNode(true)
-      let formattedCode = [
-        capability.WasteCode.slice(0, 2),
-        capability.WasteCode.slice(2, 4),
-        capability.WasteCode.slice(4, 6),
-      ].join(" ")
-      if (capability.Dangerous) {
-        formattedCode += "*"
-      }
-      capabilityTemplate.querySelector('.waste-code').textContent = formattedCode
-      capabilityTemplate.querySelector('.process-code').textContent = capability.ProcessCode
-      capabilityTemplate.querySelector('.quantity').textContent = capability.Quantity
+  build(capability) {
+    let element = this.template.content.cloneNode(true);
+    let formattedCode = [
+      capability.WasteCode.slice(0, 2),
+      capability.WasteCode.slice(2, 4),
+      capability.WasteCode.slice(4, 6),
+    ].join(" ")
+    if (capability.Dangerous) {
+      formattedCode += "*";
+    }
+    element.querySelector('.waste-code').textContent = formattedCode;
+    element.querySelector('.process-code').textContent = capability.ProcessCode;
+    element.querySelector('.quantity').textContent = capability.Quantity;
 
-      let processStatus = 'teal'
-      if (capability.ProcessCode.startsWith('D')) {
-        processStatus = 'orange'
-      }
-      capabilityTemplate.querySelector('.process-code').classList.add(processStatus)
+    let processStatus = 'teal';
+    if (capability.ProcessCode.startsWith('D')) {
+      processStatus = 'orange';
+    }
+    element.querySelector('.process-code').classList.add(processStatus);
 
-      let quantityStatus = 'olive'
-      if (capability.Quantity > 1500) {
-        quantityStatus = 'purple'
-      }
-      capabilityTemplate.querySelector('.quantity').classList.add(quantityStatus)
+    let quantityStatus = 'olive';
+    if (capability.Quantity > 1500) {
+      quantityStatus = 'purple';
+    }
+    element.querySelector('.quantity').classList.add(quantityStatus);
 
-      modal.querySelector('.installation-capabilities').append(capabilityTemplate)
-    })
-    modal.querySelectorAll('.button.cancel').forEach((elem) => {
-      elem.addEventListener('click', (event) => {
-        modal.classList.remove('is-active');
-      })
-    })
-    modal.classList.add('is-active');
+    return element;
+  }
+}
+
+class InstallationTemplate {
+  constructor() {
+    this.template = document.getElementById('installation-template');
   }
 
-  addInstallation(installation) {
-    let template = document.getElementById('installation-template').content.cloneNode(true)
-    template.querySelector('.name').textContent = installation.Name
-    template.querySelector('.address').textContent = `${installation.Address.Line1},  ${installation.Address.Line2}`
-    template.querySelector('.action.show-details').addEventListener('click', (event) => {
-      this.showDetails(installation);
+  build(installation, onShowDetails) {
+    let element = this.template.content.cloneNode(true);
+    element.querySelector('.name-slot').textContent = installation.Name;
+    element.querySelector('.address-slot').textContent = `${installation.Address.Line1},  ${installation.Address.Line2}`;
+    element.querySelector('.show-details-action').addEventListener('click', (event) => {
+      onShowDetails(installation);
     })
     let wasteCodes = []
     let processCodes = []
@@ -80,16 +85,62 @@ export class InstallationsComponent {
       }
     });
     wasteCodes.sort().forEach((code, i) => {
-      let wasteCodeTemplate = document.getElementById('code-template').content.cloneNode(true);
-      wasteCodeTemplate.querySelector('.code').textContent = code;
-      template.querySelector('.waste-codes').append(wasteCodeTemplate);
+      element.querySelector('.waste-codes-slot').append(new CodeTemplate().build(code));
     })
     processCodes.sort().forEach((code, i) => {
-      let processCodeTemplate = document.getElementById('code-template').content.cloneNode(true)
-      processCodeTemplate.querySelector('.code').textContent = code;
-      template.querySelector('.process-codes').append(processCodeTemplate)
+      element.querySelector('.process-codes-slot').append(new CodeTemplate().build(code));
     })
 
-    this.element.append(template)
+    return element;
+  }
+}
+
+export class InstallationDetailsView {
+  constructor() {
+    this.modal = document.querySelector('.modal.installation-details');
+    this.modal.querySelectorAll('.button.cancel').forEach((elem) => {
+      elem.addEventListener('click', (event) => {
+        closeModal(this.modal);
+      })
+    })
+  }
+
+  hide() {
+    closeModal(this.modal);
+  }
+
+  show(installation) {
+    this.modal.querySelector('.installation-name').textContent = installation.Name
+    this.modal.querySelector('.installation-address').textContent = `${installation.Address.Line1},  ${installation.Address.Line2}`
+    this.modal.querySelector('.installation-capabilities').innerHTML = '';
+    installation.Capabilities.forEach((capability, i) => {
+      this.modal.querySelector('.installation-capabilities').append(
+        new InstallationCapabilityTemplate().build(capability)
+      )
+    })
+    openModal(this.modal);
+  }
+}
+
+export class InstallationsComponent {
+  constructor(elementId) {
+    this.element = document.getElementById(elementId);
+    this.detailsView = new InstallationDetailsView();
+  }
+
+  clear() {
+    this.element.innerHTML = '';
+  }
+
+  showDetails(installation) {
+    this.detailsView.show(installation);
+  }
+
+  addInstallation(installation) {
+    this.element.appendChild(
+      new InstallationTemplate().build(installation, (installation) => {
+        this.showDetails(installation);
+      })
+    )
   }
 }

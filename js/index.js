@@ -1,17 +1,9 @@
 import { codes, codeDescs } from "./waste_catalog.js"
 import { processes, processDescs } from "./process_catalog.js"
-import {MapComponent} from "./map_component.js"
-import {SearchComponent} from "./search_component.js"
-import {InstallationsComponent} from "./installations_component.js"
-
-
-function openModal($el) {
-  $el.classList.add('is-active');
-}
-
-function closeModal($el) {
-  $el.classList.remove('is-active');
-}
+import { MapComponent } from "./map_component.js"
+import { SearchComponent } from "./search_component.js"
+import { InstallationsComponent } from "./installations_component.js"
+import { openModal, closeModal } from "./modal_helpers.js"
 
 export function updateUrlSearchParams(params) {
   if ('URLSearchParams' in window) {
@@ -48,55 +40,36 @@ export class InstallationRequest {
       })
     })
   }
-/*
-  search(params) {
-    axios.get(this.url, {
-      params: params
-    })
-    .then(function(installations) {
-      resolve(installations)
-    })
-    .catch(function(error) {
-      console.log(error)
-      reject(error);
-    })
-  }
-  search(params) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        method: "GET",
-        url: this.url,
-        data: params,
-        dataType: "json",
-      }).done(function(installations) {
-        resolve(installations)
-      }).fail(function(xhr, status, error) {
-        reject(xhr.responseJSON.errors);
-      })
-    })
-  }
-*/
 }
 
-class CodeDescRowBuilder {
-  static build(code, desc, callback) {
-    var template = document.getElementById('code-desc-row-template').content.cloneNode(true);
-    template.querySelector('.code').textContent = code;
-    template.querySelector('.description').textContent = desc;
-    template.querySelector('.action').addEventListener('click', (event) => {
-      callback(code, desc)
+class CodeDescRowTemplate {
+  constructor() {
+    this.template = document.getElementById('code-desc-row-template');
+  }
+
+  build(code, desc, onSelect) {
+    var element = this.template.content.cloneNode(true);
+    element.querySelector('.code-slot').textContent = code;
+    element.querySelector('.description-slot').textContent = desc;
+    element.querySelector('.select-action').addEventListener('click', (event) => {
+      onSelect(code, desc);
     })
-    return template
+
+    return element;
   }
 }
 
-class CodeDescHeaderRowBuilder {
-  static build(code, desc) {
-    let template = document.getElementById('code-desc-header-row-template').content.cloneNode(true);
-    template.querySelector('.code').textContent = code;
-    template.querySelector('.description').textContent = desc;
+class CodeDescHeaderRowTemplate {
+  constructor() {
+    this.template = document.getElementById('code-desc-header-row-template');
+  }
 
-    return template
+  build(code, desc) {
+    let element = this.template.content.cloneNode(true);
+    element.querySelector('.code').textContent = code;
+    element.querySelector('.description').textContent = desc;
+
+    return element;
   }
 }
 
@@ -121,10 +94,10 @@ export class ProcessSelectorView {
 
   load(onSelect) {
     for (let code in processDescs) {
-      let template = CodeDescRowBuilder.build(code, processDescs[code], (code, desc) => {
+      let element = new CodeDescRowTemplate().build(code, processDescs[code], (code, desc) => {
         onSelect(code, desc)
       })
-      this.modal.querySelector('.process-list').append(template);
+      this.modal.querySelector('.process-list').append(element);
     }
   }
 }
@@ -147,7 +120,7 @@ export class WasteSelectorView {
 
   select(code, desc) {
     this.modal.querySelector('.waste-list-header').append(
-      CodeDescHeaderRowBuilder.build(code, desc)
+      new CodeDescHeaderRowTemplate().build(code, desc)
     )
   }
 
@@ -162,12 +135,12 @@ export class WasteSelectorView {
   load(onSelect) {
     this.modal.querySelector('.waste-list').innerHTML = '';
     codes[this.selectedCode].forEach((code, i) => {
-      let template = CodeDescRowBuilder.build(code, codeDescs[code.replace("*", "")], (code, desc) => {
+      let element = new CodeDescRowTemplate().build(code, codeDescs[code.replace("*", "")], (code, desc) => {
         this.selectedCode = code
         this.selectedDescs.push(desc)
         onSelect(code, desc)
       })
-      this.modal.querySelector('.waste-list').append(template)
+      this.modal.querySelector('.waste-list').append(element)
     })
   }
 }
