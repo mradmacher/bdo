@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>BDO</title>
-    <script src="assets/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
   <body>
+    <span id="google-maps-api-key" data-value="{{.GoogleMapsApiKey}}"></span>
     <template id="code-desc-row-template">
       <tr>
         <td class="code"></td>
@@ -235,69 +235,7 @@
         </div>
       </div>
     </section>
+
+  <script src="/assets/main.js"></script>
   </body>
-
-  <script type="module">
-    import {ProcessSelectorView, WasteSelectorView, InstallationRequest, updateUrlSearchParams} from "./js/app.js?q=4"
-    import {MapComponent} from "./js/map_component.js?q=1"
-    import {SearchComponent} from "./js/search_component.js"
-    import {InstallationsComponent} from "./js/installations_component.js?q=2"
-
-    document.addEventListener("DOMContentLoaded", () => {
-      let installationsComponent
-      let searchComponent
-      let mapComponent = new MapComponent({{.GoogleMapsApiKey}})
-
-      mapComponent.initMap("map").then(()=> {
-        installationsComponent = new InstallationsComponent('installations')
-        searchComponent = new SearchComponent('search',
-          () => {
-            installationsComponent.clear()
-            mapComponent.clear()
-          },
-          (params) => {
-            updateUrlSearchParams(params)
-
-            installationsComponent.clear()
-            mapComponent.clear()
-
-            new InstallationRequest().search(params)
-              .then((installations) => {
-                installations.forEach((installation, i) => {
-                  installationsComponent.addInstallation(installation)
-                  mapComponent.addInstallation(installation)
-                })
-              })
-          }
-        )
-
-        document.querySelector('.search.process').addEventListener('click', (event) => {
-          event.preventDefault();
-          let processSelectorView = new ProcessSelectorView
-          processSelectorView.load((code, desc) => {
-            searchComponent.setProcess(code, desc)
-            processSelectorView.hide()
-          })
-          processSelectorView.show()
-        })
-
-        document.querySelector('.search.waste').addEventListener('click', (event) => {
-          event.preventDefault();
-          var wasteListView = new WasteSelectorView
-          wasteListView.load((code, desc) => {
-            wasteListView.select(code, desc)
-            wasteListView.load((code, desc) => {
-              wasteListView.select(code, desc)
-              wasteListView.load((code, desc) => {
-                searchComponent.setWaste(wasteListView.selectedCode, ...wasteListView.selectedDescs)
-                wasteListView.hide()
-              })
-            })
-          })
-          wasteListView.show()
-        })
-      })
-
-    })
-  </script>
 </html>

@@ -1,5 +1,9 @@
 import { codes, codeDescs } from "./waste_catalog.js"
 import { processes, processDescs } from "./process_catalog.js"
+import {MapComponent} from "./map_component.js"
+import {SearchComponent} from "./search_component.js"
+import {InstallationsComponent} from "./installations_component.js"
+
 
 function openModal($el) {
   $el.classList.add('is-active');
@@ -167,3 +171,61 @@ export class WasteSelectorView {
     })
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  let googleMapsApiKey = document.getElementById('google-maps-api-key').getAttribute('data-value');
+  let installationsComponent
+  let searchComponent
+  let mapComponent = new MapComponent(googleMapsApiKey)
+
+  mapComponent.initMap("map").then(()=> {
+    installationsComponent = new InstallationsComponent('installations')
+    searchComponent = new SearchComponent('search',
+      () => {
+        installationsComponent.clear()
+        mapComponent.clear()
+      },
+      (params) => {
+        updateUrlSearchParams(params)
+
+        installationsComponent.clear()
+        mapComponent.clear()
+
+        new InstallationRequest().search(params)
+          .then((installations) => {
+            installations.forEach((installation, i) => {
+              installationsComponent.addInstallation(installation)
+              mapComponent.addInstallation(installation)
+            })
+          })
+      }
+    )
+
+    document.querySelector('.search.process').addEventListener('click', (event) => {
+      event.preventDefault();
+      let processSelectorView = new ProcessSelectorView
+      processSelectorView.load((code, desc) => {
+        searchComponent.setProcess(code, desc)
+        processSelectorView.hide()
+      })
+      processSelectorView.show()
+    })
+
+    document.querySelector('.search.waste').addEventListener('click', (event) => {
+      event.preventDefault();
+      var wasteListView = new WasteSelectorView
+      wasteListView.load((code, desc) => {
+        wasteListView.select(code, desc)
+        wasteListView.load((code, desc) => {
+          wasteListView.select(code, desc)
+          wasteListView.load((code, desc) => {
+            searchComponent.setWaste(wasteListView.selectedCode, ...wasteListView.selectedDescs)
+            wasteListView.hide()
+          })
+        })
+      })
+      wasteListView.show()
+    })
+  })
+
+})
