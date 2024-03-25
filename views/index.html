@@ -26,13 +26,15 @@
     </template>
 
     <template id="installation-capability-template">
-      <div class="control">
-        <div class="tags has-addons capability">
-          <span class="tag waste-code"></span>
-          <span class="tag process-code"></span>
-          <span class="tag quantity"></span>
-        </div>
+      <tr class="capability">
+        <td class="waste-code"></td>
+        <td class="process-code"></td>
+        <td class="quantity"></td>
       </div>
+    </template>
+
+    <template id="code-template">
+        <span class="tag code"></span>
     </template>
 
     <template id="installation-template">
@@ -43,12 +45,52 @@
             <p class="tag address"></p>
           </header>
           <section class="panel-block">
-            <div class="field is-grouped is-grouped-multiline capabilities">
+            <div class="tags waste-codes">
             </div>
+          </section>
+          <section class="panel-block">
+            <div class="tags process-codes">
+            </div>
+          </section>
+          <section class="panel-block">
+            <button class="button action show-details is-link is-fullwidth">Szczegóły</button>
           </section>
         </div>
       </div>
     </template>
+
+    <div class="modal installation-details">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title installation-name">
+          </p>
+          <p class="tag installation-address">
+          </p>
+          <button class="cancel button modal-close is-large" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="table-container">
+            <table class="table is-narrow is-striped">
+              <thead>
+                <tr>
+                  <th>Kod</th>
+                  <th>Proces</th>
+                  <th>Mg</th>
+                </tr>
+              </thead>
+              <tbody class="installation-capabilities">
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <div class="cancel button is-link is-fullwidth">
+            Zamknij
+          </div>
+        </footer>
+      </div>
+    </div>
 
     <div class="modal processes">
       <div class="modal-background"></div>
@@ -179,7 +221,7 @@
         <div class="column">
           <div class="card">
             <div class="card-content">
-              <div class="image is-5by4" id="map"></div>
+              <div class="image is-2by1" id="map"></div>
             </div>
           </div>
         </div>
@@ -189,17 +231,17 @@
 
     <section class="section">
       <div class="container">
-        <div class="columns" id="installations">
+        <div class="olumns" id="installations">
         </div>
       </div>
     </section>
   </body>
 
   <script type="module">
-    import {ProcessSelectorView, WasteSelectorView, InstallationRequest, updateUrlSearchParams} from "./js/app.js?q=3"
-    import {MapComponent} from "./js/map_component.js"
+    import {ProcessSelectorView, WasteSelectorView, InstallationRequest, updateUrlSearchParams} from "./js/app.js?q=4"
+    import {MapComponent} from "./js/map_component.js?q=1"
     import {SearchComponent} from "./js/search_component.js"
-    import {InstallationsComponent} from "./js/installations_component.js"
+    import {InstallationsComponent} from "./js/installations_component.js?q=2"
 
     document.addEventListener("DOMContentLoaded", () => {
       let installationsComponent
