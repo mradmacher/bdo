@@ -5,17 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>BDO</title>
-    <script src="assets/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
   <body>
+    <span id="google-maps-api-key" data-value="{{.GoogleMapsApiKey}}"></span>
     <template id="code-desc-row-template">
       <tr>
-        <td class="code"></td>
-        <td class="description"></td>
-        <td class="action"><button class="button is-small is-rounded">-></button></td>
+        <td class="code-slot"></td>
+        <td class="description-slot"></td>
+        <td class="select-action"><button class="button is-small is-rounded">-></button></td>
       </tr>
     </template>
     <template id="code-desc-header-row-template">
@@ -26,29 +26,69 @@
     </template>
 
     <template id="installation-capability-template">
-      <div class="control">
-        <div class="tags has-addons capability">
-          <span class="tag waste-code"></span>
-          <span class="tag process-code"></span>
-          <span class="tag quantity"></span>
-        </div>
+      <tr class="capability">
+        <td class="waste-code"></td>
+        <td class="process-code"></td>
+        <td class="quantity"></td>
       </div>
     </template>
 
+    <template id="code-template">
+        <span class="tag code-slot"></span>
+    </template>
+
     <template id="installation-template">
-      <div class="column">
-        <div class="panel installation">
-          <header class="panel-heading">
-            <p class="header name"></p>
-            <p class="tag address"></p>
-          </header>
-          <section class="panel-block">
-            <div class="field is-grouped is-grouped-multiline capabilities">
-            </div>
-          </section>
-        </div>
+      <div class="panel installation">
+        <header class="panel-heading">
+          <p class="header name-slot"></p>
+          <p class="tag address-slot"></p>
+        </header>
+        <section class="panel-block">
+          <div class="tags waste-codes-slot">
+          </div>
+        </section>
+        <section class="panel-block">
+          <div class="tags process-codes-slot">
+          </div>
+        </section>
+        <section class="panel-block">
+          <button class="button show-details-action is-link is-fullwidth">Szczegóły</button>
+        </section>
       </div>
     </template>
+
+    <div class="modal installation-details">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title installation-name">
+          </p>
+          <p class="tag installation-address">
+          </p>
+          <button class="cancel button modal-close is-large" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="table-container">
+            <table class="table is-narrow is-striped">
+              <thead>
+                <tr>
+                  <th>Kod</th>
+                  <th>Proces</th>
+                  <th>Mg</th>
+                </tr>
+              </thead>
+              <tbody class="installation-capabilities">
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <div class="cancel button is-link is-fullwidth">
+            Zamknij
+          </div>
+        </footer>
+      </div>
+    </div>
 
     <div class="modal processes">
       <div class="modal-background"></div>
@@ -179,7 +219,7 @@
         <div class="column">
           <div class="card">
             <div class="card-content">
-              <div class="image is-5by4" id="map"></div>
+              <div class="image is-2by1" id="map"></div>
             </div>
           </div>
         </div>
@@ -189,73 +229,11 @@
 
     <section class="section">
       <div class="container">
-        <div class="columns" id="installations">
+        <div id="installations">
         </div>
       </div>
     </section>
+
+  <script src="/assets/main.js"></script>
   </body>
-
-  <script type="module">
-    import {ProcessSelectorView, WasteSelectorView, InstallationRequest, updateUrlSearchParams} from "./js/app.js?q=3"
-    import {MapComponent} from "./js/map_component.js"
-    import {SearchComponent} from "./js/search_component.js"
-    import {InstallationsComponent} from "./js/installations_component.js"
-
-    document.addEventListener("DOMContentLoaded", () => {
-      let installationsComponent
-      let searchComponent
-      let mapComponent = new MapComponent({{.GoogleMapsApiKey}})
-
-      mapComponent.initMap("map").then(()=> {
-        installationsComponent = new InstallationsComponent('installations')
-        searchComponent = new SearchComponent('search',
-          () => {
-            installationsComponent.clear()
-            mapComponent.clear()
-          },
-          (params) => {
-            updateUrlSearchParams(params)
-
-            installationsComponent.clear()
-            mapComponent.clear()
-
-            new InstallationRequest().search(params)
-              .then((installations) => {
-                installations.forEach((installation, i) => {
-                  installationsComponent.addInstallation(installation)
-                  mapComponent.addInstallation(installation)
-                })
-              })
-          }
-        )
-
-        document.querySelector('.search.process').addEventListener('click', (event) => {
-          event.preventDefault();
-          let processSelectorView = new ProcessSelectorView
-          processSelectorView.load((code, desc) => {
-            searchComponent.setProcess(code, desc)
-            processSelectorView.hide()
-          })
-          processSelectorView.show()
-        })
-
-        document.querySelector('.search.waste').addEventListener('click', (event) => {
-          event.preventDefault();
-          var wasteListView = new WasteSelectorView
-          wasteListView.load((code, desc) => {
-            wasteListView.select(code, desc)
-            wasteListView.load((code, desc) => {
-              wasteListView.select(code, desc)
-              wasteListView.load((code, desc) => {
-                searchComponent.setWaste(wasteListView.selectedCode, ...wasteListView.selectedDescs)
-                wasteListView.hide()
-              })
-            })
-          })
-          wasteListView.show()
-        })
-      })
-
-    })
-  </script>
 </html>

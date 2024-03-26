@@ -43,14 +43,14 @@ func playWithDb() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("%v", *result)
+	fmt.Printf("%v\n", *result)
 
 	results, err := repo.Search(map[string]string{})
 	if err != nil {
 		panic(err)
 	}
 	for _, installation := range results {
-		fmt.Println("%v", installation)
+		fmt.Printf("%v\n", installation)
 	}
 }
 
