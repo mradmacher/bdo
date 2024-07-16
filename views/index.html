@@ -19,7 +19,7 @@
       </tr>
     </template>
     <template id="code-desc-header-row-template">
-      <tr class="selected-waste-header is-selected">
+      <tr class="selected-header is-selected">
         <th class="code"></th>
         <th class="description"></th>
       </tr>
@@ -30,7 +30,7 @@
         <td class="waste-code"></td>
         <td class="process-code"></td>
         <td class="quantity"></td>
-      </div>
+      </tr>
     </template>
 
     <template id="code-template">
@@ -58,36 +58,6 @@
     </template>
 
     <div class="modal installation-details">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title installation-name">
-          </p>
-          <p class="tag installation-address">
-          </p>
-          <button class="cancel button modal-close is-large" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="table-container">
-            <table class="table is-narrow is-striped">
-              <thead>
-                <tr>
-                  <th>Kod</th>
-                  <th>Proces</th>
-                  <th>Mg</th>
-                </tr>
-              </thead>
-              <tbody class="installation-capabilities">
-              </tbody>
-            </table>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <div class="cancel button is-link is-fullwidth">
-            Zamknij
-          </div>
-        </footer>
-      </div>
     </div>
 
     <div class="modal processes">
@@ -102,21 +72,20 @@
         <section class="modal-card-body">
           <div class="table-container">
             <table class="table is-narrow is-striped">
-              <thead>
+              <thead class="list-header">
                 <tr>
                   <th>Kod</th>
                   <th>Opis</th>
                 </tr>
               </thead>
-              <tbody class="process-list">
+              <tbody class="list">
               </tbody>
             </table>
           </div>
         </section>
         <footer class="modal-card-foot">
-          <div class="cancel button is-link is-fullwidth">
-            Anuluj
-          </div>
+          <button class="cancel button is-link is-fullwidth">Anuluj</button>
+          <button class="accept button is-link is-fullwidth" disabled>Wybierz</button>
         </footer>
       </div>
     </div>
@@ -133,19 +102,20 @@
         <section class="modal-card-body">
           <div class="table-container">
             <table class="table is-narrow is-striped">
-              <thead class="waste-list-header">
+              <thead class="list-header">
                 <tr>
                   <th>Kod</th>
                   <th>Opis</th>
                 </tr>
               </thead>
-              <tbody class="waste-list">
+              <tbody class="list">
               </tbody>
             </table>
           </div>
         </section>
         <footer class="modal-card-foot">
           <button class="cancel button is-link is-fullwidth">Anuluj</button>
+          <button class="accept button is-link is-fullwidth" disabled>Wybierz</button>
         </div>
       </div>
     </div>
@@ -234,6 +204,6 @@
       </div>
     </section>
 
-  <script src="/assets/main.js"></script>
+  <script src="/assets/main.js?q=3"></script>
   </body>
 </html>

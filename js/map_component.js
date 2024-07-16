@@ -22,21 +22,21 @@ export class MapComponent {
 
   addInstallation(installation) {
     const latLng = new google.maps.LatLng(
-      installation.Address.Lat,
-      installation.Address.Lng
+      installation.addressLat,
+      installation.addressLng
     )
     let marker = new google.maps.Marker({
       map: this.map,
       position: latLng,
-      label: installation.Name,
-      title: `${installation.Name}\n${installation.Address.Line1}\n${installation.Address.Line2}`,
+      label: installation.name,
+      title: `${installation.name}\n${installation.addressLine1}\n${installation.addressLine2}`,
     })
     const infoWindow = new google.maps.InfoWindow({
       content: `
-        <h3>${installation.Name}</h3>
-        <p>${installation.Address.Line1}<br />${installation.Address.Line2}</p>
+        <h3>${installation.name}</h3>
+        <p>${installation.addressLine1}<br />${installation.addressLine2}</p>
       `,
-      ariaLabel: installation.Name,
+      ariaLabel: installation.name,
     })
     marker.addListener("click", () => {
       infoWindow.open({

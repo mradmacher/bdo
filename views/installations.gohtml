@@ -1,0 +1,27 @@
+{{ range .Installations }}
+  <div class="panel" data-installation data-lng="{{ .AddressLng }}" data-lat="{{ .AddressLat }}">
+    <header class="panel-heading">
+      <p class="header" data-name>{{ .Name }}</p>
+      <p class="tag">
+        <span data-address-line1>{{ .AddressLine1 }}</span>,  <span data-address-line2>{{ .AddressLine2 }}</span>
+      </p>
+    </header>
+    <section class="panel-block">
+      <div class="tags" data-waste-codes>
+      {{ range .WasteCodes }}
+        <span class="tag" data-waste-code>{{ . }}</span>
+      {{ end }}
+      </div>
+    </section>
+    <section class="panel-block">
+      <div class="tags" data-process-codes>
+      {{ range .ProcessCodes }}
+        <span class="tag" data-process-code>{{ . }}</span>
+      {{ end }}
+      </div>
+    </section>
+    <section class="panel-block">
+      <button class="button is-link is-fullwidth" data-show-details data-id="{{ .Id }}">Szczegóły</button>
+    </section>
+  </div>
+{{ end }}

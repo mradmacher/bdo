@@ -1,4 +1,4 @@
-export const codes = {
+export const wasteCodes = {
   "00": [
     "01",
     "02",
@@ -1330,7 +1330,7 @@ export const codes = {
   ],
 }
 
-export const codeDescs = {
+export const wasteCodeDescs = {
   "100708": "Odpady z uzdatniania wody chłodzącej inne niż wymienione w 10 07 07",
   "070180": "Wapno pokarbidowe niezawierające substancji niebezpiecznych (inne niż wymienione w 07 01 08)",
   "070299": "Inne niewymienione odpady",
@@ -2389,3 +2389,18 @@ export const codeDescs = {
   "200302": "Odpady z targowisk",
   "200102": "Szkło",
 }
+
+export class WasteHinter {
+  relatedCodesFor(code) {
+    if (code == '') {
+      return wasteCodes['00'];
+    } else {
+      return wasteCodes[code];
+    }
+  }
+
+  descriptionFor(code) {
+    return wasteCodeDescs[code.replace("*", "")];
+  }
+}
+

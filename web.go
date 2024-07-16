@@ -11,8 +11,11 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		panic("No .env file found")
 	}
-
-	app, err := bdo.NewApp("views")
+	renderer, err := bdo.NewRenderer("views")
+	if err != nil {
+		panic(err)
+	}
+	app, err := bdo.NewApp(*renderer)
 	if err != nil {
 		panic(err)
 	}
