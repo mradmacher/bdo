@@ -118,9 +118,14 @@ func (repo *InstallationRepo) Search(params SearchParams) ([]Installation, error
 	return installations, nil
 }
 
-func (repo *InstallationRepo) Find() (*Installation, error) {
+func (repo *InstallationRepo) Find(id string) (*Installation, error) {
 	var installation Installation
-	err := repo.Collection.FindOne(context.TODO(), bson.D{}).Decode(&installation)
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	err = repo.Collection.FindOne(context.TODO(), bson.M{"_id": objectId}).Decode(&installation)
 	if err == mongo.ErrNoDocuments {
 		return nil, nil
 	} else if err != nil {

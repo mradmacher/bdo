@@ -1,5 +1,5 @@
-import { codes, codeDescs } from "./waste_catalog.js"
-import { processes, processDescs } from "./process_catalog.js"
+import { WasteHinter } from "./waste_catalog.js"
+import { ProcessHinter } from "./process_catalog.js"
 
 export class SearchComponent {
   constructor(elementId, onReset, onSearch) {
@@ -9,6 +9,8 @@ export class SearchComponent {
     this.element.querySelector('form').reset()
     this.setWasteHint(null, null, null)
     this.setProcessHint(null)
+    this.processHinter = new ProcessHinter();
+    this.wasteHinter = new WasteHinter();
 
     this.element.querySelector('form [type="reset"]').addEventListener('click', (event) => {
       this.setWasteHint(null, null, null)
@@ -60,13 +62,13 @@ export class SearchComponent {
       codeC = ''
     }
     if(codeA) {
-      descA = codeDescs[codeA]
+      descA = this.wasteHinter.descriptionFor(codeA);
     }
     if(codeB) {
-      descB = codeDescs[codeB]
+      descB = this.wasteHinter.descriptionFor(codeB);
     }
     if(codeC) {
-      descC = codeDescs[codeC]
+      descC = this.wasteHinter.descriptionFor(codeC);
     }
     this.setWasteHint(descA, descB, descC)
 
@@ -75,7 +77,7 @@ export class SearchComponent {
     if(process) {
       process = process.toUpperCase()
       processInputElement.value = process
-      this.setProcessHint(processDescs[process])
+      this.setProcessHint(this.processHinter.descriptionFor(process))
     } else {
       this.setProcessHint(null)
     }

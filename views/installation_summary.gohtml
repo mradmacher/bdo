@@ -1,0 +1,52 @@
+<div class="modal-background"></div>
+<div class="modal-card">
+  <header class="modal-card-head">
+    <p class="modal-card-title installation-name">
+    {{ .Name }}
+    </p>
+    <p class="tag installation-address">
+      {{ .AddressLine1 }}, {{ .AddressLine2 }}
+    </p>
+    <button class="cancel button modal-close is-large" aria-label="close"></button>
+  </header>
+  <section class="modal-card-body">
+    <div class="table-container">
+      <table class="table is-narrow is-striped">
+        <thead>
+          <tr>
+            <th>Kod</th>
+            <th>Proces</th>
+            <th>Mg</th>
+          </tr>
+        </thead>
+        <tbody class="installation-capabilities">
+        <!--
+        let processStatus = 'teal';
+        if (capability.ProcessCode.startsWith('D')) {
+          processStatus = 'orange';
+        }
+        element.querySelector('.process-code').classList.add(processStatus);
+
+        let quantityStatus = 'olive';
+        if (capability.Quantity > 1500) {
+          quantityStatus = 'purple';
+        }
+        element.querySelector('.quantity').classList.add(quantityStatus);
+        -->
+        {{ range .Capabilities }}
+          <tr class="capability">
+            <td class="waste-code">{{ .WasteCode }}</td>
+            <td class="process-code">{{ .ProcessCode }}</td>
+            <td class="quantity">{{ .Quantity }}</td>
+          </tr>
+        {{ end }}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <footer class="modal-card-foot">
+    <div class="cancel button is-link is-fullwidth">
+      Zamknij
+    </div>
+  </footer>
+</div>

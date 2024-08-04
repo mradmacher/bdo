@@ -12,7 +12,12 @@ func TestSearch(t *testing.T) {
 		panic("No .test.env file found")
 	}
 
-	app, err := NewApp("../views")
+	renderer, err := NewRenderer("../views")
+	if err != nil {
+		t.Errorf("Error creating the renderer: %v", err)
+	}
+
+	app, err := NewApp(*renderer)
 	if err != nil {
 		t.Errorf("Error creating the app: %v", err)
 	}
@@ -28,7 +33,7 @@ func TestSearch(t *testing.T) {
 		t.Errorf("Expected response code %d; got %d\n", http.StatusOK, res.Code)
 	}
 
-	if res.Body.String() != "[]" {
-		t.Errorf("/api/installations => []; got: %v", res.Body.String())
+	if res.Body.String() != "\n" {
+		t.Errorf("/api/installations => %q, got: %q", "", res.Body.String())
 	}
 }

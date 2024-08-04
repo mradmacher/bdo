@@ -1,8 +1,7 @@
-import { codes, codeDescs } from "./waste_catalog.js"
-import { processes, processDescs } from "./process_catalog.js"
+import { WasteHinter } from "./waste_catalog.js"
+import { ProcessHinter } from "./process_catalog.js"
 import { MapComponent } from "./map_component.js"
 import { SearchComponent } from "./search_component.js"
-import { InstallationsComponent } from "./installations_component.js"
 import { openModal, closeModal } from "./modal_helpers.js"
 
 export function updateUrlSearchParams(params) {
@@ -25,14 +24,26 @@ export function updateUrlSearchParams(params) {
 
 export class InstallationRequest {
   constructor() {
-    this.url = "/api/installations"
+    this.indexUrl = "/api/installations"
+    this.showUrl = "/api/installation"
   }
 
   search(params) {
     return new Promise((resolve, reject) => {
-      axios.get(this.url, {
+      axios.get(this.indexUrl, {
         params: params
       }).then(function(response) {
+        resolve(response.data)
+      }).catch(function(error) {
+        reject(error.response.data)
+      })
+    })
+  }
+
+  show(id) {
+    return new Promise((resolve, reject) => {
+      axios.get(`${this.showUrl}/${id}`)
+      .then(function(response) {
         console.log(response)
         resolve(response.data)
       }).catch(function(error) {
@@ -73,102 +84,129 @@ class CodeDescHeaderRowTemplate {
   }
 }
 
-export class ProcessSelectorView {
-  constructor() {
-    this.modal = document.querySelector('.modal.processes');
-    this.modal.querySelector('.process-list').content = '';
+export class CodeSelectorView {
+  constructor(selector, hinter, onSelect) {
+    this.modal = document.querySelector(selector);
+    this.hinter = hinter;
     this.modal.querySelectorAll('.button.cancel').forEach((elem) => {
       elem.addEventListener('click', (event) => {
         closeModal(this.modal);
       })
     })
-  }
-
-  hide() {
-    closeModal(this.modal);
-  }
-
-  show() {
-    openModal(this.modal);
-  }
-
-  load(onSelect) {
-    for (let code in processDescs) {
-      let element = new CodeDescRowTemplate().build(code, processDescs[code], (code, desc) => {
-        onSelect(code, desc)
+    this.modal.querySelectorAll('.button.accept').forEach((elem) => {
+      elem.addEventListener('click', (event) => {
+        onSelect(this.selectedCode, this.selectedDescs);
+        closeModal(this.modal);
       })
-      this.modal.querySelector('.process-list').append(element);
-    }
-  }
-}
-
-export class WasteSelectorView {
-  constructor() {
-    this.modal = document.querySelector('.modal.wastes');
-    this.modal.querySelectorAll('.selected-waste-header').forEach((elem) => {
+    })
+    this.modal.querySelectorAll('.selected-header').forEach((elem) => {
       elem.remove();
     })
-    this.modal.querySelectorAll('.button.cancel').forEach((elem) => {
-      elem.addEventListener('click', (event) => {
-        closeModal(this.modal);
-      })
-    })
-    this.modal.querySelector('.waste-list').innerHTML = '';
-    this.selectedDescs = []
-    this.selectedCode = '00'
+    this.modal.querySelector('.list').innerHTML = '';
+    this.disableAccept();
+    this.selectedDescs = [];
+    this.selectedCode = '';
   }
 
   select(code, desc) {
-    this.modal.querySelector('.waste-list-header').append(
+    this.selectedCode = code
+    this.selectedDescs.push(desc)
+    this.modal.querySelector('.list-header').append(
       new CodeDescHeaderRowTemplate().build(code, desc)
     )
   }
 
+  enableAccept() {
+    this.modal.querySelector('.button.accept').removeAttribute('disabled');
+  }
+
+  disableAccept() {
+    this.modal.querySelector('.button.accept').setAttribute('disabled', '');
+  }
+
   hide() {
     closeModal(this.modal);
   }
 
   show() {
-    openModal(this.modal)
+    this.load();
+    openModal(this.modal);
   }
 
-  load(onSelect) {
-    this.modal.querySelector('.waste-list').innerHTML = '';
-    codes[this.selectedCode].forEach((code, i) => {
-      let element = new CodeDescRowTemplate().build(code, codeDescs[code.replace("*", "")], (code, desc) => {
-        this.selectedCode = code
-        this.selectedDescs.push(desc)
-        onSelect(code, desc)
+  load() {
+    let relatedCodes = this.hinter.relatedCodesFor(this.selectedCode);
+
+    this.modal.querySelector('.list').innerHTML = '';
+    if (!relatedCodes) {
+      this.enableAccept();
+      return;
+    }
+    this.hinter.relatedCodesFor(this.selectedCode).forEach((code, i) => {
+      let element = new CodeDescRowTemplate().build(code, this.hinter.descriptionFor(code), (code, desc) => {
+        this.select(code, desc);
+        this.load();
       })
-      this.modal.querySelector('.waste-list').append(element)
+      this.modal.querySelector('.list').append(element)
     })
+  }
+}
+
+export class ProcessSelectorView extends CodeSelectorView {
+  constructor(selector, onSelect) {
+    super(selector, new ProcessHinter(), onSelect);
+  }
+}
+
+export class WasteSelectorView extends CodeSelectorView {
+  constructor(selector, onSelect) {
+    super(selector, new WasteHinter(), onSelect);
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   let googleMapsApiKey = document.getElementById('google-maps-api-key').getAttribute('data-value');
-  let installationsComponent
   let searchComponent
   let mapComponent = new MapComponent(googleMapsApiKey)
 
   mapComponent.initMap("map").then(()=> {
-    installationsComponent = new InstallationsComponent('installations')
     searchComponent = new SearchComponent('search',
       () => {
-        installationsComponent.clear()
         mapComponent.clear()
       },
       (params) => {
         updateUrlSearchParams(params)
 
-        installationsComponent.clear()
         mapComponent.clear()
 
         new InstallationRequest().search(params)
           .then((installations) => {
-            installations.forEach((installation, i) => {
-              installationsComponent.addInstallation(installation)
-              mapComponent.addInstallation(installation)
+            let listElement = document.getElementById('installations')
+            listElement.innerHTML = installations;
+            listElement.querySelectorAll('.installation').forEach((installationElement) => {
+              mapComponent.addInstallation({
+                addressLat: installationElement.getAttribute('data-lat'),
+                addressLng: installationElement.getAttribute('data-lng'),
+                name: installationElement.querySelector('[data-name]').textContent,
+                addressLine1: installationElement.querySelector('[data-address-line1]').textContent,
+                addressLine2: installationElement.querySelector('[data-address-line2]').textContent,
+              });
+
+            })
+
+            listElement.querySelectorAll('[data-show-details]').forEach((actionElement) => {
+              actionElement.addEventListener('click', (event) => {
+                let id = event.target.getAttribute('data-id');
+                new InstallationRequest().show(id).then((result) => {
+                  let detailsElement = document.querySelector('.installation-details');
+                  detailsElement.innerHTML = result;
+                  detailsElement.querySelectorAll('.button.cancel').forEach((cancelElement) => {
+                    cancelElement.addEventListener('click', (event) => {
+                      closeModal(detailsElement);
+                    })
+                  })
+                  openModal(detailsElement);
+                })
+              })
             })
           })
       }
@@ -176,28 +214,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelector('.search.process').addEventListener('click', (event) => {
       event.preventDefault();
-      let processSelectorView = new ProcessSelectorView
-      processSelectorView.load((code, desc) => {
-        searchComponent.setProcess(code, desc)
-        processSelectorView.hide()
-      })
-      processSelectorView.show()
+      new ProcessSelectorView('.modal.processes', (code, descs) => {
+        searchComponent.setProcess(code, descs[0]);
+      }).show();
     })
 
     document.querySelector('.search.waste').addEventListener('click', (event) => {
       event.preventDefault();
-      var wasteListView = new WasteSelectorView
-      wasteListView.load((code, desc) => {
-        wasteListView.select(code, desc)
-        wasteListView.load((code, desc) => {
-          wasteListView.select(code, desc)
-          wasteListView.load((code, desc) => {
-            searchComponent.setWaste(wasteListView.selectedCode, ...wasteListView.selectedDescs)
-            wasteListView.hide()
-          })
-        })
-      })
-      wasteListView.show()
+      new WasteSelectorView('.modal.wastes', (code, descs) => {
+        searchComponent.setWaste(code, ...descs);
+      }).show();
     })
   })
 

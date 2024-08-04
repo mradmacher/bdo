@@ -1,4 +1,4 @@
-export const processDescs = {
+export const processCodeDescs = {
   R1: "Wykorzystanie głównie jako paliwa lub innego środka wytwarzania energii",
   R2: "Odzysk/regeneracja rozpuszczalników",
   R3: "Recykling lub regeneracja substancji organicznych, które nie są stosowane jako rozpuszczalniki (w tym kompostowanie i inne biologiczne procesy przekształcania)",
@@ -27,7 +27,7 @@ export const processDescs = {
   D13: "Sporządzanie mieszanki lub mieszanie przed poddaniem odpadów któremukolwiek z procesów wymienionych w pozycjach D 1 – D 12",
 }
 
-export const processes = [
+export const processCodes = [
   'R1',
   'R2',
   'R3',
@@ -55,3 +55,17 @@ export const processes = [
   'D12',
   'D13',
 ]
+
+export class ProcessHinter {
+  relatedCodesFor(code) {
+    if (code == '') {
+      return processCodes;
+    } else {
+      return null;
+    }
+  }
+
+  descriptionFor(code) {
+    return processCodeDescs[code];
+  }
+}

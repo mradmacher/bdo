@@ -1,32 +1,23 @@
 package bdo
 
 import (
-	"encoding/json"
-	"fmt"
-	"github.com/go-chi/chi/v5"
-	"html/template"
 	"net/http"
 	"os"
 )
 
 type App struct {
-	router   *chi.Mux
+	router  *http.ServeMux
 	db       DbClient
-	template *template.Template
+	renderer Renderer
 }
 
-func NewApp(templatesPath string) (*App, error) {
+func NewApp(renderer Renderer) (*App, error) {
 	app := App{}
-	app.router = chi.NewRouter()
+	app.router = http.NewServeMux()
 	app.db = DbClient{}
+	app.renderer = renderer
 
 	var err error
-
-	app.template, err = template.ParseFiles(templatesPath + "/index.html")
-	if err != nil {
-		return nil, err
-	}
-
 	err = app.db.Connect()
 	if err != nil {
 		return nil, err
@@ -36,10 +27,10 @@ func NewApp(templatesPath string) (*App, error) {
 }
 
 func (app *App) MountHandlers() {
-	app.router.Get("/", app.homeHandler)
-	app.router.Get("/js/*", staticHandler)
-	app.router.Get("/assets/*", staticHandler)
-	app.router.Get("/api/installations", app.searchInstallationsHandler)
+	app.router.HandleFunc("GET /assets/main.js", staticHandler)
+	app.router.HandleFunc("GET /{$}", app.homeHandler)
+	app.router.HandleFunc("GET /api/installations", app.searchInstallationsHandler)
+	app.router.HandleFunc("GET /api/installation/{id}", app.showInstallationHandler)
 }
 
 func (app *App) Start() {
@@ -57,7 +48,7 @@ func (app *App) homeHandler(w http.ResponseWriter, r *http.Request) {
 	config := struct {
 		GoogleMapsApiKey string
 	}{os.Getenv("GOOGLE_MAPS_API_KEY")}
-	err := app.template.Execute(w, config)
+	err := app.renderer.RenderHome(w, config)
 	if err != nil {
 		panic(err)
 	}
@@ -79,24 +70,29 @@ func Bind(sp SearchParams, r *http.Request) {
 	}
 }
 
+func (app *App) showInstallationHandler(w http.ResponseWriter, r *http.Request) {
+	repo := app.db.NewInstallationRepo()
+	installation, err := repo.Find(r.PathValue("id"))
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	err = app.renderer.RenderInstallationSummary(w, *installation)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (app *App) searchInstallationsHandler(w http.ResponseWriter, r *http.Request) {
 	params := SearchParams{}
 	Bind(params, r)
 	repo := app.db.NewInstallationRepo()
-	results, err := repo.Search(params)
+	installations, err := repo.Search(params)
 	if err != nil {
 		panic(err)
 	}
 
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	if len(results) != 0 {
-		jsonBlob, err := json.Marshal(&results)
-		if err != nil {
-			panic(err)
-		}
-
-		fmt.Fprint(w, string(jsonBlob[:]))
-	} else {
-		fmt.Fprint(w, "[]")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	err = app.renderer.RenderInstallations(w, installations)
+	if err != nil {
+		panic(err)
 	}
 }
