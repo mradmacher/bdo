@@ -1,135 +1,232 @@
 package bdo
 
 import (
-	"context"
 	"errors"
+	"fmt"
 	"os"
+	"strings"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"database/sql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 const DB_NAME = "bdo"
 
-type DbClient struct {
-	Client *mongo.Client
+type RecordNotFound struct {
+	Collection string
+	Id         int64
 }
 
-func (db *DbClient) Connect() error {
-	var err error
-	uri := os.Getenv("MONGODB_URI")
-	if uri == "" {
-		return errors.New("Set 'MONGODB_URI'")
-	}
-	db.Client, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (e RecordNotFound) Error() string {
+	return fmt.Sprintf("Could not find record with %d ID in %s collection", e.Id, e.Collection)
 }
 
-func (db *DbClient) Disconnect() error {
-	return db.Client.Disconnect(context.TODO())
+func IsRecordNotFound(err error) bool {
+	_, ok := err.(RecordNotFound)
+	return ok
 }
 
-func (db *DbClient) NewInstallationRepo() *InstallationRepo {
-	return &InstallationRepo{Collection: db.Client.Database(DB_NAME).Collection("installations")}
+type Repository struct {
+	db *sql.DB
 }
 
-type SearchParams map[string]string
-
-func (params *SearchParams) toQuery() bson.D {
-	query := bson.D{}
-
-	for k, v := range *params {
-		switch k {
-		case "process_code":
-			query = append(query, bson.E{"capabilities.process_code", v})
-		case "waste_code":
-			query = append(query, bson.E{"capabilities.waste_code", v})
-		case "state_code":
-			query = append(query, bson.E{"address.state_code", v})
-		}
-	}
-
-	return query
+type DbRecord interface {
+	Add(r *Repository) (int64, error)
 }
 
 type Capability struct {
-	WasteCode   string `bson:"waste_code"`
-	Dangerous   bool   `bson:"dangerous"`
-	ProcessCode string `bson:"process_code,omitempty"`
-	Quantity    int    `bson:"quantity,omitempty"`
+	Id           int64
+	WasteCode    string
+	Dangerous    bool
+	ProcessCode  string
+	ActivityCode string
+	Quantity     int
 }
 
 type Address struct {
 	Line1     string
 	Line2     string
-	StateCode string `bson:"state_code"`
-	Lat       float32
-	Lng       float32
+	StateCode string
+	Lat       string
+	Lng       string
 }
 
 type Installation struct {
-	ID           primitive.ObjectID `bson:"_id,omitempty"`
+	Id           int64
 	Name         string
 	Address      Address
 	Capabilities []Capability
 }
 
-type InstallationRepo struct {
-	Collection *mongo.Collection
-}
+type SearchParams map[string]string
 
-func (repo *InstallationRepo) Purge() error {
-	_, err := repo.Collection.DeleteMany(context.TODO(), bson.D{})
-	return err
-}
-
-func (repo *InstallationRepo) Add(installation *Installation) (interface{}, error) {
-	result, err := repo.Collection.InsertOne(context.TODO(), installation)
-	if err != nil {
-		return nil, err
+func (r *Repository) Connect() error {
+	var err error
+	uri := os.Getenv("BDO_DB_URI")
+	if uri == "" {
+		return errors.New("Set 'BDO_DB_URI'")
 	}
-	return result.InsertedID, nil
-}
-
-func (repo *InstallationRepo) Search(params SearchParams) ([]Installation, error) {
-	var installations []Installation
-
-	cursor, err := repo.Collection.Find(context.TODO(), params.toQuery())
+	r.db, err = sql.Open("sqlite3", uri)
 	if err != nil {
-		return nil, err
+		return errors.Join(errors.New("Problem opening the database"), err)
 	}
 
-	for cursor.Next(context.TODO()) {
-		var result Installation
-		if err := cursor.Decode(&result); err != nil {
-			return nil, err
+	return nil
+}
+
+func (r *Repository) Disconnect() error {
+	return r.db.Close()
+}
+
+func (r *Repository) Purge() error {
+	tx, err := r.db.Begin()
+	if err != nil {
+		return err
+	}
+	_, err = tx.Exec("DELETE FROM capabilities")
+	if err != nil {
+		return errors.Join(errors.New("Problem removing capabilities"), err)
+	}
+	_, err = tx.Exec("DELETE FROM installations")
+	if err != nil {
+		return errors.Join(errors.New("Problem removing installations"), err)
+	}
+	tx.Commit()
+	return nil
+}
+
+func (inst Installation) Add(r *Repository) (int64, error) {
+	tx, err := r.db.Begin()
+	if err != nil {
+		return 0, err
+	}
+	result, err := tx.Exec(
+		"INSERT INTO installations (name, address_line1, address_line2, state_code, lat, lng) values (?, ?, ?, ?, ?, ?)",
+		inst.Name, inst.Address.Line1, inst.Address.Line2, inst.Address.StateCode, inst.Address.Lat, inst.Address.Lng,
+	)
+	if err != nil {
+		return 0, errors.Join(errors.New("Executing INSERT INTO installations failed"), err)
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, errors.Join(errors.New("Could not obtain last inserted ID"), err)
+	}
+	stmt, err := tx.Prepare(
+		"INSERT INTO capabilities (installation_id, waste_code, dangerous, process_code, activity_code, quantity) values (?, ?, ?, ?, ?, ?)",
+	)
+	if err != nil {
+		return 0, errors.Join(errors.New("Preparing statement failed"), err)
+	}
+	defer stmt.Close()
+	for _, capability := range inst.Capabilities {
+		//dangerous := false
+		//if strings.HasSuffix(capability.WasteCode, "*") {
+		//	dangerous = true
+		//}
+		//code := capability.WasteCode
+		//if dangerous {
+		//		code = code[0:6]
+		//}
+		_, err = stmt.Exec(id, capability.WasteCode, capability.Dangerous, capability.ProcessCode, capability.ActivityCode, capability.Quantity)
+		if err != nil {
+			return 0, err
 		}
-		installations = append(installations, result)
 	}
-	if err := cursor.Err(); err != nil {
-		return nil, err
+	err = tx.Commit()
+	if err != nil {
+		return 0, err
 	}
+
+	return id, nil
+}
+
+func (r *Repository) LoadCapabilities(id int64) ([]Capability, error) {
+	var capabilities []Capability
+
+	rows, err := r.db.Query("SELECT id, waste_code, dangerous, process_code, activity_code, quantity FROM capabilities WHERE installation_id = ?", id)
+	defer rows.Close()
+	for rows.Next() {
+		var capa Capability
+		err := rows.Scan(&capa.Id, &capa.WasteCode, &capa.Dangerous, &capa.ProcessCode, &capa.ActivityCode, &capa.Quantity)
+		if err != nil {
+			return nil, errors.Join(errors.New("Reading capabilities failed"), err)
+		}
+		capabilities = append(capabilities, capa)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, errors.Join(errors.New("Not all capabilities read"), err)
+
+	}
+
+	return capabilities, nil
+}
+
+func (r *Repository) Search(params SearchParams) ([]*Installation, error) {
+	var installations []*Installation
+	var where_cond []string
+	var where_args []any
+
+	for k, v := range params {
+		switch k {
+		case "process_code":
+			where_cond = append(where_cond, "process_code = ?")
+			where_args = append(where_args, v)
+		case "waste_code":
+			where_cond = append(where_cond, "waste_code = ?")
+			where_args = append(where_args, v)
+		case "state_code":
+			where_cond = append(where_cond, "state_code = ?")
+			where_args = append(where_args, v)
+		}
+	}
+	query := "SELECT id, name, address_line1, address_line2, state_code, lat, lng from installations"
+	var where_clause string
+	if len(where_cond) > 0 {
+		where_clause = strings.Join(where_cond, " AND ")
+		query = query + " WHERE id IN (SELECT DISTINCT installation_id FROM capabilities WHERE " + where_clause + ")"
+	}
+
+	rows, err := r.db.Query(query, where_args...)
+	if err != nil {
+		return nil, errors.Join(errors.New("Searching installations failed"), err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		inst := Installation{}
+		err = rows.Scan(&inst.Id, &inst.Name, &inst.Address.Line1, &inst.Address.Line2, &inst.Address.StateCode, &inst.Address.Lat, &inst.Address.Lng)
+		if err != nil {
+			return nil, errors.Join(errors.New("Scaning installation failed"), err)
+		}
+		installations = append(installations, &inst)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, errors.Join(errors.New("Not all installations read"), err)
+	}
+
+	for _, inst := range installations {
+		inst.Capabilities, err = r.LoadCapabilities(inst.Id)
+		if err != nil {
+			return nil, errors.Join(errors.New("Loading capabilities failed"), err)
+		}
+	}
+
 	return installations, nil
 }
 
-func (repo *InstallationRepo) Find(id string) (*Installation, error) {
-	var installation Installation
-	objectId, err := primitive.ObjectIDFromHex(id)
+func (r *Repository) Find(id int64, inst *Installation) error {
+	row := r.db.QueryRow("SELECT id, name, address_line1, address_line2, state_code, lat, lng FROM installations WHERE id = ?", id)
+	err := row.Scan(&inst.Id, &inst.Name, &inst.Address.Line1, &inst.Address.Line2, &inst.Address.StateCode, &inst.Address.Lat, &inst.Address.Lng)
 	if err != nil {
-		return nil, err
+		if err == sql.ErrNoRows {
+			return RecordNotFound{Collection: "installations", Id: id}
+		} else {
+			return errors.Join(errors.New("Finding installation failed"), err)
+		}
 	}
-
-	err = repo.Collection.FindOne(context.TODO(), bson.M{"_id": objectId}).Decode(&installation)
-	if err == mongo.ErrNoDocuments {
-		return nil, nil
-	} else if err != nil {
-		return nil, err
+	inst.Capabilities, err = r.LoadCapabilities(inst.Id)
+	if err != nil {
+		return errors.Join(errors.New("Loading capabilities failed"), err)
 	}
-	return &installation, nil
+	return nil
 }

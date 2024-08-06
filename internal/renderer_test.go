@@ -1,21 +1,20 @@
 package bdo
 
 import (
-	"testing"
 	"bytes"
 	"strings"
+	"testing"
 )
 
-
 func TestRenderInstallations(t *testing.T) {
-	renderer, err := NewRenderer("../views")
+	renderer, err := NewRenderer()
 	if err != nil {
 		t.Errorf("Error creating the renderer: %v", err)
 	}
 
 	t.Run("renders empty string when no installations", func(t *testing.T) {
 		buffer := bytes.Buffer{}
-		renderer.RenderInstallations(&buffer, []Installation{})
+		renderer.RenderInstallations(&buffer, []*Installation{})
 		got := buffer.String()
 		want := "\n"
 
@@ -25,8 +24,8 @@ func TestRenderInstallations(t *testing.T) {
 	})
 
 	t.Run("renders names", func(t *testing.T) {
-		collection := []Installation {
-			Installation{
+		collection := []*Installation{
+			&Installation{
 				Name: "Test1",
 				Address: Address{
 					StateCode: "10",
@@ -44,7 +43,7 @@ func TestRenderInstallations(t *testing.T) {
 					},
 				},
 			},
-			Installation{
+			&Installation{
 				Name: "Test2",
 				Address: Address{
 					StateCode: "12",
