@@ -3,18 +3,19 @@ package bdo
 import (
 	"net/http"
 	"os"
+	"github.com/mradmacher/bdo/internal/repo"
 )
 
 type App struct {
 	router  *http.ServeMux
-	db       DbClient
+	db       repo.Repository
 	renderer Renderer
 }
 
 func NewApp(renderer Renderer) (*App, error) {
 	app := App{}
+	app.db = repo.Repository{}
 	app.router = http.NewServeMux()
-	app.db = DbClient{}
 	app.renderer = renderer
 
 	var err error
@@ -58,7 +59,7 @@ func staticHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "."+r.URL.Path)
 }
 
-func Bind(sp SearchParams, r *http.Request) {
+func Bind(sp repo.SearchParams, r *http.Request) {
 	if r.FormValue("wc") != "" {
 		sp["waste_code"] = r.FormValue("wc")
 	}
@@ -71,8 +72,7 @@ func Bind(sp SearchParams, r *http.Request) {
 }
 
 func (app *App) showInstallationHandler(w http.ResponseWriter, r *http.Request) {
-	repo := app.db.NewInstallationRepo()
-	installation, err := repo.Find(r.PathValue("id"))
+	installation, err := app.db.Find(r.PathValue("id"))
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	err = app.renderer.RenderInstallationSummary(w, *installation)
@@ -82,10 +82,10 @@ func (app *App) showInstallationHandler(w http.ResponseWriter, r *http.Request) 
 }
 
 func (app *App) searchInstallationsHandler(w http.ResponseWriter, r *http.Request) {
-	params := SearchParams{}
+	params := repo.SearchParams{}
 	Bind(params, r)
-	repo := app.db.NewInstallationRepo()
-	installations, err := repo.Search(params)
+	var installations []repo.Installation
+	err := app.db.Search(params, &installations)
 	if err != nil {
 		panic(err)
 	}

@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"io"
 	"slices"
+	"github.com/mradmacher/bdo/internal/repo"
 )
 
 func formatWasteCode(value string, dangerous bool) string {
@@ -15,10 +16,10 @@ func formatWasteCode(value string, dangerous bool) string {
 }
 
 type InstallationSummaryView struct {
-	Id	string
+	Id	int64
 	Name string
-	AddressLat float32
-	AddressLng float32
+	AddressLat string
+	AddressLng string
 	AddressLine1 string
 	AddressLine2 string
 	WasteCodes []string
@@ -32,7 +33,7 @@ type CapabilityView struct {
 }
 
 type InstallationView struct {
-	Id	string
+	Id	int64
 	Name string
 	AddressLine1 string
 	AddressLine2 string
@@ -74,9 +75,9 @@ func (r *Renderer) RenderHome(w io.Writer, data any) error {
 	return  r.homeTemplate.Execute(w, data)
 }
 
-func (r *Renderer) RenderInstallationSummary(w io.Writer, installation Installation) error {
+func (r *Renderer) RenderInstallationSummary(w io.Writer, installation repo.Installation) error {
 	view := InstallationView {
-		Id: installation.ID.Hex(),
+		Id: installation.Id,
 		Name: installation.Name,
 		AddressLine1: installation.Address.Line1,
 		AddressLine2: installation.Address.Line2,
@@ -92,11 +93,11 @@ func (r *Renderer) RenderInstallationSummary(w io.Writer, installation Installat
 	return r.installationSummaryTemplate.Execute(w, view)
 }
 
-func (r *Renderer) RenderInstallations(w io.Writer, installations []Installation) error {
+func (r *Renderer) RenderInstallations(w io.Writer, installations []repo.Installation) error {
 	var result InstallationsView
 	for _, installation := range installations {
 	  summary := InstallationSummaryView {
-		Id: installation.ID.Hex(),
+		Id: installation.Id,
 		Name: installation.Name,
 		AddressLat: installation.Address.Lat,
 		AddressLng: installation.Address.Lng,

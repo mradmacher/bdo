@@ -5,21 +5,21 @@
       "Line1": "podkarpackie, dębicki",
       "Line2": "Podgrodzie",
       "StateCode": "18",
-      "Lat": 50.01235165814038,
-      "Lng": 21.334693268564028
+      "Lat": "50.01235165814038",
+      "Lng": "21.334693268564028"
     },
     "Capabilities": [
       {
         "WasteCode": "160103",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2500
       }, {
         "WasteCode": "160103",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 40000
       }
     ]
@@ -30,87 +30,87 @@
       "Line1": "podkarpackie, dębicki",
       "Line2": "Dębica",
       "StateCode": "18",
-      "Lat": 50.0786513030218,
-      "Lng": 21.436335712744448
+      "Lat": "50.0786513030218",
+      "Lng": "21.436335712744448"
     },
     "Capabilities": [
       {
         "WasteCode": "030308",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2500
       }, {
         "WasteCode": "150101",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2500
       }, {
         "WasteCode": "191201",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2500
       }, {
         "WasteCode": "200101",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2500
       }, {
         "WasteCode": "070213",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 130
       }, {
         "WasteCode": "200139",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 130
       }, {
         "WasteCode": "040209",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 130
       }, {
         "WasteCode": "040221",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 130
       }, {
         "WasteCode": "040222",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 130
       }, {
         "WasteCode": "040299",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 130
       }, {
         "WasteCode": "191208",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 130
       }, {
         "WasteCode": "200110",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 130
       }, {
         "WasteCode": "200111",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 130
       }
     ]
@@ -121,344 +121,344 @@
       "Line1": "podkarpackie, dębicki",
       "Line2": "Dębica",
       "StateCode": "18",
-      "Lat": 50.020477987595,
-      "Lng": 21.405744440625995
+      "Lat": "50.020477987595",
+      "Lng": "21.405744440625995"
     },
     "Capabilities": [
       {
         "WasteCode": "020110",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "100210",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "100280",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "100903",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "100906",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "100908",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "100980",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "100999",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "101003",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "101006",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "101008",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "110501",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 150
       }, {
         "WasteCode": "110502",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "120101",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 3000
       }, {
         "WasteCode": "120102",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2500
       }, {
         "WasteCode": "120103",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2500
       }, {
         "WasteCode": "120104",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2000
       }, {
         "WasteCode": "120113",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "150104",
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 500
       }, {
         "WasteCode": "150110",
         "Dangerous": true,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "160104",
         "Dangerous": true,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 250
       }, {
         "WasteCode": "160106",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 50
       }, {
         "WasteCode": "160116",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "160117",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2000
       }, {
         "WasteCode": "160118",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 200
       }, {
         "WasteCode": "160213",
         "Dangerous": true,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 5
       }, {
         "WasteCode": "160214",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "160215",
         "Dangerous": true,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 5
       }, {
         "WasteCode": "160216",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "160601",
         "Dangerous": true,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 60
       }, {
         "WasteCode": "160602",
         "Dangerous": true,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 15
       }, {
         "WasteCode": "160801",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 5
       }, {
         "WasteCode": "160802",
         "Dangerous": true,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 1
       }, {
         "WasteCode": "160803",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 5
       }, {
         "WasteCode": "160804",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 1
       }, {
         "WasteCode": "170401",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 500
       }, {
         "WasteCode": "170402",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2000
       }, {
         "WasteCode": "170403",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 50
       }, {
         "WasteCode": "170404",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 50
       }, {
         "WasteCode": "170405",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 10000
       }, {
         "WasteCode": "170406",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "170407",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "170409",
         "Dangerous": true,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25
       }, {
         "WasteCode": "170411",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 50
       }, {
         "WasteCode": "190102",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 50
       }, {
         "WasteCode": "191001",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 4000
       }, {
         "WasteCode": "191002",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "191202",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "191203",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "200140",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "120101",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 1000
       }, {
         "WasteCode": "120102",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2000
       }, {
         "WasteCode": "120103",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2000
       }, {
         "WasteCode": "120104",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 1000
       }, {
         "WasteCode": "150104",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 500
       }, {
         "WasteCode": "160117",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 200
       }, {
         "WasteCode": "160118",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 100
       }, {
         "WasteCode": "170405",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 6000
       }, {
         "WasteCode": "170407",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2000
       }
     ]
@@ -469,51 +469,51 @@
       "Line1": "wielkopolskie, poznański",
       "Line2": "Poznań",
       "StateCode": "30",
-      "Lat": 52.40441427551725,
-      "Lng": 16.919681799465284
+      "Lat": "52.40441427551725",
+      "Lng": "16.919681799465284"
     },
     "Capabilities": [
       {
         "WasteCode": "191210",
         "Dangerous": false,
         "ProcessCode": "R1",
-        "ActivityType": "PO",
+        "ActivityCode": "PO",
         "Quantity": 19000
       }, {
         "WasteCode": "191212",
         "Dangerous": false,
         "ProcessCode": "R1",
-        "ActivityType": "PO",
+        "ActivityCode": "PO",
         "Quantity": 210000
       }, {
         "WasteCode": "200301",
         "Dangerous": false,
         "ProcessCode": "R1",
-        "ActivityType": "PO",
+        "ActivityCode": "PO",
         "Quantity": 210000
       }, {
         "WasteCode": "200307",
         "Dangerous": false,
         "ProcessCode": "R1",
-        "ActivityType": "PO",
+        "ActivityCode": "PO",
         "Quantity": 2000
       }, {
         "WasteCode": "190107",
         "Dangerous": true,
         "ProcessCode": "R1",
-        "ActivityType": "UN",
+        "ActivityCode": "UN",
         "Quantity": 8400
       }, {
         "WasteCode": "190113",
         "Dangerous": true,
         "ProcessCode": "R1",
-        "ActivityType": "UN",
+        "ActivityCode": "UN",
         "Quantity": 8400
       }, {
         "WasteCode": "190115",
         "Dangerous": true,
         "ProcessCode": "R1",
-        "ActivityType": "UN",
+        "ActivityCode": "UN",
         "Quantity": 8400
       }
     ]
@@ -524,45 +524,45 @@
       "Line1": "mazowieckie, pruszkowski",
       "Line2": "Pruszków",
       "StateCode": "14",
-      "Lat": 52.16544029312577,
-      "Lng": 20.813777066254254
+      "Lat": "52.16544029312577",
+      "Lng": "20.813777066254254"
     },
     "Capabilities": [
       {
         "WasteCode": "170101",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2000
       }, {
         "WasteCode": "170181",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2000
       }, {
         "WasteCode": "170504",
         "Dangerous": false,
         "ProcessCode": "R12",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2000
       }, {
         "WasteCode": "170101",
         "Dangerous": false,
         "ProcessCode": "R13",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2000
       }, {
         "WasteCode": "170181",
         "Dangerous": false,
         "ProcessCode": "R13",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2000
       }, {
         "WasteCode": "170504",
         "Dangerous": false,
         "ProcessCode": "R13",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2000
       }
     ]
@@ -572,45 +572,45 @@
       "Line1": "świętokrzyskie, kieleckie",
       "Line2": "Kielce",
       "StateCode": "26",
-      "Lat": 50.8869955168215,
-      "Lng": 20.651366950342062
+      "Lat": "50.8869955168215",
+      "Lng": "20.651366950342062"
     },
     "Capabilities": [
       {
         "WasteCode": "070280",
         "Dangerous": false,
         "ProcessCode": "R1",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 300
       }, {
         "WasteCode": "160103",
         "Dangerous": false,
         "ProcessCode": "R1",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2100
       }, {
         "WasteCode": "191204",
         "Dangerous": false,
         "ProcessCode": "R1",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 200
       }, {
         "WasteCode": "070280",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 300
       }, {
         "WasteCode": "160103",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 2100
       }, {
         "WasteCode": "191204",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 200
       }
     ]
@@ -620,64 +620,64 @@
       "Line1": "lubelskie, chełmski",
       "Line2": "Chełm",
       "StateCode": "06",
-      "Lat": 51.12320150160354,
-      "Lng": 23.473971769012334
+      "Lat": "51.12320150160354",
+      "Lng": "23.473971769012334"
     },
     "Capabilities": [
       {
         "WasteCode": "030308",
         "Dangerous": false,
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 1200
       }, {
         "WasteCode": "150101",
         "Dangerous": false,
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 10000
       }, {
         "WasteCode": "150102",
         "Dangerous": false,
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 600
       }, {
         "WasteCode": "150103",
         "Dangerous": false,
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 20
       }, {
         "WasteCode": "150105",
         "Dangerous": false,
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 10
       }, {
         "WasteCode": "150107",
         "Dangerous": false,
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 10
       }, {
         "WasteCode": "150109",
         "Dangerous": false,
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 10
       }, {
         "WasteCode": "191201",
         "Dangerous": false,
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 1945
       }, {
         "WasteCode": "200101",
         "Dangerous": false,
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 1000
       }, {
         "WasteCode": "200102",
         "Dangerous": false,
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 5
       }, {
         "WasteCode": "200139",
         "Dangerous": false,
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 200
       }
     ]
@@ -687,33 +687,33 @@
       "Line1": "lubelskie, kraśnicki",
       "Line2": "Kraśnik",
       "StateCode": "06",
-      "Lat": 50.918192258328,
-      "Lng": 22.237263472172266
+      "Lat": "50.918192258328",
+      "Lng": "22.237263472172266"
     },
     "Capabilities": [
       {
         "WasteCode": "100102",
         "Dangerous": false,
         "ProcessCode": "R5",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 5000
       }, {
         "WasteCode": "100117",
         "Dangerous": false,
         "ProcessCode": "R5",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 5000
       }, {
         "WasteCode": "100182",
         "Dangerous": false,
         "ProcessCode": "R5",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 5000
       }, {
         "WasteCode": "190114",
         "Dangerous": false,
         "ProcessCode": "R5",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 5000
       }
     ]
@@ -723,27 +723,27 @@
       "Line1": "wielkopolskie, poznańskie",
       "Line2": "Poznań",
       "StateCode": "30",
-      "Lat": 52.37639627213576,
-      "Lng": 16.88782859117856
+      "Lat": "52.37639627213576",
+      "Lng": "16.88782859117856"
     },
     "Capabilities": [
       {
         "WasteCode": "070213",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 300
       }, {
         "WasteCode": "150102",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 100
       }, {
         "WasteCode": "191204",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 100
       }
     ]
@@ -753,237 +753,237 @@
       "Line1": "wielkopolskie, wrzesiński",
       "Line2": "Września",
       "StateCode": "30",
-      "Lat": 52.33070976394924,
-      "Lng": 17.57883247234888
+      "Lat": "52.33070976394924",
+      "Lng": "17.57883247234888"
     },
     "Capabilities": [
       {
         "WasteCode": "200301",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 25000
       }, {
         "WasteCode": "200399",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 1000
       }, {
         "WasteCode": "150101",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 7000
       }, {
         "WasteCode": "150102",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 7000
       }, {
         "WasteCode": "150103",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 7000
       }, {
         "WasteCode": "150104",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 7000
       }, {
         "WasteCode": "150105",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 7000
       }, {
         "WasteCode": "150106",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 7000
       }, {
         "WasteCode": "150107",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 7000
       }, {
         "WasteCode": "160103",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 300
       }, {
         "WasteCode": "170101",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 700
       }, {
         "WasteCode": "170102",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 700
       }, {
         "WasteCode": "170103",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 700
       }, {
         "WasteCode": "170107",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 700
       }, {
         "WasteCode": "170180",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 700
       }, {
         "WasteCode": "170182",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "170202",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "170401",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "170402",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "170405",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "170407",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "200101",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2000
       }, {
         "WasteCode": "200102",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2000
       }, {
         "WasteCode": "200110",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "200111",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "200138",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "200139",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2000
       }, {
         "WasteCode": "200140",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "200199",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 2000
       }, {
         "WasteCode": "200202",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "200303",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "200307",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 1500
       }, {
         "WasteCode": "200201",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 1164
       }, {
         "WasteCode": "200302",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 1164
       }, {
         "WasteCode": "160214",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 100
       }, {
         "WasteCode": "200136",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "Z",
+        "ActivityCode": "Z",
         "Quantity": 200
       }, {
         "WasteCode": "200201",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 1164
       }, {
         "WasteCode": "200302",
         "Dangerous": false,
         "ProcessCode": "R3",
-        "ActivityType": "PR",
+        "ActivityCode": "PR",
         "Quantity": 1164
       }
     ]
