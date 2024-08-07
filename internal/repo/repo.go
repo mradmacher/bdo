@@ -2,9 +2,9 @@ package repo
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strings"
-	"fmt"
 
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
@@ -14,8 +14,9 @@ const DB_NAME = "bdo"
 
 type RecordNotFound struct {
 	Collection string
-	Id int64
+	Id         int64
 }
+
 func (e RecordNotFound) Error() string {
 	return fmt.Sprintf("Could not find record with %d ID in %s collection", e.Id, e.Collection)
 }
@@ -163,15 +164,15 @@ func (inst Installation) Add(r *Repository) (int64, error) {
 	}
 	defer stmt.Close()
 	for _, capability := range inst.Capabilities {
-		dangerous := false
-		if strings.HasSuffix(capability.WasteCode, "*") {
-			dangerous = true
-		}
-		code := capability.WasteCode
-		if dangerous {
-			code = code[0:6]
-		}
-		_, err = stmt.Exec(id, code, dangerous, capability.ProcessCode, capability.ActivityCode, capability.Quantity)
+		//dangerous := false
+		//if strings.HasSuffix(capability.WasteCode, "*") {
+		//	dangerous = true
+		//}
+		//code := capability.WasteCode
+		//if dangerous {
+		//		code = code[0:6]
+		//}
+		_, err = stmt.Exec(id, capability.WasteCode, capability.Dangerous, capability.ProcessCode, capability.ActivityCode, capability.Quantity)
 		if err != nil {
 			return 0, err
 		}
@@ -185,8 +186,32 @@ func (inst Installation) Add(r *Repository) (int64, error) {
 }
 
 func (r *Repository) Find(id int64, inst *Installation) error {
-	return RecordNotFound{ Collection: "installations", Id: id }
+	row := r.db.QueryRow("SELECT id, name, address_line1, address_line2, state_code, lat, lng FROM installations WHERE id = ?", id)
+	err := row.Scan(&inst.Id, &inst.Name, &inst.Address.Line1, &inst.Address.Line2, &inst.Address.StateCode, &inst.Address.Lat, &inst.Address.Lng)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return RecordNotFound{Collection: "installations", Id: id}
+		} else {
+			return errors.Join(errors.New("Finding installation failed"), err)
+		}
+	}
+	rows, err := r.db.Query("SELECT id, waste_code, dangerous, process_code, activity_code, quantity FROM capabilities WHERE installation_id = ?", id)
+	defer rows.Close()
+	for rows.Next() {
+		var capa Capability
+		err := rows.Scan(&capa.Id, &capa.WasteCode, &capa.Dangerous, &capa.ProcessCode, &capa.ActivityCode, &capa.Quantity)
+		if err != nil {
+			return errors.Join(errors.New("Reading capabilities failed"), err)
+		}
+		inst.Capabilities = append(inst.Capabilities, capa)
+	}
+	if err = rows.Err(); err != nil {
+		return errors.Join(errors.New("Not all capabilities read"), err)
+
+	}
+	return nil
 }
+
 /*
 func (repo *InstallationRepo) Find(id string) (*Installation, error) {
 	var installation Installation

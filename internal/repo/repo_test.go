@@ -6,6 +6,22 @@ import (
 	"testing"
 )
 
+func assertNoError(t *testing.T, err error) {
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+}
+func assertEqualStr(t *testing.T, got, want, name string) {
+	if got != want {
+		t.Errorf("%s = %q, want %q", name, got, want)
+	}
+}
+func assertEqual[K comparable](t *testing.T, got, want K, name string) {
+	if got != want {
+		t.Errorf("%s = %v, want %v", name, got, want)
+	}
+}
+
 func setupSuite(t *testing.T) (func(*testing.T), *Repository) {
 	if err := godotenv.Load("../../.test.env"); err != nil {
 		t.Fatalf("No .env file found")
@@ -97,16 +113,22 @@ func TestRepo(t *testing.T) {
 		teardownTest := setupTest(t, r)
 		defer teardownTest(t)
 
-		inst := Installation{
+		want := Installation{
 			Name: "ToBeFound",
 			Address: Address{
+				Line1:     "Address1",
+				Line2:     "Address2",
 				StateCode: "10",
+				Lat:       "12.00",
+				Lng:       "10.00",
 			},
 			Capabilities: []Capability{
 				Capability{
-					WasteCode:   "010203",
-					ProcessCode: "R1",
-					Quantity:    123,
+					WasteCode:    "010203",
+					Dangerous:    true,
+					ProcessCode:  "R1",
+					ActivityCode: "Z",
+					Quantity:     123,
 				},
 				Capability{
 					WasteCode:   "030201",
@@ -120,10 +142,8 @@ func TestRepo(t *testing.T) {
 				},
 			},
 		}
-		id, err := inst.Add(r)
-		if err != nil {
-			t.Fatalf("Expected no error, got %v", err)
-		}
+		id, err := want.Add(r)
+		assertNoError(t, err)
 
 		t.Run("not existing", func(t *testing.T) {
 			var got Installation
@@ -136,12 +156,39 @@ func TestRepo(t *testing.T) {
 			}
 		})
 
-		t.Run("existing", func(t *testing.T) {
+		t.Run("existing with metadata", func(t *testing.T) {
 			var got Installation
 
 			err := r.Find(id, &got)
-			if err != nil {
-				t.Errorf("Expected no error, got %v", err)
+			assertNoError(t, err)
+			assertEqualStr(t, got.Name, want.Name, "Installation.Name")
+			assertEqualStr(t, got.Address.Line1, want.Address.Line1, "Installation.Address.Line1")
+			assertEqualStr(t, got.Address.Line2, want.Address.Line2, "Installation.Address.Line1")
+			assertEqualStr(t, got.Address.Lng, want.Address.Lng, "Installation.Address.Lng")
+			assertEqualStr(t, got.Address.Lat, want.Address.Lat, "Installation.Address.Lat")
+		})
+
+		t.Run("existing with capabilities", func(t *testing.T) {
+			var got Installation
+
+			err := r.Find(id, &got)
+			assertNoError(t, err)
+			assertEqual(t, len(got.Capabilities), 3, "len(Capabilities)")
+			for _, w := range want.Capabilities {
+				found := false
+				for _, g := range got.Capabilities {
+					if g.WasteCode == w.WasteCode &&
+						g.Dangerous == w.Dangerous &&
+						g.ProcessCode == w.ProcessCode &&
+						g.ActivityCode == w.ActivityCode &&
+						g.Quantity == w.Quantity {
+						found = true
+						break
+					}
+				}
+				if !found {
+					t.Errorf("Expected capability not found %v", w)
+				}
 			}
 		})
 	})

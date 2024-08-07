@@ -1,10 +1,10 @@
 package bdo
 
 import (
+	"github.com/mradmacher/bdo/internal/repo"
 	"html/template"
 	"io"
 	"slices"
-	"github.com/mradmacher/bdo/internal/repo"
 )
 
 func formatWasteCode(value string, dangerous bool) string {
@@ -16,38 +16,38 @@ func formatWasteCode(value string, dangerous bool) string {
 }
 
 type InstallationSummaryView struct {
-	Id	int64
-	Name string
-	AddressLat string
-	AddressLng string
+	Id           int64
+	Name         string
+	AddressLat   string
+	AddressLng   string
 	AddressLine1 string
 	AddressLine2 string
-	WasteCodes []string
+	WasteCodes   []string
 	ProcessCodes []string
 }
 
 type CapabilityView struct {
-	WasteCode string
-	ProcessCode string
-	Quantity int
+	WasteCode    string
+	ProcessCode  string
+	ActivityCode string
+	Quantity     int
 }
 
 type InstallationView struct {
-	Id	int64
-	Name string
+	Id           int64
+	Name         string
 	AddressLine1 string
 	AddressLine2 string
 	Capabilities []CapabilityView
 }
 
 type InstallationsView struct {
-  Installations []InstallationSummaryView
+	Installations []InstallationSummaryView
 }
 
-
 type Renderer struct {
-	homeTemplate *template.Template
-	installationsTemplate *template.Template
+	homeTemplate                *template.Template
+	installationsTemplate       *template.Template
 	installationSummaryTemplate *template.Template
 }
 
@@ -72,21 +72,22 @@ func NewRenderer(templatesPath string) (*Renderer, error) {
 }
 
 func (r *Renderer) RenderHome(w io.Writer, data any) error {
-	return  r.homeTemplate.Execute(w, data)
+	return r.homeTemplate.Execute(w, data)
 }
 
 func (r *Renderer) RenderInstallationSummary(w io.Writer, installation repo.Installation) error {
-	view := InstallationView {
-		Id: installation.Id,
-		Name: installation.Name,
+	view := InstallationView{
+		Id:           installation.Id,
+		Name:         installation.Name,
 		AddressLine1: installation.Address.Line1,
 		AddressLine2: installation.Address.Line2,
 	}
 	for _, c := range installation.Capabilities {
 		view.Capabilities = append(view.Capabilities, CapabilityView{
-			WasteCode: formatWasteCode(c.WasteCode, c.Dangerous),
-			ProcessCode: c.ProcessCode,
-			Quantity: c.Quantity,
+			WasteCode:    formatWasteCode(c.WasteCode, c.Dangerous),
+			ProcessCode:  c.ProcessCode,
+			ActivityCode: c.ActivityCode,
+			Quantity:     c.Quantity,
 		})
 	}
 
@@ -96,25 +97,25 @@ func (r *Renderer) RenderInstallationSummary(w io.Writer, installation repo.Inst
 func (r *Renderer) RenderInstallations(w io.Writer, installations []repo.Installation) error {
 	var result InstallationsView
 	for _, installation := range installations {
-	  summary := InstallationSummaryView {
-		Id: installation.Id,
-		Name: installation.Name,
-		AddressLat: installation.Address.Lat,
-		AddressLng: installation.Address.Lng,
-		AddressLine1: installation.Address.Line1,
-		AddressLine2: installation.Address.Line2,
-	  }
+		summary := InstallationSummaryView{
+			Id:           installation.Id,
+			Name:         installation.Name,
+			AddressLat:   installation.Address.Lat,
+			AddressLng:   installation.Address.Lng,
+			AddressLine1: installation.Address.Line1,
+			AddressLine2: installation.Address.Line2,
+		}
 
-	  for _, c := range installation.Capabilities {
-		formattedCode := formatWasteCode(c.WasteCode, c.Dangerous)
-		if !slices.Contains(summary.WasteCodes, formattedCode) {
-			summary.WasteCodes = append(summary.WasteCodes, formattedCode)
+		for _, c := range installation.Capabilities {
+			formattedCode := formatWasteCode(c.WasteCode, c.Dangerous)
+			if !slices.Contains(summary.WasteCodes, formattedCode) {
+				summary.WasteCodes = append(summary.WasteCodes, formattedCode)
+			}
+			if !slices.Contains(summary.ProcessCodes, c.ProcessCode) {
+				summary.ProcessCodes = append(summary.ProcessCodes, c.ProcessCode)
+			}
 		}
-		if !slices.Contains(summary.ProcessCodes, c.ProcessCode) {
-			summary.ProcessCodes = append(summary.ProcessCodes, c.ProcessCode)
-		}
-	  }
-	  result.Installations = append(result.Installations, summary)
+		result.Installations = append(result.Installations, summary)
 	}
 	return r.installationsTemplate.Execute(w, result)
 }

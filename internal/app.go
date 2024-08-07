@@ -1,13 +1,14 @@
 package bdo
 
 import (
+	"github.com/mradmacher/bdo/internal/repo"
 	"net/http"
 	"os"
-	"github.com/mradmacher/bdo/internal/repo"
+	"strconv"
 )
 
 type App struct {
-	router  *http.ServeMux
+	router   *http.ServeMux
 	db       repo.Repository
 	renderer Renderer
 }
@@ -72,10 +73,17 @@ func Bind(sp repo.SearchParams, r *http.Request) {
 }
 
 func (app *App) showInstallationHandler(w http.ResponseWriter, r *http.Request) {
-	installation, err := app.db.Find(r.PathValue("id"))
+	var installation repo.Installation
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err == nil {
+		err := app.db.Find(id, &installation)
+		if err != nil {
+			panic(err)
+		}
+	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	err = app.renderer.RenderInstallationSummary(w, *installation)
+	err = app.renderer.RenderInstallationSummary(w, installation)
 	if err != nil {
 		panic(err)
 	}
