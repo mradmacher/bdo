@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .then((installations) => {
             let listElement = document.getElementById('installations')
             listElement.innerHTML = installations;
-            listElement.querySelectorAll('.installation').forEach((installationElement) => {
+            listElement.querySelectorAll('[data-installation]').forEach((installationElement) => {
               mapComponent.addInstallation({
                 addressLat: installationElement.getAttribute('data-lat'),
                 addressLng: installationElement.getAttribute('data-lng'),

@@ -3,18 +3,19 @@ package bdo
 import (
 	"net/http"
 	"os"
+	"strconv"
 )
 
 type App struct {
-	router  *http.ServeMux
-	db       DbClient
+	router   *http.ServeMux
+	db       Repository
 	renderer Renderer
 }
 
 func NewApp(renderer Renderer) (*App, error) {
 	app := App{}
+	app.db = Repository{}
 	app.router = http.NewServeMux()
-	app.db = DbClient{}
 	app.renderer = renderer
 
 	var err error
@@ -71,11 +72,17 @@ func Bind(sp SearchParams, r *http.Request) {
 }
 
 func (app *App) showInstallationHandler(w http.ResponseWriter, r *http.Request) {
-	repo := app.db.NewInstallationRepo()
-	installation, err := repo.Find(r.PathValue("id"))
+	var installation Installation
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err == nil {
+		err := app.db.Find(id, &installation)
+		if err != nil {
+			panic(err)
+		}
+	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	err = app.renderer.RenderInstallationSummary(w, *installation)
+	err = app.renderer.RenderInstallationSummary(w, installation)
 	if err != nil {
 		panic(err)
 	}
@@ -84,8 +91,9 @@ func (app *App) showInstallationHandler(w http.ResponseWriter, r *http.Request) 
 func (app *App) searchInstallationsHandler(w http.ResponseWriter, r *http.Request) {
 	params := SearchParams{}
 	Bind(params, r)
-	repo := app.db.NewInstallationRepo()
-	installations, err := repo.Search(params)
+	var installations []*Installation
+	var err error
+	installations, err = app.db.Search(params)
 	if err != nil {
 		panic(err)
 	}

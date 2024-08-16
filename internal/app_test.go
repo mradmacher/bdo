@@ -12,7 +12,7 @@ func TestSearch(t *testing.T) {
 		panic("No .test.env file found")
 	}
 
-	renderer, err := NewRenderer("../views")
+	renderer, err := NewRenderer()
 	if err != nil {
 		t.Errorf("Error creating the renderer: %v", err)
 	}
