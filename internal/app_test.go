@@ -24,7 +24,7 @@ func TestSearch(t *testing.T) {
 	app.MountHandlers()
 	defer app.Stop()
 
-	req := httptest.NewRequest("GET", "/api/installations", nil)
+	req := httptest.NewRequest("GET", "/instalacje", nil)
 
 	res := httptest.NewRecorder()
 	app.router.ServeHTTP(res, req)
@@ -33,7 +33,7 @@ func TestSearch(t *testing.T) {
 		t.Errorf("Expected response code %d; got %d\n", http.StatusOK, res.Code)
 	}
 
-	if res.Body.String() != "\n" {
-		t.Errorf("/api/installations => %q, got: %q", "", res.Body.String())
+	if res.Body.String() != "\nBrak instalacji spełniających podane kryteria\n\n\n" {
+		t.Errorf("/instalacje => %q, got: %q", "", res.Body.String())
 	}
 }

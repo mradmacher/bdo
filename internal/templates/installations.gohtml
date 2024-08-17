@@ -1,5 +1,8 @@
+{{ if not .Installations }}
+Brak instalacji spełniających podane kryteria
+{{ end }}
 {{ range .Installations }}
-  <div class="panel" data-installation data-lng="{{ .AddressLng }}" data-lat="{{ .AddressLat }}">
+  <div class="panel" data-installation data-id="{{ .Id }}" data-lng="{{ .AddressLng }}" data-lat="{{ .AddressLat }}">
     <header class="panel-heading">
       <p class="header" data-name>{{ .Name }}</p>
       <p class="tag">
@@ -7,9 +10,9 @@
       </p>
     </header>
     <section class="panel-block">
-      <div class="tags" data-waste-codes>
+      <div class="buttons">
       {{ range .WasteCodes }}
-        <span class="tag" data-waste-code>{{ . }}</span>
+        <button class="button is-small" data-show-details data-waste-code="{{ . }}">{{ . }}</button>
       {{ end }}
       </div>
     </section>
@@ -21,7 +24,28 @@
       </div>
     </section>
     <section class="panel-block">
-      <button class="button is-link is-fullwidth" data-show-details data-id="{{ .Id }}">Szczegóły</button>
+      <button class="button is-link is-fullwidth" data-show-details>Szczegóły</button>
     </section>
+
+    <div class="modal" data-capabilities-details>
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">{{ .Name }}</p>
+          <p class="tag">
+            {{ .AddressLine1 }},  {{ .AddressLine2 }}
+          </p>
+          <button class="cancel button modal-close is-large" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body" data-capabilities>
+        </section>
+        <footer class="modal-card-foot">
+          <div class="cancel button is-link is-fullwidth">
+            Zamknij
+          </div>
+        </footer>
+      </div>
+    </div>
+
   </div>
 {{ end }}

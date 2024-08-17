@@ -30,8 +30,9 @@ func NewApp(renderer Renderer) (*App, error) {
 func (app *App) MountHandlers() {
 	app.router.HandleFunc("GET /assets/main.js", staticHandler)
 	app.router.HandleFunc("GET /{$}", app.homeHandler)
-	app.router.HandleFunc("GET /api/installations", app.searchInstallationsHandler)
-	app.router.HandleFunc("GET /api/installation/{id}", app.showInstallationHandler)
+	app.router.HandleFunc("GET /instalacje", app.searchInstallationsHandler)
+	app.router.HandleFunc("GET /instalacje/{id}/mozliwosci", app.searchInstallationCapabilitiesHandler)
+	app.router.HandleFunc("GET /mozliwosci", app.searchCapabilitiesHandler)
 }
 
 func (app *App) Start() {
@@ -69,20 +70,43 @@ func Bind(sp SearchParams, r *http.Request) {
 	if r.FormValue("sc") != "" {
 		sp["state_code"] = r.FormValue("sc")
 	}
+	if r.FormValue("id") != "" {
+		sp["installation_id"] = r.FormValue("id")
+	}
 }
 
-func (app *App) showInstallationHandler(w http.ResponseWriter, r *http.Request) {
-	var installation Installation
+func (app *App) searchInstallationCapabilitiesHandler(w http.ResponseWriter, r *http.Request) {
+	var capabilities []Capability
+	var err error
+	params := SearchParams{}
 	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
 	if err == nil {
-		err := app.db.Find(id, &installation)
+		Bind(params, r)
+		capabilities, err = app.db.SearchCapabilities(id, params)
 		if err != nil {
 			panic(err)
 		}
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	err = app.renderer.RenderInstallationSummary(w, installation)
+	err = app.renderer.RenderCapabilities(w, capabilities)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (app *App) searchCapabilitiesHandler(w http.ResponseWriter, r *http.Request) {
+	var capabilities []Capability
+	var err error
+	params := SearchParams{}
+	Bind(params, r)
+	capabilities, err = app.db.Summarize(params)
+	if err != nil {
+		panic(err)
+	}
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	err = app.renderer.RenderCapabilities(w, capabilities)
 	if err != nil {
 		panic(err)
 	}

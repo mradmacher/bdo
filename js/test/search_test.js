@@ -19,6 +19,8 @@ test.before(t => {
             <option value="04">B</option>
             <option value="06">C</option>
           </select>
+          <input type="radio" name="view" value="/path1" checked />
+          <input type="radio" name="view" value="/path2" />
           <button type="submit"></button>
           <button type="reset"></button>
         </form>
@@ -31,7 +33,9 @@ test('returns search params on search', t => {
   global.document = dom.window.document
   let onReset = () => {}
   let searchedParams
-  let onSearch = (params) => {
+  let searchedPath
+  let onSearch = (path, params) => {
+    searchedPath = path
     searchedParams = params
   }
   let search = new SearchComponent('search', onReset, onSearch)
@@ -41,6 +45,7 @@ test('returns search params on search', t => {
   document.querySelector("[name=state]").value = "06"
   document.querySelector('form [type="submit"]').click()
 
+  t.deepEqual(searchedPath, "/path1")
   t.assert(Object.keys(searchedParams).includes('wc'))
   t.deepEqual(searchedParams["wc"], "101010")
   t.assert(Object.keys(searchedParams).includes('pc'))
@@ -53,13 +58,16 @@ test('returns nothing when search params not entered', t => {
   const dom = new JSDOM(t.context.html)
   global.document = dom.window.document
   let onReset = () => {}
+  let searchedPath
   let searchedParams
-  let onSearch = (params) => {
+  let onSearch = (path, params) => {
+    searchedPath = path
     searchedParams = params
   }
   let search = new SearchComponent('search', onReset, onSearch)
 
   document.querySelector('form [type="submit"]').click()
 
+  t.deepEqual(searchedPath, "/path1")
   t.deepEqual(searchedParams, {})
 })

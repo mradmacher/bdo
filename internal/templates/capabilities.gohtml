@@ -1,0 +1,22 @@
+<div class="table-container">
+  <table class="table is-narrow is-striped is-fullwidth">
+    <thead>
+      <tr>
+        <th>Kod</th>
+        <th>Proces</th>
+        <th>Działanie</th>
+        <th>Mg</th>
+      </tr>
+    </thead>
+    <tbody>
+    {{ range .Capabilities }}
+      <tr class="capability">
+        <td class="waste-code">{{ .WasteCode }}</td>
+        <td class="process-code">{{ .ProcessCode }}</td>
+        <td class="activity-code">{{ .ActivityCode }}</td>
+        <td class="quantity">{{ .Quantity }}</td>
+      </tr>
+    {{ end }}
+    </tbody>
+  </table>
+</div>
