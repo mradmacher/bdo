@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type App struct {
@@ -75,11 +76,20 @@ func Bind(sp SearchParams, r *http.Request) {
 	}
 }
 
+func redirectNoAjax(w http.ResponseWriter, r *http.Request) {
+	if !strings.Contains(r.Header.Get("Accept"), "application/json") {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
+}
+
 func (app *App) searchInstallationCapabilitiesHandler(w http.ResponseWriter, r *http.Request) {
+	redirectNoAjax(w, r)
+
 	var capabilities []Capability
 	var err error
 	params := SearchParams{}
 	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+
 	if err == nil {
 		Bind(params, r)
 		capabilities, err = app.db.SearchCapabilities(id, params)
@@ -96,6 +106,8 @@ func (app *App) searchInstallationCapabilitiesHandler(w http.ResponseWriter, r *
 }
 
 func (app *App) searchCapabilitiesHandler(w http.ResponseWriter, r *http.Request) {
+	redirectNoAjax(w, r)
+
 	var capabilities []Capability
 	var err error
 	params := SearchParams{}
@@ -106,13 +118,15 @@ func (app *App) searchCapabilitiesHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	err = app.renderer.RenderCapabilities(w, capabilities)
+	err = app.renderer.RenderCapabilitiesSummary(w, capabilities)
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (app *App) searchInstallationsHandler(w http.ResponseWriter, r *http.Request) {
+	redirectNoAjax(w, r)
+
 	params := SearchParams{}
 	Bind(params, r)
 	var installations []*Installation

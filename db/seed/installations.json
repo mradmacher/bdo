@@ -21,6 +21,44 @@
         "ProcessCode": "R12",
         "ActivityCode": "Z",
         "Quantity": 40000
+      }, {
+        "WasteCode": "160119",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityCode": "Z",
+        "Quantity": 20000,
+        "Materials": [
+          { "Code": "TSTP01" },
+          { "Code": "TSTP02" },
+          { "Code": "TSTP03" },
+          { "Code": "TSTP04" },
+          { "Code": "TSTP05" },
+          { "Code": "TSTP06" },
+          { "Code": "TSTP07" },
+          { "Code": "TSTP08" },
+          { "Code": "TSTP09" },
+          { "Code": "TSTP10" },
+          { "Code": "TSTP11" }
+        ]
+      }, {
+        "WasteCode": "160119",
+        "Dangerous": false,
+        "ProcessCode": "R12",
+        "ActivityCode": "PR",
+        "Quantity": 20000,
+        "Materials": [
+          { "Code": "TSTP01" },
+          { "Code": "TSTP02" },
+          { "Code": "TSTP03" },
+          { "Code": "TSTP04" },
+          { "Code": "TSTP05" },
+          { "Code": "TSTP06" },
+          { "Code": "TSTP07" },
+          { "Code": "TSTP08" },
+          { "Code": "TSTP09" },
+          { "Code": "TSTP10" },
+          { "Code": "TSTP11" }
+        ]
       }
     ]
   },
@@ -612,6 +650,21 @@
         "ProcessCode": "R3",
         "ActivityCode": "PR",
         "Quantity": 200
+      }, {
+        "WasteCode": "160119",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityCode": "PR",
+        "Quantity": 2300,
+        "Materials": [
+          { "Code": "TSTT01" },
+          { "Code": "TSTT02" },
+          { "Code": "TSTT03" },
+          { "Code": "TSTT04" },
+          { "Code": "TSTT05" },
+          { "Code": "TSWZ01" },
+          { "Code": "TSWZ02" }
+        ]
       }
     ]
   }, {
@@ -756,6 +809,25 @@
         "ProcessCode": "R3",
         "ActivityCode": "PR",
         "Quantity": 100
+      }, {
+        "WasteCode": "160119",
+        "Dangerous": false,
+        "ProcessCode": "R3",
+        "ActivityCode": "PR",
+        "Quantity": 850,
+        "Materials": [
+          { "Code": "TSTP01" },
+          { "Code": "TSTP02" },
+          { "Code": "TSTP03" },
+          { "Code": "TSTP04" },
+          { "Code": "TSTP05" },
+          { "Code": "TSTP06" },
+          { "Code": "TSTP07" },
+          { "Code": "TSTP08" },
+          { "Code": "TSTP09" },
+          { "Code": "TSTP10" },
+          { "Code": "TSTP11" }
+        ]
       }
     ]
   }, {

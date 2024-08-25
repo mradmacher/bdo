@@ -72,18 +72,6 @@
                   </div>
                 </div>
 
-                <div class="field">
-                  <div class="radios">
-                    <label class="radio">
-                      <input type="radio" name="view" value="/instalacje" checked/>
-                      Instalacje
-                    </label>
-                    <label class="radio">
-                      <input type="radio" name="view" value="/mozliwosci" />
-                      Możliwości
-                    </label>
-                  </div>
-                </div>
                 <button class="button is-link" type="submit">Szukaj</button>
                 <button class="button is-link is-light" type="reset">Wyczyść</button>
               </form>
@@ -101,8 +89,13 @@
       <div class="column">
         <section class="section">
           <div class="container">
-            <div id="installations">
+            <div class="tabs" data-view-selector>
+              <ul>
+                <li class="is-active" data-view="installations" data-active><a href="/instalacje">Instalacje</a></li>
+                <li data-view="capabilities"><a href="/mozliwosci">Możliwości</a></li>
+              </ul>
             </div>
+            <div id="installations"></div>
           </div>
         </section>
 
@@ -215,6 +208,29 @@
       </div>
     </div>
 
-  <script src="/assets/main.js"></script>
+    <template id="modal-card">
+      <div class="modal" data-modal>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">
+              <span data-modal-title></span>
+              <p class="tag"><span data-modal-subtitle></span></p>
+            </p>
+            <button class="button delete" aria-label="close" data-close-modal></button>
+          </header>
+          <section class="modal-card-body" data-modal-body>
+          </section>
+          <footer class="modal-card-foot">
+            <button class="cancel button is-link is-fullwidth" data-close-modal>
+              Zamknij
+            </button>
+          </footer>
+        </div>
+      </div>
+    </template>
+    <span id="capabilities-modal"></span>
+    <span id="materials-modal"></span>
+
+    <script src="/assets/main.js?q=1"></script>
   </body>
 </html>

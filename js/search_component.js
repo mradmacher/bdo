@@ -1,5 +1,4 @@
-import { WasteHinter } from "./waste_catalog.js"
-import { ProcessHinter } from "./process_catalog.js"
+import { WasteHinter, ProcessHinter } from "./hinters.js"
 
 export class SearchComponent {
   constructor(elementId, onReset, onSearch) {
@@ -11,8 +10,10 @@ export class SearchComponent {
     this.setProcessHint(null)
     this.processHinter = new ProcessHinter();
     this.wasteHinter = new WasteHinter();
+    this.searched = false;
 
     this.element.querySelector('form [type="reset"]').addEventListener('click', (event) => {
+      this.searched = false;
       this.setWasteHint(null, null, null)
       this.setProcessHint(null)
       this.onReset()
@@ -21,13 +22,16 @@ export class SearchComponent {
     this.element.querySelector('form [type="submit"]').addEventListener('click', (event) => {
       event.preventDefault()
 
-      this.onSearch(this.collectSearchPath(), this.collectSearchParams())
+      this.searched = true;
+      this.onSearch(this.collectSearchParams())
       this.setHints()
     })
   }
 
-  collectSearchPath() {
-    return this.element.querySelector('[name=view]:checked').value
+  repeatSearch() {
+    if (this.searched) {
+      this.onSearch(this.collectSearchParams())
+    }
   }
 
   collectSearchParams() {

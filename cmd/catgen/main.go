@@ -3,11 +3,81 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"errors"
 	"fmt"
+	"gopkg.in/yaml.v3"
 	"os"
 	"regexp"
 	"strings"
 )
+
+type Material struct {
+	Code  string
+	Name  string
+	Desc  string
+	Items []Material
+}
+
+func readMaterials(fileName string) ([]Material, error) {
+	var materials []Material
+	buffer, err := os.ReadFile(fileName)
+	if err != nil {
+		return nil, errors.Join(errors.New("Problem reading materials file"), err)
+	}
+	err = yaml.Unmarshal(buffer, &materials)
+	if err != nil {
+		return nil, errors.Join(errors.New("Problem unmarshaling materials file"), err)
+	}
+	fmt.Printf("%v\n", materials)
+
+	return materials, nil
+}
+
+func genMaterials(fileName string, materials []Material) error {
+	f, err := os.Create(fileName)
+	if err != nil {
+		return errors.Join(errors.New("Problem creating materials output file"), err)
+	}
+	defer f.Close()
+
+	fmt.Fprintln(f, "export const materialCodes = {")
+	fmt.Fprintln(f, "  \"00\": [")
+	for _, m := range materials {
+		fmt.Fprintf(f, "    %q,\n", m.Code)
+	}
+	fmt.Fprintln(f, "  ],")
+	for _, m1 := range materials {
+		fmt.Fprintf(f, "  %q: [\n", m1.Code)
+		for _, m2 := range m1.Items {
+			fmt.Fprintf(f, "    %q,\n", m2.Code)
+		}
+		fmt.Fprintln(f, "  ],")
+	}
+	for _, m1 := range materials {
+		for _, m2 := range m1.Items {
+			fmt.Fprintf(f, "  %q: [\n", m2.Code)
+			for _, m3 := range m2.Items {
+				fmt.Fprintf(f, "    %q,\n", m3.Code)
+			}
+			fmt.Fprintln(f, "  ],")
+		}
+	}
+	fmt.Fprintf(f, "}\n")
+
+	fmt.Fprintf(f, "export const materialNames = {\n")
+	for _, m1 := range materials {
+		fmt.Fprintf(f, "  %q: %q,\n", m1.Code, m1.Name)
+		for _, m2 := range m1.Items {
+			fmt.Fprintf(f, "  %q: %q,\n", m2.Code, m2.Name)
+			for _, m3 := range m2.Items {
+				fmt.Fprintf(f, "  %q: %q,\n", m3.Code, m3.Name)
+			}
+		}
+	}
+	fmt.Fprintf(f, "}\n")
+
+	return nil
+}
 
 type CodeDescs map[string]string
 type CodeTree map[string][]string
@@ -114,12 +184,11 @@ func writeFinalCodes(f *os.File, finalCodes FinalCodes) error {
 	return nil
 }
 
-func main() {
+func makeWasteCodes(fileName string) {
 	var codeDescs CodeDescs
 	var codeTree CodeTree
 	var finalCodes FinalCodes
 	var err error
-	fileName := "test_catalog.js"
 
 	codeTree, codeDescs, finalCodes, err = readWasteCatalog()
 	if err != nil {
@@ -135,4 +204,19 @@ func main() {
 	writeCodeTree(file, codeTree)
 	writeCodeDescs(file, codeDescs)
 	writeFinalCodes(file, finalCodes)
+}
+
+func main() {
+	//makeWasteCodes("test_catalog.js")
+	var materials []Material
+	var err error
+	materials, err = readMaterials("internal/seeds/materials.yaml")
+	if err != nil {
+		panic(err)
+	}
+
+	err = genMaterials("js/material_catalog.js", materials)
+	if err != nil {
+		panic(err)
+	}
 }

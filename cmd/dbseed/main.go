@@ -17,7 +17,7 @@ func loadData(filePath string, installations *[]bdo.Installation) error {
 	}
 	return nil
 }
-func saveData(r *bdo.Repository, installations []bdo.Installation) (error) {
+func saveData(r *bdo.Repository, installations []bdo.Installation) error {
 	for _, installation := range installations {
 		id, err := installation.Add(r)
 		fmt.Printf("%v, %v\n", id, err)
@@ -48,6 +48,7 @@ func seedDb() {
 	}()
 
 	var installations []bdo.Installation
+	try(db.Purge())
 	try(loadData("db/seed/installations.json", &installations))
 	for _, installation := range installations {
 		fmt.Printf("%v\n", installation)

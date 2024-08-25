@@ -1,0 +1,51 @@
+- name: Tworzywa sztuczne
+  code: TS
+  items:
+    - name: Tworzywa termoplastyczne
+      code: TSTP
+      desc: Tworzywa termoplastyczne miękną lub topią się pod wpływem ogrzewania.
+      items:
+          - code: TSTP01
+            name: "Poliolefiny: polietylen (PE), polipropylen (PP)"
+          - code: TSTP02
+            name: Polichlorek winylu (PVC)
+          - code: TSTP03
+            name: "Termoplasty na bazie styrenu: polistyren (PS), kopolimer akrylonitrylo-butadienowo-styrenowy (ABS), kopolimer akrylonitrylo-styrenowo-akrylowy (ASA), kopolimer styrenowo-akrylonitrylowy (SAN), kopolimer styrenu i bezwodnika maleinowego (SMA)"
+          - code: TSTP04
+            name: Poliamidy (PA)
+          - code: TSTP05
+            name: Poliuretany (TPU)
+          - code: TSTP06
+            name: "Poliestry termoplastyczne: politereftalan butylenu (PBT), politereftalan etylenu (PET), politereftalan trimetylu (PTT), polinaftalan etylenu (PEN), polimery ciekłokrystaliczne (LCP)"
+          - code: TSTP07
+            name: Poliacetal (POM)
+          - code: TSTP08
+            name: Eter polifenylenowy (PPE)
+          - code: TSTP09
+            name: "Elastomery termoplastyczne (TPEs): elastomery termoplastyczne olefinowe (TPE-O), elastomery termoplastyczne wulkanizowane dynamicznie (TPE-V), elastomery termoplastyczne poliestrowe (TPE-E), elastomery termoplastyczne styrenowe (TPE-S), elastomery termoplastyczne poliamidowe (TPE-A), elastomery termoplastyczne poliuretanowe (TPE-U)"
+          - code: TSTP10
+            name: "Fluoropolimery: politetrafluoroetylen (PTFE), polifluorek winylidenu (PVDF), tetrafluoroetylen etylenu (ETFE), chlorotrifluoroetylen etylenu (ECTFE), tetrafluoroetylen-heksafluoropropylen i fluorek winylidenu (THV)"
+          - code: TSTP11
+            name: "Inne tworzywa termoplastyczne: polimetakrylan metylu (PMMA), poliketony alifatyczne (APK)"
+    - name: Tworzywa termoutwardzalne
+      code: TSTT
+      desc: Tworzywa termoutwardzalne, które nie miękną ani nie topią się pod wpływem ciepła.
+      items:
+        - code: TSTT01
+          name: Poliestry nienasycone (żywice UP)
+        - code: TSTT02
+          name: Żywica fenolowo-formaldehydowa (PF)
+        - code: TSTT03
+          name: Żywica epoksydowa (EP)
+        - code: TSTT04
+          name: Poliuretany termoutwardzalne (PUR)
+        - code: TSTT05
+          name: "Inne tworzywa termoutwardzalne: żywice winyloestrowe (VP), żywice mocznikowo-formaldehydowe (UF), żywice melaminowo-formaldehydowe (MF)"
+    - name: Inne/Wzmocnienia
+      code: TSWZ
+      desc: Tworzywa sztuczne wzmocnione włóknami szklanymi, węglowymi, aramidowymi, z wełny mineralnej i naturalnej.
+      items:
+        - name: Włókna szklane i mata szklana
+          code: TSWZ01
+        - name: "Inne: włókna naturalne, włókna aramidowe, włókna węglowe, włókna metalowe, wypełniacze (kreda, talk), nanokompozyty"
+          code: TSWZ02

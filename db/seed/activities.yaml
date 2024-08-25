@@ -1,0 +1,14 @@
+- code: PR
+  description: przetwarzanie recykling
+- code: PO
+  description: przetwarzanie odzysk
+- code: Z
+  description: zbieranie
+- code: W
+  description: wytwarzanie
+- code: U
+  description: unieszkodliwianie
+- code: T
+  description: transport
+- code: OO
+  description: organizacja odzysku

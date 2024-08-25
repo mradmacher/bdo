@@ -5,15 +5,36 @@
         <th>Kod</th>
         <th>Proces</th>
         <th>Działanie</th>
+        <th>Materiały</th>
         <th>Mg</th>
       </tr>
     </thead>
     <tbody>
-    {{ range .Capabilities }}
+    {{range .Capabilities}}
+      {{$wasteCode := .WasteCode}}
       <tr class="capability">
-        <td class="waste-code">{{ .WasteCode }}</td>
-        <td class="process-code">{{ .ProcessCode }}</td>
-        <td class="activity-code">{{ .ActivityCode }}</td>
+        <td class="waste-code">{{.WasteCode}}</td>
+        <td class="process-code">{{.ProcessCode}}</td>
+        <td class="activity-code">{{.ActivityCode}}</td>
+        <td class="materials" data-modal-home>
+          {{$id := .Id}}
+          {{range .MaterialGroups}}
+            <button class="button is-small" data-modal-target="#materials-modal" data-modal-source="#modal-card" data-modal-title="{{.Name}}" href="#capability-materials-{{$id}}">{{.Name}}</button>
+            <template id="capability-materials-{{$id}}">
+              <p class="block">{{.Desc}}</p>
+              <ul class="checkboxes">
+                {{range .Materials}}
+                <li>
+                  <label class="checkbox">
+                    <input type="checkbox" {{if .Selected}} checked {{else}}{{end}} disabled/>
+                    {{.Name}}
+                  </label>
+                </li>
+              {{end}}
+              </ul>
+            </template>
+          {{end}}
+        </td>
         <td class="quantity">{{ .Quantity }}</td>
       </tr>
     {{ end }}
