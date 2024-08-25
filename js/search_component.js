@@ -21,9 +21,13 @@ export class SearchComponent {
     this.element.querySelector('form [type="submit"]').addEventListener('click', (event) => {
       event.preventDefault()
 
-      this.onSearch(this.collectSearchParams())
+      this.onSearch(this.collectSearchPath(), this.collectSearchParams())
       this.setHints()
     })
+  }
+
+  collectSearchPath() {
+    return this.element.querySelector('[name=view]:checked').value
   }
 
   collectSearchParams() {

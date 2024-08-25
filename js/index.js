@@ -4,7 +4,7 @@ import { MapComponent } from "./map_component.js"
 import { SearchComponent } from "./search_component.js"
 import { openModal, closeModal } from "./modal_helpers.js"
 
-export function updateUrlSearchParams(params) {
+export function updateUrlSearchParams(path, params) {
   if ('URLSearchParams' in window) {
     let searchParams = new URLSearchParams();
     let searchParamsProvided = false;
@@ -14,7 +14,7 @@ export function updateUrlSearchParams(params) {
         searchParamsProvided = true;
       }
     }
-    let newRelativePathQuery = window.location.pathname;
+    let newRelativePathQuery = path; //window.location.pathname;
     if(searchParamsProvided) {
       newRelativePathQuery = newRelativePathQuery + '?' + searchParams.toString();
     }
@@ -24,15 +24,28 @@ export function updateUrlSearchParams(params) {
 
 export class InstallationRequest {
   constructor() {
-    this.indexUrl = "/api/installations"
-    this.showUrl = "/api/installation"
+    this.baseUrl = ""
+    this.showUrl = "/instalacje"
   }
 
-  search(params) {
+  search(path, params) {
     return new Promise((resolve, reject) => {
-      axios.get(this.indexUrl, {
+      axios.get(this.baseUrl + path, {
         params: params
       }).then(function(response) {
+        resolve(response.data)
+      }).catch(function(error) {
+        reject(error.response.data)
+      })
+    })
+  }
+
+  searchCapabilities(id, params) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/instalacje/${id}/mozliwosci`, {
+        params: params
+      }).then(function(response) {
+        console.log(response)
         resolve(response.data)
       }).catch(function(error) {
         reject(error.response.data)
@@ -173,12 +186,12 @@ document.addEventListener("DOMContentLoaded", () => {
       () => {
         mapComponent.clear()
       },
-      (params) => {
-        updateUrlSearchParams(params)
+      (path, params) => {
+        updateUrlSearchParams(path, params)
 
         mapComponent.clear()
 
-        new InstallationRequest().search(params)
+        new InstallationRequest().search(path, params)
           .then((installations) => {
             let listElement = document.getElementById('installations')
             listElement.innerHTML = installations;
@@ -195,16 +208,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
             listElement.querySelectorAll('[data-show-details]').forEach((actionElement) => {
               actionElement.addEventListener('click', (event) => {
-                let id = event.target.getAttribute('data-id');
-                new InstallationRequest().show(id).then((result) => {
-                  let detailsElement = document.querySelector('.installation-details');
-                  detailsElement.innerHTML = result;
-                  detailsElement.querySelectorAll('.button.cancel').forEach((cancelElement) => {
+                let installationElement = event.target.closest('[data-installation]');
+                let id = installationElement.getAttribute("data-id");
+                let code = event.target.getAttribute("data-waste-code")
+                if (code) {
+                  code = code.replaceAll(' ', '')
+                  code = code.replaceAll('*', '')
+                }
+                let modal = installationElement.querySelector("[data-capabilities-details]");
+                let element = modal.querySelector("[data-capabilities]");
+                new InstallationRequest().searchCapabilities(id, {wc: code}).then((result) => {
+                  element.innerHTML = result;
+                  modal.querySelectorAll('.button.cancel').forEach((cancelElement) => {
                     cancelElement.addEventListener('click', (event) => {
-                      closeModal(detailsElement);
+                      closeModal(modal);
                     })
                   })
-                  openModal(detailsElement);
+                  openModal(modal);
                 })
               })
             })

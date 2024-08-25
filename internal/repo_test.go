@@ -25,17 +25,34 @@ func assertEqual[K comparable](t *testing.T, got, want K, name string) {
 
 func assertHasCapability(t *testing.T, inst Installation, want Capability) {
 	found := false
-	for _, capa := range inst.Capabilities {
-		if capa.WasteCode == want.WasteCode &&
-			capa.Dangerous == want.Dangerous &&
-			capa.ProcessCode == want.ProcessCode &&
-			capa.ActivityCode == want.ActivityCode {
+	for _, c := range inst.Capabilities {
+		if c.WasteCode == want.WasteCode &&
+			c.Dangerous == want.Dangerous &&
+			c.ProcessCode == want.ProcessCode &&
+			c.ActivityCode == want.ActivityCode &&
+			c.Quantity == want.Quantity {
 			found = true
 			break
 		}
 	}
 	if !found {
 		t.Errorf("Expected %q to has capability %v", inst.Name, want)
+	}
+}
+func assertIncludeCapability(t *testing.T, collection []Capability, want Capability) {
+	found := false
+	for _, c := range collection {
+		if c.WasteCode == want.WasteCode &&
+			c.Dangerous == want.Dangerous &&
+			c.ProcessCode == want.ProcessCode &&
+			c.ActivityCode == want.ActivityCode &&
+			c.Quantity == want.Quantity {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Errorf("Expected %v to has capability %v", collection, want)
 	}
 }
 
@@ -63,6 +80,229 @@ func setupTest(t *testing.T, r *Repository) func(*testing.T) {
 func TestRepo(t *testing.T) {
 	teardownSuite, r := setupSuite(t)
 	defer teardownSuite(t)
+
+	t.Run("Summarize", func(t *testing.T) {
+		teardownTest := setupTest(t, r)
+		defer teardownTest(t)
+
+		inst1 := Installation{
+			Name: "Test1",
+			Address: Address{
+				StateCode: "10",
+			},
+			Capabilities: []Capability{
+				Capability{
+					WasteCode:   "010101",
+					ProcessCode: "R1",
+					Quantity:    100,
+				},
+				Capability{
+					WasteCode:   "020202",
+					Dangerous:   true,
+					ProcessCode: "D2",
+					Quantity:    100,
+				},
+			},
+		}
+
+		inst2 := Installation{
+			Name: "Test2",
+			Address: Address{
+				StateCode: "10",
+			},
+			Capabilities: []Capability{
+				Capability{
+					WasteCode:   "010101",
+					ProcessCode: "R1",
+					Quantity:    100,
+				},
+				Capability{
+					WasteCode:   "010101",
+					ProcessCode: "R2",
+					Quantity:    100,
+				},
+				Capability{
+					WasteCode:   "020202",
+					Dangerous:   true,
+					ProcessCode: "D3",
+					Quantity:    100,
+				},
+			},
+		}
+
+		inst3 := Installation{
+			Name: "Test3",
+			Address: Address{
+				StateCode: "11",
+			},
+			Capabilities: []Capability{
+				Capability{
+					WasteCode:   "010101",
+					ProcessCode: "R1",
+					Quantity:    100,
+				},
+				Capability{
+					WasteCode:   "010101",
+					ProcessCode: "R2",
+					Quantity:    100,
+				},
+				Capability{
+					WasteCode:   "040404",
+					ProcessCode: "R10",
+					Quantity:    100,
+				},
+			},
+		}
+
+		inst1.Add(r)
+		inst2.Add(r)
+		inst3.Add(r)
+
+		testCases := []struct {
+			params SearchParams
+			want   []Capability
+		}{
+			{
+				SearchParams{
+					"waste_code":   "010101",
+					"process_code": "R1",
+				},
+				[]Capability{
+					Capability{
+						WasteCode:   "010101",
+						Dangerous:   false,
+						ProcessCode: "R1",
+						Quantity:    300,
+					},
+				},
+			},
+			{
+				SearchParams{
+					"process_code": "R1",
+				},
+				[]Capability{
+					Capability{
+						WasteCode:   "010101",
+						Dangerous:   false,
+						ProcessCode: "R1",
+						Quantity:    300,
+					},
+				},
+			},
+			{
+				SearchParams{
+					"waste_code": "010101",
+				},
+				[]Capability{
+					Capability{
+						WasteCode:   "010101",
+						Dangerous:   false,
+						ProcessCode: "R1",
+						Quantity:    300,
+					},
+					Capability{
+						WasteCode:   "010101",
+						Dangerous:   false,
+						ProcessCode: "R2",
+						Quantity:    200,
+					},
+				},
+			},
+			{
+				SearchParams{
+					"waste_code": "010101",
+					"state_code": "10",
+				},
+				[]Capability{
+					Capability{
+						WasteCode:   "010101",
+						Dangerous:   false,
+						ProcessCode: "R1",
+						Quantity:    200,
+					},
+					Capability{
+						WasteCode:   "010101",
+						Dangerous:   false,
+						ProcessCode: "R2",
+						Quantity:    100,
+					},
+				},
+			},
+			{
+				SearchParams{
+					"waste_code": "020202",
+				},
+				[]Capability{
+					Capability{
+						WasteCode:   "020202",
+						Dangerous:   true,
+						ProcessCode: "D2",
+						Quantity:    100,
+					},
+					Capability{
+						WasteCode:   "020202",
+						Dangerous:   true,
+						ProcessCode: "D3",
+						Quantity:    100,
+					},
+				},
+			},
+			{
+				SearchParams{
+					"state_code": "10",
+				},
+				[]Capability{
+					Capability{
+						WasteCode:   "010101",
+						Dangerous:   false,
+						ProcessCode: "R1",
+						Quantity:    200,
+					},
+					Capability{
+						WasteCode:   "010101",
+						Dangerous:   false,
+						ProcessCode: "R2",
+						Quantity:    100,
+					},
+					Capability{
+						WasteCode:   "020202",
+						Dangerous:   true,
+						ProcessCode: "D2",
+						Quantity:    100,
+					},
+					Capability{
+						WasteCode:   "020202",
+						Dangerous:   true,
+						ProcessCode: "D3",
+						Quantity:    100,
+					},
+				},
+			},
+			{
+				SearchParams{
+					"waste_code": "040404",
+					"state_code": "10",
+				},
+				[]Capability{},
+			},
+		}
+
+		for _, tc := range testCases {
+			t.Run(fmt.Sprintf("%v", tc.params), func(t *testing.T) {
+				var results []Capability
+				var err error
+
+				results, err = r.Summarize(tc.params)
+				assertNoError(t, err)
+				t.Run("returns summarized capabilities", func(t *testing.T) {
+					assertEqual(t, len(results), len(tc.want), "len(Capabilites)")
+					for _, want := range tc.want {
+						assertIncludeCapability(t, results, want)
+					}
+				})
+			})
+		}
+	})
 
 	t.Run("Find", func(t *testing.T) {
 		teardownTest := setupTest(t, r)
@@ -131,6 +371,99 @@ func TestRepo(t *testing.T) {
 			assertEqual(t, len(got.Capabilities), 3, "len(Capabilities)")
 			for _, w := range want.Capabilities {
 				assertHasCapability(t, got, w)
+			}
+		})
+	})
+
+	t.Run("SearchCapabilities", func(t *testing.T) {
+		teardownTest := setupTest(t, r)
+		defer teardownTest(t)
+
+		cap1 := Capability{
+			WasteCode:   "010101",
+			ProcessCode: "R3",
+			ActivityCode: "Z",
+			Quantity:    789,
+		}
+		cap2 := Capability{
+			WasteCode:   "010101",
+			ProcessCode: "R3",
+			ActivityCode: "PR",
+			Quantity:    789,
+		}
+		cap3 := Capability{
+			WasteCode:   "010101",
+			ProcessCode: "R2",
+			ActivityCode: "PR",
+			Quantity:    987,
+		}
+
+		inst := Installation{
+			Name: "ToBeFound",
+			Address: Address{
+				Line1:     "Address1",
+				Line2:     "Address2",
+				StateCode: "10",
+				Lat:       "12.00",
+				Lng:       "10.00",
+			},
+			Capabilities: []Capability{
+				Capability{
+					WasteCode:    "010203",
+					Dangerous:    true,
+					ProcessCode:  "R1",
+					ActivityCode: "Z",
+					Quantity:     123,
+				},
+				Capability{
+					WasteCode:   "030201",
+					ProcessCode: "R2",
+					Quantity:    456,
+				},
+				cap1,
+				cap2,
+				cap3,
+			},
+		}
+		id, err := inst.Add(r)
+		assertNoError(t, err)
+
+		t.Run("not existing installation", func(t *testing.T) {
+			var got []Capability
+			sp := SearchParams{
+				"waste_code": "010101",
+			}
+			got, err := r.SearchCapabilities(0, sp)
+			assertNoError(t, err)
+			if len(got) > 0 {
+				t.Errorf("Expected empty collection but got %v", got)
+			}
+		})
+
+		t.Run("not existing code", func(t *testing.T) {
+			var got []Capability
+			sp := SearchParams{
+				"waste_code": "101010",
+			}
+			got, err := r.SearchCapabilities(id, sp)
+			assertNoError(t, err)
+			if len(got) > 0 {
+				t.Errorf("Expected empty collection but got %v", got)
+			}
+		})
+
+		t.Run("existing with capabilities", func(t *testing.T) {
+			var got []Capability
+			want := []Capability{cap1, cap2, cap3}
+			sp := SearchParams{
+				"waste_code": "010101",
+			}
+			got, err := r.SearchCapabilities(id, sp)
+
+			assertNoError(t, err)
+			assertEqual(t, len(got), 3, "len(Capabilities)")
+			for _, w := range want {
+				assertIncludeCapability(t, got, w)
 			}
 		})
 	})

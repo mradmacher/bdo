@@ -50,10 +50,14 @@ type InstallationsView struct {
 	Installations []InstallationSummaryView
 }
 
+type CapabilitiesView struct {
+	Capabilities []CapabilityView
+}
+
 type Renderer struct {
 	homeTemplate                *template.Template
 	installationsTemplate       *template.Template
-	installationSummaryTemplate *template.Template
+	capabilitiesTemplate        *template.Template
 }
 
 func NewRenderer() (*Renderer, error) {
@@ -68,7 +72,7 @@ func NewRenderer() (*Renderer, error) {
 	if err != nil {
 		return nil, err
 	}
-	renderer.installationSummaryTemplate, err = template.ParseFS(templates, "templates/installation_summary.gohtml")
+	renderer.capabilitiesTemplate, err = template.ParseFS(templates, "templates/capabilities.gohtml")
 	if err != nil {
 		return nil, err
 	}
@@ -80,15 +84,11 @@ func (r *Renderer) RenderHome(w io.Writer, data any) error {
 	return r.homeTemplate.Execute(w, data)
 }
 
-func (r *Renderer) RenderInstallationSummary(w io.Writer, installation Installation) error {
-	view := InstallationView{
-		Id:           installation.Id,
-		Name:         installation.Name,
-		AddressLine1: installation.Address.Line1,
-		AddressLine2: installation.Address.Line2,
-	}
-	for _, c := range installation.Capabilities {
-		view.Capabilities = append(view.Capabilities, CapabilityView{
+func (r *Renderer) RenderCapabilities(w io.Writer, capabilities []Capability) error {
+	var result CapabilitiesView
+
+	for _, c := range capabilities {
+		result.Capabilities = append(result.Capabilities, CapabilityView{
 			WasteCode:    formatWasteCode(c.WasteCode, c.Dangerous),
 			ProcessCode:  c.ProcessCode,
 			ActivityCode: c.ActivityCode,
@@ -96,7 +96,7 @@ func (r *Renderer) RenderInstallationSummary(w io.Writer, installation Installat
 		})
 	}
 
-	return r.installationSummaryTemplate.Execute(w, view)
+	return r.capabilitiesTemplate.Execute(w, result)
 }
 
 func (r *Renderer) RenderInstallations(w io.Writer, installations []*Installation) error {

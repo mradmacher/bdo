@@ -11,6 +11,104 @@
 
   <body>
     <span id="google-maps-api-key" data-value="{{.GoogleMapsApiKey}}"></span>
+
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/"><h1>BDO</h1></a>
+      </div>
+    </nav>
+
+    <div class="columns">
+      <div class="column is-half">
+        <section class="section">
+          <div class="search panel" id="search">
+            <div class="panel-heading">
+              <p>Szukaj instalacji</p>
+            </div>
+            <div class="panel-block">
+              <form>
+                <div class="field">
+                  <label class="label">Kod odpadu</label>
+                  <div class="control">
+                    <input type="text" name="waste" placeholder="xxxxxx">
+                    <button class="button is-small is-link search waste">Wybierz</button>
+                  </div>
+                  <em class="waste-hint code-a"></em>
+                  <em class="waste-hint code-b"></em>
+                  <em class="waste-hint code-c"></em>
+                </div>
+
+                <div class="field">
+                  <label class="label">Proces przetwarzania</label>
+                  <div class="control">
+                    <input type="text" name="process" placeholder="Rx/Dx">
+                    <button class="button is-small is-link search process">Wybierz</button>
+                  </div>
+                  <em class="process-hint"></em>
+                </div>
+
+                <div class="field">
+                  <label class="label">Województwo</label>
+                  <div class="control">
+                    <select class="select" name="state">
+                      <option value=""></option>
+                      <option value="02">dolnośląskie</option>
+                      <option value="04">kujawsko-pomorskie</option>
+                      <option value="06">lubelskie</option>
+                      <option value="08">lubuskie</option>
+                      <option value="10">łódzkie</option>
+                      <option value="12">małopolskie</option>
+                      <option value="14">mazowieckie</option>
+                      <option value="16">opolskie</option>
+                      <option value="18">podkarpackie</option>
+                      <option value="20">podlaskie</option>
+                      <option value="22">pomorskie</option>
+                      <option value="24">śląskie</option>
+                      <option value="26">świętokrzyskie</option>
+                      <option value="28">warmińsko-mazurskie</option>
+                      <option value="30">wielkopolskie</option>
+                      <option value="32">zachodniopomorskie</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="radios">
+                    <label class="radio">
+                      <input type="radio" name="view" value="/instalacje" checked/>
+                      Instalacje
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="view" value="/mozliwosci" />
+                      Możliwości
+                    </label>
+                  </div>
+                </div>
+                <button class="button is-link" type="submit">Szukaj</button>
+                <button class="button is-link is-light" type="reset">Wyczyść</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-content">
+              <div class="image is-2by1" id="map"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="column">
+        <section class="section">
+          <div class="container">
+            <div id="installations">
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
     <template id="code-desc-row-template">
       <tr>
         <td class="code-slot"></td>
@@ -56,9 +154,6 @@
         </section>
       </div>
     </template>
-
-    <div class="modal installation-details">
-    </div>
 
     <div class="modal processes">
       <div class="modal-background"></div>
@@ -120,90 +215,6 @@
       </div>
     </div>
 
-    <nav class="navbar">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="/"><h1>BDO</h1></a>
-      </div>
-    </nav>
-
-    <section class="section">
-      <div class="columns">
-        <div class="column" >
-          <div class="search panel" id="search">
-            <div class="panel-heading">
-              <p>Szukaj instalacji</p>
-            </div>
-            <div class="panel-block">
-              <form>
-                <div class="field">
-                  <label class="label">Kod odpadu</label>
-                  <div class="control">
-                    <input type="text" name="waste" placeholder="xxxxxx">
-                    <button class="button is-small is-link search waste">Wybierz</button>
-                  </div>
-                  <div class="tag is-primary is-light is-rounded waste-hint code-a"></div>
-                  <div class="tag is-primary is-light is-rounded waste-hint code-b"></div>
-                  <div class="tag is-primary is-light is-rounded waste-hint code-c"></div>
-                </div>
-                <div class="field">
-                  <label class="label">Proces przetwarzania</label>
-                  <div class="control">
-                    <input type="text" name="process" placeholder="Rx/Dx">
-                    <button class="button is-small is-link search process">Wybierz</button>
-                  </div>
-                  <div class="tag is-primary is-light is-rounded process-hint"></div>
-                </div>
-                <div class="field">
-                  <label class="label">Województwo</label>
-                  <div class="control">
-                    <select class="select" name="state">
-                      <option value=""></option>
-                      <option value="02">dolnośląskie</option>
-                      <option value="04">kujawsko-pomorskie</option>
-                      <option value="06">lubelskie</option>
-                      <option value="08">lubuskie</option>
-                      <option value="10">łódzkie</option>
-                      <option value="12">małopolskie</option>
-                      <option value="14">mazowieckie</option>
-                      <option value="16">opolskie</option>
-                      <option value="18">podkarpackie</option>
-                      <option value="20">podlaskie</option>
-                      <option value="22">pomorskie</option>
-                      <option value="24">śląskie</option>
-                      <option value="26">świętokrzyskie</option>
-                      <option value="28">warmińsko-mazurskie</option>
-                      <option value="30">wielkopolskie</option>
-                      <option value="32">zachodniopomorskie</option>
-                    </select>
-                    <!--<i class="inverted circular location arrow link icon"></i>-->
-                  </div>
-                </div>
-                <button class="button is-link" type="submit">Szukaj</button>
-                <button class="button is-link is-light" type="reset">Wyczyść</button>
-              </form>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="column">
-          <div class="card">
-            <div class="card-content">
-              <div class="image is-2by1" id="map"></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div id="installations">
-        </div>
-      </div>
-    </section>
-
-  <script src="/assets/main.js?q=3"></script>
+  <script src="/assets/main.js"></script>
   </body>
 </html>

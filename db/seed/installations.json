@@ -628,56 +628,67 @@
         "WasteCode": "030308",
         "Dangerous": false,
         "ActivityCode": "Z",
+        "ProcessCode": "R3",
         "Quantity": 1200
       }, {
         "WasteCode": "150101",
         "Dangerous": false,
         "ActivityCode": "Z",
+        "ProcessCode": "R3",
         "Quantity": 10000
       }, {
         "WasteCode": "150102",
         "Dangerous": false,
         "ActivityCode": "Z",
+        "ProcessCode": "R3",
         "Quantity": 600
       }, {
         "WasteCode": "150103",
         "Dangerous": false,
         "ActivityCode": "Z",
+        "ProcessCode": "R3",
         "Quantity": 20
       }, {
         "WasteCode": "150105",
         "Dangerous": false,
         "ActivityCode": "Z",
+        "ProcessCode": "R3",
         "Quantity": 10
       }, {
         "WasteCode": "150107",
         "Dangerous": false,
         "ActivityCode": "Z",
+        "ProcessCode": "R3",
         "Quantity": 10
       }, {
         "WasteCode": "150109",
         "Dangerous": false,
         "ActivityCode": "Z",
+        "ProcessCode": "R3",
         "Quantity": 10
       }, {
         "WasteCode": "191201",
         "Dangerous": false,
         "ActivityCode": "Z",
+        "ProcessCode": "R3",
         "Quantity": 1945
       }, {
         "WasteCode": "200101",
         "Dangerous": false,
         "ActivityCode": "Z",
+        "ProcessCode": "R3",
         "Quantity": 1000
       }, {
         "WasteCode": "200102",
         "Dangerous": false,
         "ActivityCode": "Z",
+        "ProcessCode": "R3",
         "Quantity": 5
       }, {
         "WasteCode": "200139",
         "Dangerous": false,
         "ActivityCode": "Z",
+        "ProcessCode": "R3",
         "Quantity": 200
       }
     ]

@@ -16,7 +16,7 @@ func TestRenderInstallations(t *testing.T) {
 		buffer := bytes.Buffer{}
 		renderer.RenderInstallations(&buffer, []*Installation{})
 		got := buffer.String()
-		want := "\n"
+		want := "\nBrak instalacji spełniających podane kryteria\n\n\n"
 
 		if got != want {
 			t.Errorf("got: %q, want %q", got, want)

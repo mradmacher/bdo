@@ -119,14 +119,6 @@ func (inst Installation) Add(r *Repository) (int64, error) {
 	}
 	defer stmt.Close()
 	for _, capability := range inst.Capabilities {
-		//dangerous := false
-		//if strings.HasSuffix(capability.WasteCode, "*") {
-		//	dangerous = true
-		//}
-		//code := capability.WasteCode
-		//if dangerous {
-		//		code = code[0:6]
-		//}
 		_, err = stmt.Exec(id, capability.WasteCode, capability.Dangerous, capability.ProcessCode, capability.ActivityCode, capability.Quantity)
 		if err != nil {
 			return 0, err
@@ -140,22 +132,115 @@ func (inst Installation) Add(r *Repository) (int64, error) {
 	return id, nil
 }
 
-func (r *Repository) LoadCapabilities(id int64) ([]Capability, error) {
+func (r *Repository) LoadInstallationCapabilities(id int64) ([]Capability, error) {
 	var capabilities []Capability
 
-	rows, err := r.db.Query("SELECT id, waste_code, dangerous, process_code, activity_code, quantity FROM capabilities WHERE installation_id = ?", id)
+	query := "SELECT id, waste_code, dangerous, process_code, activity_code, quantity FROM capabilities WHERE installation_id = ?"
+
+	rows, err := r.db.Query(query, id)
 	defer rows.Close()
+
 	for rows.Next() {
-		var capa Capability
-		err := rows.Scan(&capa.Id, &capa.WasteCode, &capa.Dangerous, &capa.ProcessCode, &capa.ActivityCode, &capa.Quantity)
+		var c Capability
+		err := rows.Scan(&c.Id, &c.WasteCode, &c.Dangerous, &c.ProcessCode, &c.ActivityCode, &c.Quantity)
 		if err != nil {
 			return nil, errors.Join(errors.New("Reading capabilities failed"), err)
 		}
-		capabilities = append(capabilities, capa)
+		capabilities = append(capabilities, c)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, errors.Join(errors.New("Not all capabilities read"), err)
 
+	}
+
+	return capabilities, nil
+}
+
+func (r *Repository) SearchCapabilities(id int64, params SearchParams) ([]Capability, error) {
+	var capabilities []Capability
+	var whereCond []string
+	var whereArgs []any
+
+	whereCond = append(whereCond, "installation_id = ?")
+	whereArgs = append(whereArgs, id)
+
+	for k, v := range params {
+		switch k {
+		case "waste_code":
+			whereCond = append(whereCond, "waste_code = ?")
+			whereArgs = append(whereArgs, v)
+		}
+	}
+
+	query := "SELECT id, waste_code, dangerous, process_code, activity_code, quantity FROM capabilities"
+	var whereClause string
+	if len(whereCond) > 0 {
+		whereClause = strings.Join(whereCond, " AND ")
+		query = query + " WHERE " + whereClause
+	}
+
+	rows, err := r.db.Query(query, whereArgs...)
+	defer rows.Close()
+
+	for rows.Next() {
+		var c Capability
+		err := rows.Scan(&c.Id, &c.WasteCode, &c.Dangerous, &c.ProcessCode, &c.ActivityCode, &c.Quantity)
+		if err != nil {
+			return nil, errors.Join(errors.New("Reading capabilities failed"), err)
+		}
+		capabilities = append(capabilities, c)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, errors.Join(errors.New("Not all capabilities read"), err)
+
+	}
+
+	return capabilities, nil
+}
+
+func (r *Repository) Summarize(params SearchParams) ([]Capability, error) {
+	var capabilities []Capability
+	var whereCond []string
+	var whereArgs []any
+
+	for k, v := range params {
+		switch k {
+		case "process_code":
+			whereCond = append(whereCond, "process_code = ?")
+			whereArgs = append(whereArgs, v)
+		case "waste_code":
+			whereCond = append(whereCond, "waste_code = ?")
+			whereArgs = append(whereArgs, v)
+		case "state_code":
+			whereCond = append(whereCond, "installation_id IN (SELECT id FROM installations WHERE state_code = ?)")
+			whereArgs = append(whereArgs, v)
+		}
+	}
+
+	query := "SELECT waste_code, dangerous, process_code, sum(quantity) FROM capabilities"
+	var whereClause string
+	if len(whereCond) > 0 {
+		whereClause = strings.Join(whereCond, " AND ")
+		query = query + " WHERE " + whereClause
+	}
+	query = query + " GROUP BY waste_code, dangerous, process_code"
+
+	rows, err := r.db.Query(query, whereArgs...)
+	if err != nil {
+		return nil, errors.Join(errors.New("Searching capabilities failed"), err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		c := Capability{}
+		err = rows.Scan(&c.WasteCode, &c.Dangerous, &c.ProcessCode, &c.Quantity)
+		if err != nil {
+			return nil, errors.Join(errors.New("Scaning capability failed"), err)
+		}
+		capabilities = append(capabilities, c)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, errors.Join(errors.New("Not all capabilities read"), err)
 	}
 
 	return capabilities, nil
@@ -205,7 +290,7 @@ func (r *Repository) Search(params SearchParams) ([]*Installation, error) {
 	}
 
 	for _, inst := range installations {
-		inst.Capabilities, err = r.LoadCapabilities(inst.Id)
+		inst.Capabilities, err = r.LoadInstallationCapabilities(inst.Id)
 		if err != nil {
 			return nil, errors.Join(errors.New("Loading capabilities failed"), err)
 		}
@@ -224,7 +309,7 @@ func (r *Repository) Find(id int64, inst *Installation) error {
 			return errors.Join(errors.New("Finding installation failed"), err)
 		}
 	}
-	inst.Capabilities, err = r.LoadCapabilities(inst.Id)
+	inst.Capabilities, err = r.LoadInstallationCapabilities(inst.Id)
 	if err != nil {
 		return errors.Join(errors.New("Loading capabilities failed"), err)
 	}
