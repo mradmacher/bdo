@@ -55,17 +55,3 @@ export const processCodes = [
   'D12',
   'D13',
 ]
-
-export class ProcessHinter {
-  relatedCodesFor(code) {
-    if (code == '') {
-      return processCodes;
-    } else {
-      return null;
-    }
-  }
-
-  descriptionFor(code) {
-    return processCodeDescs[code];
-  }
-}

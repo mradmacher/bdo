@@ -2389,18 +2389,3 @@ export const wasteCodeDescs = {
   "200302": "Odpady z targowisk",
   "200102": "Szkło",
 }
-
-export class WasteHinter {
-  relatedCodesFor(code) {
-    if (code == '') {
-      return wasteCodes['00'];
-    } else {
-      return wasteCodes[code];
-    }
-  }
-
-  descriptionFor(code) {
-    return wasteCodeDescs[code.replace("*", "")];
-  }
-}
-

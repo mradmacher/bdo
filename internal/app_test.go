@@ -25,6 +25,7 @@ func TestSearch(t *testing.T) {
 	defer app.Stop()
 
 	req := httptest.NewRequest("GET", "/instalacje", nil)
+	req.Header.Add("Accept", "application/json")
 
 	res := httptest.NewRecorder()
 	app.router.ServeHTTP(res, req)

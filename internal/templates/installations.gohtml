@@ -4,15 +4,19 @@ Brak instalacji spełniających podane kryteria
 {{ range .Installations }}
   <div class="panel" data-installation data-id="{{ .Id }}" data-lng="{{ .AddressLng }}" data-lat="{{ .AddressLat }}">
     <header class="panel-heading">
-      <p class="header" data-name>{{ .Name }}</p>
+      <p class="header" data-name>{{.Name}}</p>
       <p class="tag">
-        <span data-address-line1>{{ .AddressLine1 }}</span>,  <span data-address-line2>{{ .AddressLine2 }}</span>
+        <span data-address-line1>{{.AddressLine1}}</span>,  <span data-address-line2>{{.AddressLine2}}</span>
       </p>
     </header>
     <section class="panel-block">
       <div class="buttons">
+      {{$id := .Id}}
+      {{$name := .Name}}
+      {{$addressLine1 := .AddressLine1}}
+      {{$addressLine2 := .AddressLine2}}
       {{ range .WasteCodes }}
-        <button class="button is-small" data-show-details data-waste-code="{{ . }}">{{ . }}</button>
+        <button class="button is-small" data-modal-target="#capabilities-modal" data-modal-source="#modal-card" data-modal-title="{{$name}}" data-modal-subtitle="{{$addressLine1}}, {{$addressLine2}}" href="/instalacje/{{$id}}/mozliwosci?wc={{normalize .}}">{{ . }}</button>
       {{ end }}
       </div>
     </section>
@@ -24,28 +28,7 @@ Brak instalacji spełniających podane kryteria
       </div>
     </section>
     <section class="panel-block">
-      <button class="button is-link is-fullwidth" data-show-details>Szczegóły</button>
+      <button class="button is-link is-fullwidth" data-modal-target="#capabilities-modal" data-modal-source="#modal-card" data-modal-title="{{$name}}" data-modal-subtitle="{{$addressLine1}}, {{$addressLine2}}" href="/instalacje/{{$id}}/mozliwosci">Szczegóły</button>
     </section>
-
-    <div class="modal" data-capabilities-details>
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">{{ .Name }}</p>
-          <p class="tag">
-            {{ .AddressLine1 }},  {{ .AddressLine2 }}
-          </p>
-          <button class="cancel button modal-close is-large" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body" data-capabilities>
-        </section>
-        <footer class="modal-card-foot">
-          <div class="cancel button is-link is-fullwidth">
-            Zamknij
-          </div>
-        </footer>
-      </div>
-    </div>
-
   </div>
 {{ end }}

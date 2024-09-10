@@ -34,6 +34,11 @@ type DbRecord interface {
 	Add(r *Repository) (int64, error)
 }
 
+type Material struct {
+	Id   int64
+	Code string
+}
+
 type Capability struct {
 	Id           int64
 	WasteCode    string
@@ -41,6 +46,7 @@ type Capability struct {
 	ProcessCode  string
 	ActivityCode string
 	Quantity     int
+	Materials    []Material
 }
 
 type Address struct {
@@ -83,6 +89,10 @@ func (r *Repository) Purge() error {
 	if err != nil {
 		return err
 	}
+	_, err = tx.Exec("DELETE FROM materials")
+	if err != nil {
+		return errors.Join(errors.New("Problem removing materials"), err)
+	}
 	_, err = tx.Exec("DELETE FROM capabilities")
 	if err != nil {
 		return errors.Join(errors.New("Problem removing capabilities"), err)
@@ -109,21 +119,41 @@ func (inst Installation) Add(r *Repository) (int64, error) {
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		return 0, errors.Join(errors.New("Could not obtain last inserted ID"), err)
+		return 0, errors.Join(errors.New("Could not obtain installation last inserted ID"), err)
 	}
-	stmt, err := tx.Prepare(
+	cstmt, err := tx.Prepare(
 		"INSERT INTO capabilities (installation_id, waste_code, dangerous, process_code, activity_code, quantity) values (?, ?, ?, ?, ?, ?)",
 	)
 	if err != nil {
-		return 0, errors.Join(errors.New("Preparing statement failed"), err)
+		return 0, errors.Join(errors.New("Preparing capabilities statement failed"), err)
 	}
-	defer stmt.Close()
+	defer cstmt.Close()
+
+	mstmt, err := tx.Prepare(
+		"INSERT INTO materials (capability_id, code) values (?, ?)",
+	)
+	if err != nil {
+		return 0, errors.Join(errors.New("Preparing materials statement failed"), err)
+	}
+	defer mstmt.Close()
+
 	for _, capability := range inst.Capabilities {
-		_, err = stmt.Exec(id, capability.WasteCode, capability.Dangerous, capability.ProcessCode, capability.ActivityCode, capability.Quantity)
+		result, err = cstmt.Exec(id, capability.WasteCode, capability.Dangerous, capability.ProcessCode, capability.ActivityCode, capability.Quantity)
 		if err != nil {
 			return 0, err
 		}
+		cid, err := result.LastInsertId()
+		if err != nil {
+			return 0, errors.Join(errors.New("Could not obtain capability last inserted ID"), err)
+		}
+		for _, material := range capability.Materials {
+			_, err = mstmt.Exec(cid, material.Code)
+			if err != nil {
+				return 0, err
+			}
+		}
 	}
+
 	err = tx.Commit()
 	if err != nil {
 		return 0, err
@@ -187,6 +217,17 @@ func (r *Repository) SearchCapabilities(id int64, params SearchParams) ([]Capabi
 		err := rows.Scan(&c.Id, &c.WasteCode, &c.Dangerous, &c.ProcessCode, &c.ActivityCode, &c.Quantity)
 		if err != nil {
 			return nil, errors.Join(errors.New("Reading capabilities failed"), err)
+		}
+		mquery := "SELECT id, code FROM materials WHERE capability_id = ?"
+		mrows, err := r.db.Query(mquery, c.Id)
+		defer mrows.Close()
+		for mrows.Next() {
+			var m Material
+			err := mrows.Scan(&m.Id, &m.Code)
+			if err != nil {
+				return nil, errors.Join(errors.New("Reading materials failed"), err)
+			}
+			c.Materials = append(c.Materials, m)
 		}
 		capabilities = append(capabilities, c)
 	}

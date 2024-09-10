@@ -1,8 +1,11 @@
-import { WasteHinter } from "./waste_catalog.js"
-import { ProcessHinter } from "./process_catalog.js"
+import { WasteHinter, ProcessHinter } from "./hinters.js"
 import { MapComponent } from "./map_component.js"
 import { SearchComponent } from "./search_component.js"
-import { openModal, closeModal } from "./modal_helpers.js"
+import { openModal, closeModal, initModalTriggers } from "./modal_helpers.js"
+
+export function updateUrlPath(path) {
+  history.pushState(null, '', path + window.location.search);
+}
 
 export function updateUrlSearchParams(path, params) {
   if ('URLSearchParams' in window) {
@@ -40,24 +43,10 @@ export class InstallationRequest {
     })
   }
 
-  searchCapabilities(id, params) {
-    return new Promise((resolve, reject) => {
-      axios.get(`/instalacje/${id}/mozliwosci`, {
-        params: params
-      }).then(function(response) {
-        console.log(response)
-        resolve(response.data)
-      }).catch(function(error) {
-        reject(error.response.data)
-      })
-    })
-  }
-
   show(id) {
     return new Promise((resolve, reject) => {
       axios.get(`${this.showUrl}/${id}`)
       .then(function(response) {
-        console.log(response)
         resolve(response.data)
       }).catch(function(error) {
         reject(error.response.data)
@@ -186,10 +175,15 @@ document.addEventListener("DOMContentLoaded", () => {
       () => {
         mapComponent.clear()
       },
-      (path, params) => {
+      (params) => {
+        let path = document.querySelector("[data-view][data-active] a").getAttribute("href");
         updateUrlSearchParams(path, params)
 
         mapComponent.clear()
+
+        document.getElementById("capabilities-modal").addEventListener('contentLoaded', (event) => {
+          initModalTriggers(event.target)
+        })
 
         new InstallationRequest().search(path, params)
           .then((installations) => {
@@ -203,34 +197,29 @@ document.addEventListener("DOMContentLoaded", () => {
                 addressLine1: installationElement.querySelector('[data-address-line1]').textContent,
                 addressLine2: installationElement.querySelector('[data-address-line2]').textContent,
               });
-
-            })
-
-            listElement.querySelectorAll('[data-show-details]').forEach((actionElement) => {
-              actionElement.addEventListener('click', (event) => {
-                let installationElement = event.target.closest('[data-installation]');
-                let id = installationElement.getAttribute("data-id");
-                let code = event.target.getAttribute("data-waste-code")
-                if (code) {
-                  code = code.replaceAll(' ', '')
-                  code = code.replaceAll('*', '')
-                }
-                let modal = installationElement.querySelector("[data-capabilities-details]");
-                let element = modal.querySelector("[data-capabilities]");
-                new InstallationRequest().searchCapabilities(id, {wc: code}).then((result) => {
-                  element.innerHTML = result;
-                  modal.querySelectorAll('.button.cancel').forEach((cancelElement) => {
-                    cancelElement.addEventListener('click', (event) => {
-                      closeModal(modal);
-                    })
-                  })
-                  openModal(modal);
-                })
-              })
+              initModalTriggers(installationElement);
             })
           })
       }
     )
+
+    document.querySelectorAll("[data-view]").forEach((element) => {
+      let actionElement = element.querySelector("a");
+      actionElement.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (element.closest("[data-view]").hasAttribute("data-active")) {
+          return
+        }
+        element.closest("[data-view-selector]").querySelectorAll("[data-view]").forEach((e) => {
+          e.classList.remove("is-active");
+          e.removeAttribute("data-active");
+        })
+        element.closest("[data-view]").classList.add("is-active");
+        element.closest("[data-view]").setAttribute("data-active", "");
+        updateUrlPath(actionElement.getAttribute("href"));
+        searchComponent.repeatSearch();
+      })
+    })
 
     document.querySelector('.search.process').addEventListener('click', (event) => {
       event.preventDefault();
@@ -245,6 +234,6 @@ document.addEventListener("DOMContentLoaded", () => {
         searchComponent.setWaste(code, ...descs);
       }).show();
     })
-  })
 
+  })
 })

@@ -1,0 +1,52 @@
+- code: R1
+  description: Wykorzystanie głównie jako paliwa lub innego środka wytwarzania energii
+- code: R2
+  description: Odzysk/regeneracja rozpuszczalników
+- code: R3
+  description: Recykling lub regeneracja substancji organicznych, które nie są stosowane jako rozpuszczalniki (w tym kompostowanie i inne biologiczne procesy przekształcania)
+- code: R4
+  description: Recykling lub odzysk metali i związków metali
+- code: R5
+  description: Recykling lub odzysk innych materiałów nieorganicznych
+- code: R6
+  description: Regeneracja kwasów lub zasad
+- code: R7
+  description: Odzysk składników stosowanych do redukcji zanieczyszczeń
+- code: R8
+  description: Odzysk składników z katalizatorów
+- code: R9
+  description: Powtórna rafinacja oleju lub inne sposoby ponownego użycia olejów
+- code: R10
+  description: Obróbka na powierzchni ziemi przynosząca korzyści dla rolnictwa lub poprawę stanu środowiska
+- code: R11
+  description: Wykorzystywanie odpadów uzyskanych w wyniku któregokolwiek z procesów wymienionych w pozycji R1 – R10
+- code: R12
+  description: Wymiana odpadów w celu poddania ich któremukolwiek z procesów wymienionych w pozycji R1 – R11
+- code: R13
+  description: Magazynowanie odpadów poprzedzające którykolwiek z procesów wymienionych w pozycji R1 – R12 (z wyjątkiem wstępnego magazynowania u wytwórcy odpadów)
+- code: D1
+  description: Składowanie w gruncie lub na powierzchni ziemi (np. składowiska itp.)
+- code: D2
+  description: Przetwarzanie w glebie i ziemi (np. biodegradacja odpadów płynnych lub szlamów w glebie i ziemi itd.)
+- code: D3
+  description: Głębokie zatłaczanie (np. zatłaczanie odpadów w postaci umożliwiającej pompowanie do odwiertów, wysadów solnych lub naturalnie powstających komór itd.)
+- code: D4
+  description: Retencja powierzchniowa (np. umieszczanie odpadów ciekłych i szlamów w dołach, poletkach poletkach osadowych lub lagunach itd.)
+- code: D5
+  description: Składowanie na składowiskach w sposób celowo zaprojektowany (np. umieszczanie w uszczelnionych oddzielnych komorach, przykrytych i izolowanych od siebie wzajemnie i od środowiska itd.)
+- code: D6
+  description: Odprowadzanie do wód z wyjątkiem mórz i oceanów
+- code: D7
+  description: Odprowadzanie do mórz i oceanów, w tym lokowanie na dnie mórz
+- code: D8
+  description: Obróbka biologiczna, niewymieniona w innej pozycji niniejszego załącznika, w wyniku której powstają ostateczne związki lub mieszanki, które są unieszkodliwiane za pomocą któregokolwiek spośród procesów wymienionych w poz. D1 – D12
+- code: D9
+  description: Obróbka fizyczno-chemiczna, niewymieniona w innej pozycji niniejszego załącznika, w wyniku której powstają ostateczne związki lub mieszaniny unieszkodliwiane za pomocą któregokolwiek spośród procesów wymienionych w pozycjach D1 – D12 (np. odparowanie, suszenie, kalcynacja itp.)
+- code: D10
+  description: Przekształcanie termiczne na lądzie
+- code: D11
+  description: Przekształcanie termiczne na morzu
+- code: D12
+  description: Trwałe składowanie (np. umieszczanie pojemników w kopalniach itd.)
+- code: D13
+  description: Sporządzanie mieszanki lub mieszanie przed poddaniem odpadów któremukolwiek z procesów wymienionych w pozycjach D1 – D12
