@@ -2,6 +2,7 @@ import { WasteHinter, ProcessHinter } from "./hinters.js"
 import { MapComponent } from "./map_component.js"
 import { SearchComponent } from "./search_component.js"
 import { openModal, closeModal, initModalTriggers } from "./modal_helpers.js"
+import { ModalWindow } from "./modal_window.js"
 
 export function updateUrlPath(path) {
   history.pushState(null, '', path + window.location.search);
@@ -165,7 +166,10 @@ export class WasteSelectorView extends CodeSelectorView {
   }
 }
 
+customElements.define("modal-window", ModalWindow);
+
 document.addEventListener("DOMContentLoaded", () => {
+
   let googleMapsApiKey = document.getElementById('google-maps-api-key').getAttribute('data-value');
   let searchComponent
   let mapComponent = new MapComponent(googleMapsApiKey)
@@ -180,10 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
         updateUrlSearchParams(path, params)
 
         mapComponent.clear()
-
-        document.getElementById("capabilities-modal").addEventListener('contentLoaded', (event) => {
-          initModalTriggers(event.target)
-        })
 
         new InstallationRequest().search(path, params)
           .then((installations) => {

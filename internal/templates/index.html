@@ -208,28 +208,26 @@
       </div>
     </div>
 
-    <template id="modal-card">
-      <div class="modal" data-modal>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">
-              <span data-modal-title></span>
-              <p class="tag"><span data-modal-subtitle></span></p>
-            </p>
-            <button class="button delete" aria-label="close" data-close-modal></button>
-          </header>
-          <section class="modal-card-body" data-modal-body>
-          </section>
-          <footer class="modal-card-foot">
-            <button class="cancel button is-link is-fullwidth" data-close-modal>
-              Zamknij
-            </button>
-          </footer>
-        </div>
+    <template id="modal-window-template">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">
+            <slot name="title">Default Title</slot>
+            <p class="tag"><slot name="subtitle"></slot></p>
+          </p>
+          <button class="button delete" aria-label="close" data-close-button></button>
+        </header>
+        <section class="modal-card-body">
+          <slot name="body"></slot>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="cancel button is-link is-fullwidth" data-close-button>
+            Zamknij
+          </button>
+        </footer>
       </div>
     </template>
-    <span id="capabilities-modal"></span>
-    <span id="materials-modal"></span>
 
     <script src="/assets/main.js?q=1"></script>
   </body>
