@@ -16,7 +16,11 @@ Brak instalacji spełniających podane kryteria
       {{$addressLine1 := .AddressLine1}}
       {{$addressLine2 := .AddressLine2}}
       {{ range .WasteCodes }}
-        <button class="button is-small" data-modal-target="#capabilities-modal" data-modal-source="#modal-card" data-modal-title="{{$name}}" data-modal-subtitle="{{$addressLine1}}, {{$addressLine2}}" href="/instalacje/{{$id}}/mozliwosci?wc={{normalize .}}">{{ . }}</button>
+        <button class="button is-small" data-href="/instalacje/{{$id}}/mozliwosci?wc={{normalize .}}" data-modal-window="window-{{normalize .}}">{{ . }}</button>
+        <modal-window id="window-{{normalize .}}">
+          <span slot="title">{{$name}}</span>
+          <span slot="subtitle">{{$addressLine1}}, {{$addressLine2}}</span>
+        </modal-window>
       {{ end }}
       </div>
     </section>
@@ -28,7 +32,11 @@ Brak instalacji spełniających podane kryteria
       </div>
     </section>
     <section class="panel-block">
-      <button class="button is-link is-fullwidth" data-modal-target="#capabilities-modal" data-modal-source="#modal-card" data-modal-title="{{$name}}" data-modal-subtitle="{{$addressLine1}}, {{$addressLine2}}" href="/instalacje/{{$id}}/mozliwosci">Szczegóły</button>
+      <button class="button is-link is-fullwidth" data-href="/instalacje/{{$id}}/mozliwosci" data-modal-window="window-installation-{{.Id}}">>Szczegóły</button>
+      <modal-window id="window-installation-{{.Id}}">
+        <span slot="title">{{.Name}}</span>
+        <span slot="subtitle">{{.AddressLine1}}, {{.AddressLine2}}</span>
+      </modal-window>
     </section>
   </div>
 {{ end }}
