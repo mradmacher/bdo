@@ -8,7 +8,7 @@ export class MapComponent {
     });
 
     this.markers = []
-    this.mapCenter = { lat: 52.24, lng: 21.00 }
+    this.mapCenter = { lat: 51.54, lng: 19.00 }
     this.mapZoom = 6
   }
 
@@ -25,11 +25,10 @@ export class MapComponent {
       installation.addressLat,
       installation.addressLng
     )
-    let marker = new google.maps.Marker({
+    let marker = new google.maps.marker.AdvancedMarkerElement({
       map: this.map,
       position: latLng,
-      label: installation.name,
-      title: `${installation.name}\n${installation.addressLine1}\n${installation.addressLine2}`,
+      title: installation.name,
     })
     const infoWindow = new google.maps.InfoWindow({
       content: `
@@ -43,16 +42,20 @@ export class MapComponent {
         anchor: marker,
         map: this.map,
       })
-    })
-    this.markers.push(marker)
+    });
+    this.markers.push(marker);
   }
 
   async initMap(elementId) {
     const { Map } = await google.maps.importLibrary("maps");
+    await google.maps.importLibrary("marker");
 
     this.map = new Map(document.getElementById(elementId), {
       center: this.mapCenter,
       zoom: this.mapZoom,
+      mapId: '3af9fdfea677be629c6243b8',
+      cameraControl: false,
+      fullscreenControl: false,
     });
   }
 }

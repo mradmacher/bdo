@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>BDO</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
@@ -80,7 +80,7 @@
 
           <div class="card">
             <div class="card-content">
-              <div class="image is-2by1" id="map"></div>
+              <div class="image is-4by3" id="map"></div>
             </div>
           </div>
         </section>
@@ -210,13 +210,13 @@
 
     <template id="modal-card">
       <div class="modal" data-modal>
+        <div class="modal-background"></div>
         <div class="modal-card">
           <header class="modal-card-head">
             <p class="modal-card-title">
               <span data-modal-title></span>
-              <p class="tag"><span data-modal-subtitle></span></p>
             </p>
-            <button class="button delete" aria-label="close" data-close-modal></button>
+            <button class="delete" aria-label="close" data-close-modal></button>
           </header>
           <section class="modal-card-body" data-modal-body>
           </section>
@@ -231,6 +231,6 @@
     <span id="capabilities-modal"></span>
     <span id="materials-modal"></span>
 
-    <script src="/assets/main.js?q=1"></script>
+    <script src="/assets/main.js?q=7"></script>
   </body>
 </html>
