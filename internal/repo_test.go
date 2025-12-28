@@ -2,6 +2,7 @@ package bdo
 
 import (
 	"github.com/joho/godotenv"
+	"os"
 	"testing"
 )
 
@@ -81,8 +82,9 @@ func setupSuite(t *testing.T) (func(*testing.T), *Repository) {
 	if err := godotenv.Load("../.test.env"); err != nil {
 		t.Fatalf("No .env file found")
 	}
+	dbUri := os.Getenv("BDO_DB_URI")
 
-	r := Repository{}
+	r := Repository{DBUri: dbUri}
 	err := r.Connect()
 	if err != nil {
 		t.Fatalf("Problem with DB connection: %v", err)

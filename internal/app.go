@@ -2,7 +2,6 @@ package bdo
 
 import (
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -11,13 +10,15 @@ type App struct {
 	router   *http.ServeMux
 	db       Repository
 	renderer Renderer
+	mapsApiKey string
 }
 
-func NewApp(renderer Renderer) (*App, error) {
+func NewApp(renderer Renderer, dbUri string, mapsApiKey string) (*App, error) {
 	app := App{}
-	app.db = Repository{}
+	app.db = Repository{DBUri: dbUri}
 	app.router = http.NewServeMux()
 	app.renderer = renderer
+	app.mapsApiKey = mapsApiKey
 
 	var err error
 	err = app.db.Connect()
@@ -50,7 +51,7 @@ func (app *App) homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	config := struct {
 		GoogleMapsApiKey string
-	}{os.Getenv("GOOGLE_MAPS_API_KEY")}
+	}{app.mapsApiKey}
 	err := app.renderer.RenderHome(w, config)
 	if err != nil {
 		panic(err)

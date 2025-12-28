@@ -5,19 +5,21 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"os"
 )
 
 func TestSearch(t *testing.T) {
 	if err := godotenv.Load("../.test.env"); err != nil {
 		panic("No .test.env file found")
 	}
+	dbUri := os.Getenv("BDO_DB_URI")
 
 	renderer, err := NewRenderer()
 	if err != nil {
 		t.Errorf("Error creating the renderer: %v", err)
 	}
 
-	app, err := NewApp(*renderer)
+	app, err := NewApp(*renderer, dbUri, "fake maps api key")
 	if err != nil {
 		t.Errorf("Error creating the app: %v", err)
 	}

@@ -3,7 +3,6 @@ package bdo
 import (
 	"errors"
 	"fmt"
-	"os"
 	"strings"
 
 	"database/sql"
@@ -27,6 +26,7 @@ func IsRecordNotFound(err error) bool {
 }
 
 type Repository struct {
+	DBUri string
 	db *sql.DB
 }
 
@@ -68,9 +68,9 @@ type SearchParams map[string]string
 
 func (r *Repository) Connect() error {
 	var err error
-	uri := os.Getenv("BDO_DB_URI")
+	uri := r.DBUri
 	if uri == "" {
-		return errors.New("Set 'BDO_DB_URI'")
+		return errors.New("Set database URI")
 	}
 	r.db, err = sql.Open("sqlite3", uri)
 	if err != nil {
