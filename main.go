@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/mradmacher/bdo/internal"
-	"os"
+	"bytes"
 	"os/exec"
 	"runtime"
+	_ "embed"
 )
 
 func openBrowser(url string) {
@@ -29,16 +30,20 @@ func openBrowser(url string) {
 	}
 }
 
+//go:embed .env
+var envFile []byte
+
 func main() {
-	if err := godotenv.Load(); err != nil {
+	envMap, err := godotenv.Parse(bytes.NewReader(envFile))
+	if err != nil {
 		panic("No .env file found")
 	}
 	renderer, err := bdo.NewRenderer()
 	if err != nil {
 		panic(err)
 	}
-	dbUri := os.Getenv("BDO_DB_URI")
-	mapsApiKey := os.Getenv("GOOGLE_MAPS_API_KEY")
+	dbUri := envMap["BDO_DB_URI"]
+	mapsApiKey := envMap["GOOGLE_MAPS_API_KEY"]
 	fmt.Printf("Loading data from %s\n", dbUri)
 
 	app, err := bdo.NewApp(*renderer, dbUri, mapsApiKey)
@@ -48,11 +53,11 @@ func main() {
 	app.MountHandlers()
 	defer app.Stop()
 
-	fmt.Println("Starting the server on :3000...")
+	fmt.Println("Starting the server on :3001...")
 	go func() {
 		app.Start()
 	}()
-	openBrowser("http://localhost:3000")
+	openBrowser("http://localhost:3001")
 
 	select {}
 }

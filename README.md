@@ -10,6 +10,9 @@
 5. Start the web server `bin/start`
 
 # Compilation
+
+`make`
+
 ## For Windows
 When cross-compiling on Linux machine, ensure you have mingw-w64 cross-compiler installed.
 ```

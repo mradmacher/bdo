@@ -1,9 +1,15 @@
 package bdo
 
 import (
+	"embed"
 	"net/http"
 	"strconv"
 	"strings"
+)
+
+var (
+	//go:embed "assets"
+	assetsFs embed.FS
 )
 
 type App struct {
@@ -30,7 +36,7 @@ func NewApp(renderer Renderer, dbUri string, mapsApiKey string) (*App, error) {
 }
 
 func (app *App) MountHandlers() {
-	app.router.HandleFunc("GET /assets/main.js", staticHandler)
+	app.router.Handle("/", http.FileServer(http.FS(assetsFs)))
 	app.router.HandleFunc("GET /{$}", app.homeHandler)
 	app.router.HandleFunc("GET /instalacje", app.searchInstallationsHandler)
 	app.router.HandleFunc("GET /instalacje/{id}/mozliwosci", app.searchInstallationCapabilitiesHandler)
@@ -38,7 +44,7 @@ func (app *App) MountHandlers() {
 }
 
 func (app *App) Start() {
-	http.ListenAndServe(":3000", app.router)
+	http.ListenAndServe(":3001", app.router)
 }
 
 func (app *App) Stop() {
@@ -56,10 +62,6 @@ func (app *App) homeHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func staticHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "."+r.URL.Path)
 }
 
 func Bind(sp SearchParams, r *http.Request) {

@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "test": "ava",
-    "build": "esbuild js/index.js --bundle --outfile=assets/main.js"
+    "build": "esbuild js/index.js --bundle --outfile=internal/assets/main.js"
   },
   "ava": {
     "files": [
