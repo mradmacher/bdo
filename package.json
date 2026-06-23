@@ -10,11 +10,11 @@
     ]
   },
   "devDependencies": {
-    "ava": "^5.3.1",
+    "ava": "^6.4.1",
     "esbuild": "^0.27.1",
     "jsdom": "^22.1.0"
   },
   "dependencies": {
-    "axios": ">=1.12.4"
+    "axios": ">=1.16.0"
   }
 }
