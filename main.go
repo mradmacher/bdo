@@ -1,13 +1,13 @@
 package main
 
 import (
+	"bytes"
+	_ "embed"
 	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/mradmacher/bdo/internal"
-	"bytes"
 	"os/exec"
 	"runtime"
-	_ "embed"
 )
 
 func openBrowser(url string) {

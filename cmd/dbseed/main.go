@@ -34,8 +34,8 @@ func try(err error) {
 	}
 }
 
-func seedDb() {
-	db := &bdo.Repository{}
+func seedDb(dbUri string) {
+	db := &bdo.Repository{DBUri: dbUri}
 	err := db.Connect()
 	if err != nil {
 		panic(err)
@@ -62,5 +62,5 @@ func main() {
 		panic("No .env file found")
 	}
 
-	seedDb()
+	seedDb(os.Getenv("BDO_DB_URI"))
 }

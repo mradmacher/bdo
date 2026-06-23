@@ -34,11 +34,7 @@
           { "Code": "TSTP04" },
           { "Code": "TSTP05" },
           { "Code": "TSTP06" },
-          { "Code": "TSTP07" },
-          { "Code": "TSTP08" },
-          { "Code": "TSTP09" },
-          { "Code": "TSTP10" },
-          { "Code": "TSTP11" }
+          { "Code": "TSTP07" }
         ]
       }, {
         "WasteCode": "160119",
@@ -54,8 +50,6 @@
           { "Code": "TSTP05" },
           { "Code": "TSTP06" },
           { "Code": "TSTP07" },
-          { "Code": "TSTP08" },
-          { "Code": "TSTP09" },
           { "Code": "TSTP10" },
           { "Code": "TSTP11" }
         ]
@@ -661,7 +655,6 @@
           { "Code": "TSTT02" },
           { "Code": "TSTT03" },
           { "Code": "TSTT04" },
-          { "Code": "TSTT05" },
           { "Code": "TSWZ01" },
           { "Code": "TSWZ02" }
         ]
@@ -823,8 +816,6 @@
           { "Code": "TSTP05" },
           { "Code": "TSTP06" },
           { "Code": "TSTP07" },
-          { "Code": "TSTP08" },
-          { "Code": "TSTP09" },
           { "Code": "TSTP10" },
           { "Code": "TSTP11" }
         ]
